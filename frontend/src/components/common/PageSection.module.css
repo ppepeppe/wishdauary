@@ -1,0 +1,37 @@
+.section {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 0 0;
+  background: transparent;
+}
+
+.heading {
+  margin: 2px 0 var(--s-5);
+  padding-right: 0;
+}
+
+.heading h2 {
+  margin: 0 0 6px;
+  color: var(--ink-strong);
+  font-size: 28px;
+  line-height: var(--leading-tight);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.heading p {
+  margin: 0;
+  max-width: 620px;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking);
+}
+
+.section > p {
+  margin: var(--s-5) 0 0;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking);
+}

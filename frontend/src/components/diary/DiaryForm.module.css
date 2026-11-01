@@ -1,0 +1,44 @@
+.form {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.field {
+  display: grid;
+  gap: var(--s-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.textarea,
+.select,
+.dateInput {
+  width: 100%;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  padding: 11px 13px;
+  background: var(--surface);
+  color: var(--ink-strong);
+  transition:
+    border-color var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-1) var(--ease-out);
+}
+
+.textarea:focus,
+.select:focus,
+.dateInput:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 180px;
+  line-height: var(--leading-normal);
+}
+
+.textarea::placeholder {
+  color: var(--ink-subtle);
+}

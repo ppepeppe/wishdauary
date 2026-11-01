@@ -1,0 +1,336 @@
+/* =========================================================================
+   WishDauary design tokens
+   흰 배경, 산세리프, 콘텐츠 중심의 간결한 플랫폼 UI.
+   ========================================================================= */
+:root {
+  /* ---------- Typography ---------- */
+  --font-sans:
+    'Pretendard Variable',
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    'Apple SD Gothic Neo',
+    'Noto Sans KR',
+    'Malgun Gothic',
+    sans-serif;
+  --font-display: var(--font-sans);
+
+  --text-2xs: 0.75rem;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.875rem;
+  --text-base: 0.9375rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.875rem;
+
+  --leading-tight: 1.28;
+  --leading-snug: 1.45;
+  --leading-normal: 1.6;
+
+  --tracking: -0.015em;
+  --tracking-tight: -0.025em;
+
+  /* ---------- Ink (charcoal, not pure black) ---------- */
+  --ink-strong: #2f3438;
+  --ink: #424242;
+  --ink-muted: #70777d;
+  --ink-subtle: #767e85;
+  --ink-inverse: #ffffff;
+
+  /* ---------- Brand: teal ---------- */
+  --brand: #087f95;
+  --brand-hover: #066b7e;
+  --brand-press: #055667;
+  --brand-tint: #edf8fa;
+  --brand-tint-strong: #d5eef3;
+  --brand-ink: #08768a;
+
+  /* ---------- Clover: green ---------- */
+  --green: #3f9c63;
+  --green-hover: #348354;
+  --green-tint: #eaf7ee;
+  --green-tint-strong: #d3eedd;
+  --green-ink: #256b41;
+
+  /* ---------- Pending: amber ---------- */
+  --amber: #d3971f;
+  --amber-tint: #fdf3da;
+  --amber-ink: #87611a;
+
+  /* ---------- Danger ---------- */
+  --danger: #cf4a44;
+  --danger-hover: #b93b36;
+  --danger-tint: #fdeceb;
+  --danger-ink: #a1332e;
+
+  /* ---------- Surfaces ---------- */
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --surface-sunken: #f7f8fa;
+  --surface-inverse: #2f3438;
+  --line: #eaedef;
+  --line-strong: #dadfe3;
+
+  /* ---------- Radius ---------- */
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 10px;
+  --r-2xl: 12px;
+  --r-pill: 999px;
+
+  /* ---------- Elevation (light borders first, shadow last) ---------- */
+  --shadow-xs: 0 1px 2px rgba(47, 52, 56, 0.04);
+  --shadow-sm: 0 2px 8px rgba(47, 52, 56, 0.05);
+  --shadow-md: 0 8px 24px rgba(47, 52, 56, 0.07);
+  --shadow-lg: 0 16px 40px rgba(47, 52, 56, 0.1);
+  --shadow-brand: 0 2px 5px rgba(48, 57, 47, 0.10);
+
+  /* ---------- Spacing ---------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-7: 32px;
+  --s-8: 40px;
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.22, 0.9, 0.32, 1);
+  --dur-1: 130ms;
+  --dur-2: 200ms;
+  --dur-3: 300ms;
+
+  /* ---------- Focus ---------- */
+  --focus-ring: 0 0 0 3px rgba(8, 127, 149, 0.20);
+
+  /* ---------- Layout ---------- */
+  --shell-max: 980px;
+  --mobile-max: 480px;
+  --nav-height: 64px;
+
+  /* ---------- Legacy aliases (kept so existing modules keep working) ------ */
+  --brand-deep: var(--brand-hover);
+  --brand-soft: var(--brand-tint);
+  --green-soft: var(--green-tint);
+  --cream: var(--surface-sunken);
+
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--canvas);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking);
+  font-weight: 400;
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* =========================================================================
+   Base
+   ========================================================================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: var(--font-sans);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-size: 15px;
+  letter-spacing: var(--tracking);
+  background: var(--canvas);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink-strong);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  text-wrap: pretty;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p a {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+p a:hover {
+  color: var(--brand-hover);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+strong,
+b {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================================
+   Form controls — one consistent look app-wide
+   ========================================================================= */
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  padding: 11px 13px;
+  color: var(--ink-strong);
+  background: var(--surface);
+  font-size: var(--text-base);
+  letter-spacing: var(--tracking);
+  transition:
+    border-color var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-1) var(--ease-out);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--ink-subtle);
+}
+
+input:hover:not(:disabled),
+textarea:hover:not(:disabled),
+select:hover:not(:disabled) {
+  border-color: #c2c8cc;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  color: var(--ink-subtle);
+  background: var(--surface-sunken);
+  cursor: not-allowed;
+}
+
+textarea {
+  resize: vertical;
+  line-height: var(--leading-normal);
+}
+
+/* =========================================================================
+   Focus & selection
+   ========================================================================= */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+::selection {
+  color: var(--ink-strong);
+  background: var(--brand-tint-strong);
+}
+
+/* =========================================================================
+   Scrollbar
+   ========================================================================= */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(47, 52, 56, 0.22) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: var(--r-pill);
+  background: rgba(47, 52, 56, 0.22);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(47, 52, 56, 0.34);
+  background-clip: content-box;
+}
+
+/* =========================================================================
+   Motion preference
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Native keyboard occupies the lower screen; keep form fields in view. */
+.native-keyboard-open nav[aria-label="주요 메뉴"] {
+  display: none;
+}
+
+.native-app {
+  color-scheme: light;
+  overscroll-behavior-y: none;
+}

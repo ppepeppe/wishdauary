@@ -1,0 +1,9 @@
+.git
+.gitignore
+.gradle
+.gradle-user-home
+build
+*.log
+.env
+.env.*
+Dockerfile*

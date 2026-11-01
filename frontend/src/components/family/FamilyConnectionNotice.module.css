@@ -1,0 +1,2 @@
+.notice { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 16px 0; margin-bottom: 16px; border-bottom: 1px solid var(--line); color: var(--brand); font-size: var(--text-sm); font-weight: 600; }
+.notice span { font-size: var(--text-xs); }

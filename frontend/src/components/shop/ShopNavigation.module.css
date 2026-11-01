@@ -1,0 +1,26 @@
+.navigation {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.link,
+.active {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 2px;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+.active {
+  border-bottom-color: var(--brand);
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.link:hover {
+  color: var(--ink-strong);
+}

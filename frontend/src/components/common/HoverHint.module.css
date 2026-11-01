@@ -1,0 +1,63 @@
+.wrap,
+.wrapWithHint {
+  display: grid;
+}
+
+.wrapWithHint {
+  position: relative;
+}
+
+/* 비활성 버튼이 마우스 이벤트를 삼키지 않도록 래퍼가 호버를 받게 한다 */
+.wrapWithHint :disabled {
+  pointer-events: none;
+}
+
+.wrapWithHint::after {
+  content: attr(data-hint);
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  width: max-content;
+  max-width: 280px;
+  padding: 9px 12px;
+  border-radius: var(--r-md);
+  color: var(--ink-inverse);
+  background: var(--surface-inverse);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  text-align: center;
+  white-space: normal;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-2) var(--ease-out),
+    transform var(--dur-2) var(--ease-out);
+  z-index: 30;
+}
+
+.wrapWithHint::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  border: 6px solid transparent;
+  border-top-color: var(--surface-inverse);
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-2) var(--ease-out),
+    transform var(--dur-2) var(--ease-out);
+  z-index: 30;
+}
+
+.wrapWithHint:hover::after,
+.wrapWithHint:focus-within::after,
+.wrapWithHint:hover::before,
+.wrapWithHint:focus-within::before {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

@@ -1,0 +1,144 @@
+.preview {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  margin-bottom: var(--s-5);
+  padding: 4px 0 24px;
+  border: 0;
+  border-radius: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.previewName {
+  margin: 0;
+  color: var(--ink-strong);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.previewEmail {
+  margin: 4px 0 0;
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+}
+
+.form {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.field,
+.photoField {
+  display: grid;
+  gap: 8px;
+  color: var(--ink-strong);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fieldset legend {
+  margin-bottom: 10px;
+  color: var(--ink-strong);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.presetGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.presetButton,
+.presetButtonActive {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+}
+
+.presetButtonActive {
+  border-color: var(--brand);
+  background: var(--brand-tint);
+  color: var(--brand-ink);
+}
+
+.clearPhoto {
+  justify-self: start;
+  border: 0;
+  padding: 0;
+  color: var(--ink-muted);
+  background: transparent;
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.logoutBox {
+  display: grid;
+  gap: 10px;
+  margin-top: var(--s-6);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+}
+
+.backLink {
+  border: 0;
+  padding: 8px;
+  color: var(--ink-muted);
+  background: transparent;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.managementNav {
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.managementLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 0 22px;
+}
+
+.managementLink > span:first-child {
+  display: grid;
+  gap: 6px;
+}
+
+.managementLink strong {
+  color: var(--ink-strong);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.managementLink small {
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+.managementLink > span:last-child {
+  color: var(--ink-muted);
+}
+
+.managementLink:hover strong,
+.managementLink:hover > span:last-child {
+  color: var(--brand);
+}

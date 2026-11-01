@@ -1,0 +1,164 @@
+.container {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.invitePanel,
+.membersPanel {
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+.eyebrow {
+  margin: 0 0 var(--s-2);
+  color: var(--ink-muted);
+  font-size: var(--text-2xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.inviteCode,
+.inviteCodeDisabled {
+  display: inline-flex;
+  border-radius: var(--r-md);
+  padding: 12px 16px;
+  color: var(--brand-ink);
+  background: var(--brand-tint);
+  border: 1px solid rgba(239, 106, 94, 0.18);
+  font-size: 1.24rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.inviteCodeDisabled {
+  color: var(--ink-subtle);
+  background: var(--surface-sunken);
+  border-color: var(--line);
+  letter-spacing: normal;
+}
+
+.inviteHint {
+  margin: var(--s-2) 0 0;
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: var(--leading-normal);
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.actionRow button,
+.memberCard button {
+  min-height: 42px;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  padding: 0 16px;
+  color: #ffffff;
+  background: var(--brand);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  transition:
+    background var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+
+.actionRow button:hover:not(:disabled) {
+  background: var(--brand-hover);
+  box-shadow: var(--shadow-brand);
+}
+
+.actionRow .secondaryButton,
+.memberCard button {
+  color: var(--ink-muted);
+  background: var(--surface);
+  border-color: var(--line-strong);
+  box-shadow: none;
+}
+
+.actionRow .secondaryButton:hover:not(:disabled),
+.memberCard button:hover:not(:disabled) {
+  color: var(--danger-ink);
+  background: var(--danger-tint);
+  border-color: rgba(207, 74, 68, 0.24);
+  box-shadow: none;
+}
+
+.actionRow button:disabled,
+.memberCard button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.sectionHeader h2,
+.memberCard h3,
+.memberCard p {
+  margin: 0;
+}
+
+.sectionHeader h2 {
+  color: var(--ink-strong);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sectionHeader span {
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+  font-weight: 800;
+}
+
+.memberList {
+  display: grid;
+  gap: var(--s-2);
+}
+
+.memberCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border-radius: var(--r-lg);
+  background: var(--surface-sunken);
+  border: 1px solid var(--line);
+}
+
+.memberCard h3 {
+  color: var(--ink-strong);
+  font-size: var(--text-base);
+  font-weight: 800;
+}
+
+.memberCard p {
+  margin-top: 3px;
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+@media (max-width: 420px) {
+  .memberCard {
+    display: grid;
+  }
+}

@@ -1,0 +1,18 @@
+.container { display: grid; gap: 22px; }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.heading h2, .form h2 { margin: 0; font-size: var(--text-md); }
+.heading small { color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }
+.form { padding-block: 20px; border-block: 1px solid var(--line); }
+.form fieldset { display: grid; min-width: 0; gap: 18px; border: 0; padding: 22px 0 0; margin: 0; }
+.form label { display: grid; gap: 8px; font-size: var(--text-sm); }
+.form input, .form select, .form textarea { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line-strong); border-radius: var(--r-md); color: var(--ink); background: var(--surface); font: inherit; }
+.form textarea { min-height: 100px; resize: vertical; }
+.prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.actions { display: flex; gap: 10px; }
+.productSection { min-width: 0; padding-top: 18px; border-top: 1px solid var(--line); }
+.productSection h2 { margin: 0; font-size: var(--text-md); }
+.productSection small { margin-left: 4px; color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }
+.hint, .empty p { color: var(--ink-muted); font-size: var(--text-xs); line-height: 1.7; }
+.link, .empty a { display: inline-flex; align-items: center; min-height: 44px; color: var(--brand); font-size: var(--text-sm); }
+.footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.heading { flex-wrap: wrap; }

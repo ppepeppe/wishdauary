@@ -1,0 +1,116 @@
+.page { background: var(--surface); }
+.navigation { display: flex; gap: 28px; width: min(1136px, calc(100% - 48px)); margin: auto; min-height: 54px; align-items: stretch; border-bottom: 1px solid var(--line); }
+.navigation a { display: flex; align-items: center; padding: 0 2px; font-size: 15px; font-weight: 600; white-space: nowrap; }
+.navigation a:hover, .navigation .current { color: var(--brand); }
+.navigation .current { border-bottom: 2px solid var(--brand); }
+.content { width: min(1136px, calc(100% - 48px)); margin: auto; }
+.intro { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; padding-top: 28px; scroll-margin-top: 100px; }
+.banner { padding: 32px 36px; border-radius: 8px; background: #edf7fa; }
+.bannerLabel { color: var(--brand-ink); font-size: 13px; font-weight: 600; }
+.banner h1 { font-size: 30px; line-height: 1.4; font-weight: 700; letter-spacing: -.035em; margin: 12px 0; }
+.banner p { margin: 0 0 22px; color: var(--ink-muted); font-size: 14px; line-height: 1.6; }
+.primaryLink { display: inline-flex; align-items: center; justify-content: space-between; gap: 32px; min-height: 42px; padding: 0 18px; border-radius: 4px; background: var(--brand); color: white; font-size: 14px; font-weight: 700; }
+.primaryLink:hover { background: var(--brand-hover); }
+.joinPanel { padding: 24px; border: 1px solid var(--line); border-radius: 8px; }
+.joinIcon { display: block; margin-bottom: 18px; color: var(--brand); }
+.joinIcon svg { width: 28px; height: 28px; }
+.joinPanel h2 { margin: 0 0 10px; font-size: 18px; }
+.joinPanel p { margin: 0 0 20px; color: var(--ink-muted); font-size: 13px; line-height: 1.65; }
+.joinPanel > a { display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; color: var(--brand); }
+.loginHint { display: block; margin-top: 16px; font-size: 12px; color: var(--ink-muted); }
+.loginHint a { margin-left: 6px; text-decoration: underline; text-underline-offset: 3px; }
+.shortcuts { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 720px; margin: 28px auto 38px; }
+.shortcuts a { display: grid; justify-items: center; gap: 10px; padding: 12px 4px; font-size: 14px; font-weight: 500; }
+.shortcutIcon { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 18px; background: #f5f7f8; color: #445d69; }
+.shortcutIcon svg { width: 27px; height: 27px; }
+.shortcuts a:hover { color: var(--brand); }
+.shortcuts a:hover .shortcutIcon { background: var(--brand-tint); color: var(--brand); }
+.section { margin-bottom: 48px; scroll-margin-top: 95px; }
+.sectionHeading { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
+.sectionHeading h2 { margin: 0; font-size: 21px; letter-spacing: -.025em; }
+.sectionHeading p { margin: 7px 0 0; font-size: 14px; color: var(--ink-muted); }
+.sectionHeading > a { flex-shrink: 0; color: var(--brand); font-size: 14px; font-weight: 700; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.filter, .filterActive { min-height: 34px; border: 0; border-radius: 6px; padding: 7px 13px; font-size: 13px; color: var(--ink); background: var(--surface-sunken); }
+.filterActive { background: var(--brand-tint); color: var(--brand-ink); font-weight: 700; }
+.filter:hover { background: var(--line); }
+.diaryGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.diaryCard { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: 8px; }
+.diaryTop { display: flex; align-items: center; gap: 10px; }
+.emotion { display: block; width: 42px; height: 42px; border-radius: 12px; overflow: hidden; }
+.diaryTop > div { display: grid; gap: 3px; }
+.diaryTop strong { font-size: 13px; }
+.diaryTop > div > span { font-size: 11px; color: var(--ink-muted); }
+.exampleLabel { margin-left: auto; color: var(--ink-muted); font-size: 11px; }
+.diaryCard h3 { margin: 0 0 9px; font-size: 16px; line-height: 1.5; }
+.diaryCard > p { font-size: 14px; color: var(--ink); line-height: 1.75; margin: 0 0 18px; }
+.reply { border-top: 1px solid var(--line); padding-top: 12px; }
+.reply summary { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-muted); cursor: pointer; list-style: none; }
+.reply p { margin: 13px 0 0; padding: 12px; background: var(--surface-sunken); border-radius: 4px; font-size: 13px; line-height: 1.7; }
+.reply p strong { display: block; margin-bottom: 4px; }
+.wishGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.product { min-width: 0; }
+.productImage { width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; background: var(--surface-sunken); }
+.productImage img { transition: transform var(--dur-2); }
+.product:hover .productImage img { transform: scale(1.04); }
+.productInfo { display: block; padding: 12px 2px 0; }
+.productInfo > span { font-size: 12px; color: var(--ink-muted); }
+.productInfo h3 { margin: 5px 0 7px; font-size: 16px; font-weight: 500; }
+.productInfo > strong { font-size: 13px; color: var(--brand); font-weight: 600; }
+.cloverGuide { padding: 28px; background: #f6f8f7; border-radius: 8px; }
+.cloverLabel { font-size: 12px; color: var(--green-ink); font-weight: 600; }
+.cloverGuide h3 { margin: 14px 0; font-size: 22px; line-height: 1.45; }
+.cloverGuide p { font-size: 13px; color: var(--ink-muted); line-height: 1.8; }
+.cloverGuide a { display: inline-flex; gap: 16px; margin-top: 12px; font-size: 13px; font-weight: 600; }
+.guideGrid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; align-items: start; }
+.guideItem { border-bottom: 1px solid var(--line); }
+.guideItem summary { display: flex; justify-content: space-between; gap: 12px; padding: 18px 0; cursor: pointer; list-style: none; font-size: 14px; font-weight: 500; }
+.guideItem summary::-webkit-details-marker, .reply summary::-webkit-details-marker { display: none; }
+.guideItem summary > span { color: var(--ink-muted); }
+.guideItem[open] summary > span { transform: rotate(45deg); }
+.guideItem p { margin: 0 0 18px; font-size: 13px; line-height: 1.8; color: var(--ink-muted); }
+.guideItem summary:focus-visible, .reply summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.footer { display: flex; align-items: center; gap: 24px; padding: 32px max(24px, calc((100% - 1136px) / 2)); background: var(--surface-sunken); border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-muted); }
+.footer > div { margin-right: auto; }
+.footer strong { font-size: 17px; color: var(--ink); }
+.footer p { margin: 7px 0 0; }
+@media (max-width: 900px) {
+  .intro { grid-template-columns: 1.6fr 1fr; gap: 16px; }
+  .banner { padding: 28px; }
+  .banner h1 { font-size: 26px; }
+  .diaryGrid, .wishGrid { gap: 16px; }
+  .diaryCard { padding: 16px; }
+  .cloverGuide { padding: 20px; }
+}
+@media (max-width: 640px) {
+  .content, .navigation { width: calc(100% - 32px); }
+  .navigation { gap: 24px; min-height: 48px; overflow-x: auto; }
+  .navigation a { font-size: 14px; }
+  .intro { grid-template-columns: 1fr; padding-top: 20px; gap: 12px; }
+  .banner { padding: 25px 22px; }
+  .banner h1 { font-size: 25px; }
+  .banner p { max-width: 270px; font-size: 13px; }
+  .joinPanel { padding: 18px 20px; }
+  .joinIcon, .joinPanel > p, .loginHint { display: none; }
+  .joinPanel h2 { font-size: 15px; margin-bottom: 10px; }
+  .shortcuts { margin: 16px 0 28px; }
+  .shortcuts a { font-size: 12px; gap: 8px; }
+  .shortcutIcon { width: 48px; height: 48px; border-radius: 16px; }
+  .section { margin-bottom: 36px; }
+  .sectionHeading { gap: 10px; margin-bottom: 16px; }
+  .sectionHeading h2 { font-size: 19px; }
+  .sectionHeading p { font-size: 12px; }
+  .sectionHeading > a { font-size: 12px; }
+  .diaryGrid { grid-template-columns: 1fr; gap: 12px; }
+  .diaryCard { padding: 18px; }
+  .wishGrid { grid-template-columns: 1fr; gap: 12px; }
+  .productInfo h3 { font-size: 14px; }
+  .productInfo > strong { font-size: 12px; }
+  .cloverGuide { padding: 22px; }
+  .cloverGuide h3 { font-size: 18px; margin: 10px 0; }
+  .cloverGuide h3 br, .cloverGuide p br { display: none; }
+  .cloverGuide a { margin-top: 4px; }
+  .guideGrid { grid-template-columns: 1fr; }
+  .footer { padding: 26px 16px; gap: 16px; flex-wrap: wrap; }
+  .footer > div { flex-basis: 100%; }
+}

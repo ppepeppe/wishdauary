@@ -1,0 +1,85 @@
+.message {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px;
+  border: 1px solid transparent;
+  border-radius: var(--r-lg);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+}
+
+/* Glyph sits on a solid disc, coloured per state below. */
+.message::before {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.loading {
+  color: var(--ink-muted);
+  background: var(--surface-sunken);
+  border-color: var(--line);
+}
+
+.loading::before {
+  content: '⋯';
+  color: var(--surface-sunken);
+  background: var(--ink-muted);
+  animation: loadingPulse 1.4s ease-in-out infinite;
+}
+
+.error {
+  color: var(--danger-ink);
+  background: var(--danger-tint);
+  border-color: rgba(207, 74, 68, 0.16);
+}
+
+.error::before {
+  content: '!';
+  color: var(--danger-tint);
+  background: var(--danger);
+}
+
+.empty {
+  color: var(--ink-muted);
+  background: var(--surface-sunken);
+  border-color: var(--line);
+}
+
+.empty::before {
+  content: '·';
+  color: var(--surface-sunken);
+  background: var(--ink-subtle);
+}
+
+.success {
+  color: var(--green-ink);
+  background: var(--green-tint);
+  border-color: rgba(63, 156, 99, 0.18);
+}
+
+.success::before {
+  content: '✓';
+  color: var(--green-tint);
+  background: var(--green);
+}
+
+@keyframes loadingPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

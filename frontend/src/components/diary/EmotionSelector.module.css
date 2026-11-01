@@ -1,0 +1,70 @@
+.group {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.option {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-1);
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 6px 4px 7px;
+  background: var(--surface);
+  color: var(--ink-muted);
+  transition:
+    transform var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out),
+    background var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-1) var(--ease-out);
+}
+
+.option:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: rgba(239, 106, 94, 0.3);
+}
+
+.option:disabled {
+  cursor: default;
+  opacity: 0.6;
+  transform: none;
+}
+
+.optionSelected {
+  color: var(--brand-ink);
+  border-color: var(--brand);
+  background: var(--brand-tint);
+  box-shadow: var(--focus-ring);
+}
+
+.emoji {
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  display: block;
+  background: var(--brand-tint);
+  border-radius: var(--r-sm);
+}
+
+.label {
+  overflow: hidden;
+  max-width: 100%;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 460px) {
+  .option {
+    padding: 6px 3px 8px;
+  }
+
+  .emoji {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--r-xs);
+  }
+}

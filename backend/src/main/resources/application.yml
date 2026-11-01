@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: wishdiary-backend
+  datasource:
+    url: ${WISHDIARY_DB_URL:jdbc:postgresql://localhost:5432/wishdiary}
+    username: ${WISHDIARY_DB_USERNAME:postgres}
+    password: ${WISHDIARY_DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: ${WISHDIARY_JPA_DDL_AUTO:validate}
+    properties:
+      hibernate:
+        format_sql: ${WISHDIARY_HIBERNATE_FORMAT_SQL:true}
+    open-in-view: false
+  flyway:
+    enabled: ${WISHDIARY_FLYWAY_ENABLED:true}
+    baseline-on-migrate: ${WISHDIARY_FLYWAY_BASELINE_ON_MIGRATE:true}
+    baseline-version: ${WISHDIARY_FLYWAY_BASELINE_VERSION:0}
+
+logging:
+  level:
+    org.hibernate.SQL: ${WISHDIARY_SQL_LOG_LEVEL:debug}
+
+wishdiary:
+  web:
+    allowed-origins: ${WISHDIARY_ALLOWED_ORIGINS:http://localhost:5187,http://127.0.0.1:5187,http://localhost:5173,http://127.0.0.1:5173,capacitor://localhost,https://localhost}
+  auth:
+    token-secret: ${WISHDIARY_AUTH_TOKEN_SECRET:local-development-token-secret-change-me}
+    token-expiration-seconds: ${WISHDIARY_AUTH_TOKEN_EXPIRATION_SECONDS:86400}

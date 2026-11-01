@@ -1,0 +1,35 @@
+build/
+.gradle/
+out/
+*.iml
+.idea/
+
+# Dependencies and generated app bundles
+.gradle-user-home/
+node_modules/
+dist/
+dist-native/
+artifacts/
+*.tsbuildinfo
+
+# Machine-specific files and environment credentials
+.DS_Store
+.openai/
+.env
+.env.*
+!.env.example
+!.env.mobile.example
+local.properties
+*.log
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Local databases and backups
+*.dump
+*.sqlite
+*.sqlite3
+*.db

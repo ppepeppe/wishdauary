@@ -1,0 +1,116 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  transition:
+    transform var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    background var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+}
+
+.button:disabled {
+  opacity: 0.55;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ---------- Sizes ---------- */
+.sm {
+  min-height: 34px;
+  padding: 0 12px;
+  font-size: var(--text-xs);
+}
+
+.md {
+  min-height: 42px;
+  padding: 0 16px;
+  font-size: var(--text-sm);
+}
+
+.lg {
+  min-height: 50px;
+  padding: 0 22px;
+  border-radius: var(--r-lg);
+  font-size: var(--text-md);
+}
+
+/* ---------- Variants ---------- */
+.primary {
+  color: #ffffff;
+  background: var(--brand);
+  box-shadow: var(--shadow-xs);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--brand-hover);
+  box-shadow: var(--shadow-brand);
+  transform: translateY(-1px);
+}
+
+.primary:active:not(:disabled) {
+  background: var(--brand-press);
+}
+
+.secondary {
+  color: var(--brand-ink);
+  background: var(--brand-tint);
+  border-color: rgba(8, 127, 149, 0.18);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--brand-tint-strong);
+  border-color: rgba(8, 127, 149, 0.3);
+  transform: translateY(-1px);
+}
+
+.neutral {
+  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-xs);
+}
+
+.neutral:hover:not(:disabled) {
+  color: var(--ink-strong);
+  background: var(--surface-sunken);
+  transform: translateY(-1px);
+}
+
+.ghost {
+  color: var(--ink-muted);
+  background: transparent;
+}
+
+.ghost:hover:not(:disabled) {
+  color: var(--ink-strong);
+  background: rgba(63, 46, 50, 0.05);
+}
+
+.danger {
+  color: var(--danger-ink);
+  background: var(--danger-tint);
+  border-color: rgba(207, 74, 68, 0.2);
+}
+
+.danger:hover:not(:disabled) {
+  color: #ffffff;
+  background: var(--danger);
+  border-color: transparent;
+}
+
+.fullWidth {
+  width: 100%;
+}

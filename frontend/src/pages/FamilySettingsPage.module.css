@@ -1,0 +1,337 @@
+.requestList {
+  display: grid;
+  gap: var(--s-3);
+}
+
+/* =========================================================================
+   Children's saving goals
+   ========================================================================= */
+.goalSection,
+.pricingSection {
+  display: grid;
+  gap: var(--s-3);
+  margin-bottom: var(--s-6);
+}
+
+.goalSection h2,
+.pricingSection h2 {
+  margin: 0;
+  color: var(--ink-strong);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.goalList {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.goalCard {
+  display: grid;
+  gap: var(--s-2);
+  padding: var(--s-5);
+  border-radius: var(--r-xl);
+  border: 1px solid rgba(63, 156, 99, 0.16);
+  background: linear-gradient(160deg, var(--green-tint) 0%, var(--surface) 62%);
+  box-shadow: var(--shadow-sm);
+}
+
+.goalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-3);
+}
+
+.goalHeader h3 {
+  margin: 0 0 3px;
+  color: var(--ink-strong);
+  font-size: var(--text-md);
+  font-weight: 800;
+}
+
+.goalHeader p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.goalBadge {
+  flex: 0 0 auto;
+  padding: 6px 11px;
+  border-radius: var(--r-pill);
+  color: var(--green-ink);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(63, 156, 99, 0.18);
+  font-size: var(--text-2xs);
+  font-weight: 800;
+}
+
+.goalNumbers {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink-muted);
+  font-size: var(--text-2xs);
+  font-weight: 800;
+}
+
+.goalTrack {
+  height: 9px;
+  border-radius: var(--r-pill);
+  background: rgba(63, 156, 99, 0.14);
+  overflow: hidden;
+}
+
+.goalFill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+  transition: width var(--dur-3) var(--ease-out);
+}
+
+/* =========================================================================
+   Request / pricing cards
+   ========================================================================= */
+.requestCard {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.requestHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.requestHeader h3 {
+  margin: 0 0 3px;
+  color: var(--ink-strong);
+  font-size: var(--text-md);
+  font-weight: 800;
+}
+
+.requestHeader p,
+.requestMessage,
+.requestDate {
+  margin: 0;
+}
+
+.requestHeader p {
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.requestDate {
+  color: var(--ink-subtle);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+}
+
+.price {
+  display: grid;
+  gap: 2px;
+  white-space: nowrap;
+  color: var(--green-ink);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  text-align: right;
+}
+
+.price small {
+  color: var(--ink-muted);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+}
+
+.requestMessage {
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  color: var(--ink);
+  background: var(--surface-sunken);
+  border: 1px solid var(--line);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.priceForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: var(--s-2);
+  align-items: end;
+}
+
+.priceForm label {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  color: var(--ink);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+}
+
+.priceForm input {
+  min-width: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.priceForm button {
+  min-height: 42px;
+  border: 0;
+  border-radius: var(--r-sm);
+  padding: 0 16px;
+  color: #ffffff;
+  background: var(--brand);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  transition:
+    background var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+
+.priceForm button:hover:not(:disabled) {
+  background: var(--brand-hover);
+  box-shadow: var(--shadow-brand);
+}
+
+.priceForm button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.productLinkPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--surface-sunken);
+  border: 1px solid var(--line);
+  min-width: 0;
+}
+
+.productLinkPanel span {
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.productLink {
+  min-height: 36px;
+  border-radius: var(--r-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  color: var(--brand-ink);
+  background: var(--brand-tint);
+  border: 1px solid rgba(239, 106, 94, 0.18);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  white-space: nowrap;
+  transition:
+    background var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out);
+}
+
+.productLink:hover {
+  background: var(--brand-tint-strong);
+  border-color: rgba(239, 106, 94, 0.3);
+}
+
+/* =========================================================================
+   Footer: status + approve/reject
+   ========================================================================= */
+.requestFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.statusPending,
+.statusDone {
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  font-size: var(--text-2xs);
+  font-weight: 800;
+}
+
+.statusPending {
+  color: var(--amber-ink);
+  background: var(--amber-tint);
+}
+
+.statusDone {
+  color: var(--green-ink);
+  background: var(--green-tint);
+}
+
+.actionGroup {
+  display: flex;
+  gap: var(--s-2);
+}
+
+.actionGroup button {
+  min-width: 68px;
+  min-height: 40px;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  padding: 0 14px;
+  color: #ffffff;
+  background: var(--green);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  transition:
+    background var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out);
+}
+
+.actionGroup button:hover:not(:disabled) {
+  background: var(--green-hover);
+}
+
+.actionGroup button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.actionGroup .rejectButton {
+  color: var(--ink-muted);
+  background: var(--surface);
+  border-color: var(--line-strong);
+}
+
+.actionGroup .rejectButton:hover:not(:disabled) {
+  color: var(--danger-ink);
+  background: var(--danger-tint);
+  border-color: rgba(207, 74, 68, 0.24);
+}
+
+@media (max-width: 640px) {
+  .requestHeader {
+    display: grid;
+  }
+
+  .price {
+    text-align: left;
+  }
+
+  .priceForm {
+    grid-template-columns: 1fr;
+  }
+}
