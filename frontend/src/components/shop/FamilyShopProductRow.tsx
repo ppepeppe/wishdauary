@@ -51,7 +51,7 @@ function ProductPriceEditor({ product, onSaved, onCancel }: {
           <label>필요한 클로버<input type="number" inputMode="numeric" min="1" max="2147483647" step="1" required value={price} autoFocus onChange={(event) => setPrice(event.target.value)} /></label>
           <label>실제 구매가 (선택)<input type="number" inputMode="numeric" min="0" max="2147483647" step="1" value={purchasePrice} onChange={(event) => setPurchasePrice(event.target.value)} /></label>
         </div>
-        <p className={styles.hint}>저장하면 아이의 상점에 반영돼요. 이미 보낸 선물 요청의 클로버는 바뀌지 않아요.</p>
+        <p className={styles.hint}>저장하면 아이의 갖고 싶은 선물에 반영돼요. 이미 보낸 선물 요청의 클로버는 바뀌지 않아요.</p>
         <div className={styles.actions}>
           <Button type="submit" disabled={busy}>{busy ? '저장 중…' : '클로버 저장'}</Button>
           <Button type="button" variant="secondary" onClick={onCancel}>취소</Button>
@@ -69,7 +69,7 @@ function FamilyShopProductRow({ product, childName, onUpdated }: ProductRowProps
       <div className={styles.summary}>
         <ProductArtwork title={product.title} imageUrl={product.imageUrl} className={styles.image} />
         <div className={styles.copy}>
-          <h3>{product.title}</h3><p>{childName}의 상점</p>
+          <h3>{product.title}</h3><p>{childName}의 선물</p>
           <strong>{priced ? `${product.cloverPrice} 클로버` : '클로버 설정 대기'}</strong>
           {product.purchasePriceWon != null ? <small>{formatWon(product.purchasePriceWon)}</small> : null}
         </div>

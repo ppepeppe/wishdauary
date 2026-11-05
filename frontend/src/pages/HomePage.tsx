@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import EmotionIcon from '../components/diary/EmotionIcon';
 import ProfileAvatar from '../components/common/ProfileAvatar';
 import StatusMessage from '../components/common/StatusMessage';
+import CloverIcon from '../components/common/CloverIcon';
 import ProductArtwork from '../components/shop/ProductArtwork';
 import { formatKoreanDate, getTodayDateInKorea } from '../constants/date';
 import { EMOTIONS } from '../constants/emotion';
@@ -111,6 +112,7 @@ function HomePage() {
         <Link to="/me" className={styles.profileBadge}>
           <ProfileAvatar
             preset={profile?.avatarPreset}
+            character={profile?.avatarCharacter}
             imageUrl={profile?.avatarImage}
             size="sm"
             alt=""
@@ -121,32 +123,34 @@ function HomePage() {
             <span className={styles.profileHint}>마이페이지</span>
           </div>
         </Link>
-        <div className={styles.balanceChip}>
+        <div className={styles.balanceChip} role="group" aria-label={`모은 클로버 ${(data?.cloverBalance ?? 0).toFixed(1)}개`}>
           <span className={styles.balanceIcon} aria-hidden="true">
-            ☘︎
+            <CloverIcon />
           </span>
           <strong className={styles.balanceValue}>{(data?.cloverBalance ?? 0).toFixed(1)}</strong>
         </div>
       </section>
 
-      <section className={styles.dateBar}>
-        <div>
-          <span className={styles.dateCaption}>오늘</span>
-          <strong>{formatKoreanDate(getTodayDateInKorea())}</strong>
+      <section className={styles.todayCard} aria-label="오늘의 기록">
+        <div className={styles.dateBar}>
+          <div>
+            <span className={styles.dateCaption}>오늘</span>
+            <strong>{formatKoreanDate(getTodayDateInKorea())}</strong>
+          </div>
+          <Link to="/diaries" className={styles.calendarLink}>
+            기록 달력
+          </Link>
         </div>
-        <Link to="/diaries" className={styles.calendarLink}>
-          기록 달력
-        </Link>
-      </section>
 
-      <section className={styles.streakBanner}>
-        <div className={styles.streakCopy}>
-          <p className={styles.streakTitle}>{data?.currentStreak ? `${data.currentStreak}일째 일기를 쓰고 있어요` : '첫 일기를 기다리고 있어요'}</p>
-          <p className={styles.streakDescription}>
-            {data?.currentStreak && data.currentStreak >= 3
-              ? '꾸준히 기록하며 클로버를 모아보세요.'
-              : '짧은 일기라도 괜찮아요.'}
-          </p>
+        <div className={styles.streakBanner}>
+          <div className={styles.streakCopy}>
+            <p className={styles.streakTitle}>{data?.currentStreak ? `${data.currentStreak}일째 일기를 쓰고 있어요` : '첫 일기를 기다리고 있어요'}</p>
+            <p className={styles.streakDescription}>
+              {data?.currentStreak && data.currentStreak >= 3
+                ? '꾸준히 기록하며 클로버를 모아보세요.'
+                : '짧은 일기라도 괜찮아요.'}
+            </p>
+          </div>
         </div>
       </section>
 
@@ -211,7 +215,7 @@ function HomePage() {
                 <p className={styles.goalName}>{goal.productTitle}</p>
               </div>
               <span className={styles.goalBadge}>
-                {goalRemaining === 0 ? '달성!' : `${goalRemaining} ☘︎ 남음`}
+                {goalRemaining === 0 ? '달성!' : `${goalRemaining} 클로버 남음`}
               </span>
             </div>
 
@@ -223,8 +227,8 @@ function HomePage() {
               />
               <div className={styles.goalProgressBlock}>
                 <div className={styles.goalNumbers}>
-                  <span>{currentGoal} ☘︎</span>
-                  <span>{goalTarget} ☘︎</span>
+                  <span>{currentGoal} 클로버</span>
+                  <span>{goalTarget} 클로버</span>
                 </div>
                 <div className={styles.progressTrack}>
                   <div className={styles.progressFill} style={{ width: `${progressRatio}%` }} />
@@ -232,7 +236,7 @@ function HomePage() {
                 <p className={styles.goalHelper}>
                   {goalRemaining === 0
                     ? '이제 가족에게 부탁할 수 있어!'
-                    : `${goalRemaining} ☘︎만 더 모으면 돼!`}
+                    : `${goalRemaining} 클로버만 더 모으면 돼!`}
                 </p>
               </div>
             </div>
@@ -246,7 +250,7 @@ function HomePage() {
               <p className={styles.goalHeading}>내가 모으는 목표</p>
               <p className={styles.goalName}>아직 정한 목표가 없어요</p>
             </div>
-            <Link to="/shop/catalog" className={styles.goalDetailLink}>
+            <Link to="/shop" className={styles.goalDetailLink}>
               갖고 싶은 선물 고르기
             </Link>
           </div>

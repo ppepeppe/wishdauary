@@ -21,6 +21,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class MyProfileServiceTest {
 
+    @Test
+    void olderClientsKeepThePreviouslySelectedCharacterWhenUpdatingTheirProfile() {
+        when(loadUserAccountPort.loadAccount(1L)).thenReturn(new User(1L, "child@test.com", "미아",
+                AppRole.CHILD, ProfileAvatar.of("mint", null, "kuromi")));
+        when(saveUserProfilePort.saveProfile(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        MyProfileResponse response = new MyProfileService(loadUserAccountPort, saveUserProfilePort)
+                .update(1L, new UpdateMyProfileRequest("별이", "sky", null));
+        assertEquals("kuromi", response.avatarCharacter());
+        assertEquals("sky", response.avatarPreset());
+    }
+
     @Mock
     private LoadUserAccountPort loadUserAccountPort;
 

@@ -1,3 +1,4 @@
+import CardCarousel from '../components/common/CardCarousel';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
@@ -31,11 +32,11 @@ export default function SharedDiaryFeedPage() {
         {loading ? <StatusMessage kind="loading" message="이야기를 모으고 있어요." /> : null}
         {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => setRevision((value) => value + 1)}>다시 불러오기</Button></div> : null}
         {!loading && !error && items.length === 0 ? <StatusMessage kind="empty" message="아직 볼 수 있는 일기가 없어요." /> : null}
-        {items.map((item) => <article className={styles.card} key={item.diaryId}>
+        <CardCarousel title="공유된 이야기" itemLabel="일기">{items.map((item) => <article className={styles.card} key={item.diaryId}>
           <div className={styles.heading}><strong>{item.authorNickname}</strong><span>{getVisibilityScopeLabel(item.visibilityScope)}</span></div>
           <p>{item.contentPreview}</p>
           <div className={styles.heading}><small>{formatKoreanDate(item.writtenDate)}</small><Link to={`/diaries/${item.diaryId}`}>이야기 읽기 →</Link></div>
-        </article>)}
+        </article>)}</CardCarousel>
         <div className={styles.actions}>
           <Button variant="secondary" disabled={loading || page === 0} onClick={() => setPage((value) => value - 1)}>이전</Button>
           <span>{page + 1} 페이지</span>

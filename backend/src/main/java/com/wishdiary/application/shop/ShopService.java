@@ -24,8 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ShopService implements GetShopProductsUseCase, GetShopFamilyRecipientsUseCase, RequestGiftUseCase, GetGiftRequestsUseCase, GetSentGiftRequestsUseCase, CreateShopProductUseCase, ProcessGiftRequestUseCase, GetShopProductPricingRequestsUseCase, SetShopProductPriceUseCase {
+public class ShopService implements ManageWishProductsUseCase, GetShopProductsUseCase, GetShopFamilyRecipientsUseCase, RequestGiftUseCase, GetGiftRequestsUseCase, GetSentGiftRequestsUseCase, CreateShopProductUseCase, ProcessGiftRequestUseCase, GetShopProductPricingRequestsUseCase, SetShopProductPriceUseCase {
 
+    private final DecodeShopPhotoPort photos;
     private final LoadShopProductPort loadShopProductPort;
     private final SaveShopProductPort saveShopProductPort;
     private final SaveGiftRequestNotificationPort saveGiftRequestNotificationPort;
@@ -49,8 +50,10 @@ public class ShopService implements GetShopProductsUseCase, GetShopFamilyRecipie
             RecordCloverLedgerPort recordCloverLedgerPort,
             ShopProductResponseMapper shopProductResponseMapper,
             GiftRequestResponseMapper giftRequestResponseMapper,
-            GiftRequestNotificationResponseMapper giftRequestNotificationResponseMapper
+            GiftRequestNotificationResponseMapper giftRequestNotificationResponseMapper,
+            DecodeShopPhotoPort photos
     ) {
+        this.photos = photos;
         this.loadShopProductPort = loadShopProductPort;
         this.saveShopProductPort = saveShopProductPort;
         this.saveGiftRequestNotificationPort = saveGiftRequestNotificationPort;
@@ -72,6 +75,7 @@ public class ShopService implements GetShopProductsUseCase, GetShopFamilyRecipie
         return loadShopProductPort.loadAll()
                 .stream()
                 .filter(product -> product.isAvailableTo(childUserId))
+                .filter(product -> product.getCloverPrice() > 0)
                 .sorted(Comparator.comparingInt(ShopProduct::getCloverPrice).thenComparing(ShopProduct::getId))
                 .map(shopProductResponseMapper::toResponse)
                 .toList();
@@ -89,7 +93,7 @@ public class ShopService implements GetShopProductsUseCase, GetShopFamilyRecipie
                 request.description(),
                 request.imageUrl(),
                 request.productUrl(),
-                request.cloverPrice() == null ? 0 : request.cloverPrice()
+                0
         ));
         return shopProductResponseMapper.toResponse(savedProduct);
     }
@@ -139,7 +143,7 @@ public class ShopService implements GetShopProductsUseCase, GetShopFamilyRecipie
                 receiver.id(),
                 receiver.relationLabel(),
                 request.message()
-        ));
+        ).withPhoto(product.getPhoto()));
         recordCloverLedgerPort.record(CloverLedger.create(
                 childUser.id(),
                 -product.getCloverPrice(),
@@ -230,6 +234,7 @@ public class ShopService implements GetShopProductsUseCase, GetShopFamilyRecipie
                 .stream()
                 .filter(product -> product.getSource() == ShopProductSource.CUSTOM)
                 .filter(product -> product.getCloverPrice() <= 0)
+                .filter(product -> product.mayBePricedBy(familyUserId))
                 .filter(product -> childUserIds.contains(product.getChildUserId()))
                 .sorted(Comparator.comparing(ShopProduct::getCreatedAt).reversed())
                 .map(shopProductResponseMapper::toResponse)
@@ -246,7 +251,7 @@ public class ShopService implements GetShopProductsUseCase, GetShopFamilyRecipie
 
         ShopProduct product = loadShopProductPort.loadById(productId)
                 .orElseThrow(() -> new ShopProductNotFoundException(productId));
-        if (product.getSource() == ShopProductSource.PRESET || product.getChildUserId() == null) {
+        if (product.getSource() == ShopProductSource.PRESET || product.getChildUserId() == null || !product.mayBePricedBy(familyUserId)) {
             throw new ShopProductPriceSettingNotAllowedException(productId);
         }
         LoadedUser childUser = loadUserPort.loadById(product.getChildUserId());
@@ -258,6 +263,28 @@ public class ShopService implements GetShopProductsUseCase, GetShopFamilyRecipie
                 request.cloverPrice(),
                 request.purchasePriceWon()
         )));
+    }
+
+    @Override
+    @Transactional
+    public ShopProductResponse requestWish(Long childId, CreateWishProductRequest request) {
+        LoadedUser child = loadUserPort.loadById(childId);
+        validateChildUser(child);
+        validateReceiver(child, loadUserPort.loadById(request.receiverFamilyUserId()));
+        return shopProductResponseMapper.toResponse(saveShopProductPort.save(ShopProduct.createWish(childId,
+                request.receiverFamilyUserId(), request.title(), request.description(), request.imageUrl(), request.productUrl())
+                .withPhoto(photos.decode(request.imageData()))));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ShopProductResponse> getWishRequests(Long childId) {
+        validateChildUser(loadUserPort.loadById(childId));
+        return loadShopProductPort.loadAll().stream()
+                .filter(product -> product.getSource() == ShopProductSource.CUSTOM)
+                .filter(product -> childId.equals(product.getChildUserId()))
+                .sorted(Comparator.comparing(ShopProduct::getCreatedAt).reversed())
+                .map(shopProductResponseMapper::toResponse).toList();
     }
 
     private void validateChildUser(LoadedUser user) {

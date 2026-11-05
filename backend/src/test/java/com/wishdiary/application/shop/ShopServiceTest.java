@@ -76,7 +76,8 @@ class ShopServiceTest {
                 recordCloverLedgerPort,
                 new ShopProductResponseMapper(),
                 new GiftRequestResponseMapper(),
-                new GiftRequestNotificationResponseMapper()
+                new GiftRequestNotificationResponseMapper(),
+                data -> null
         );
     }
 
@@ -86,12 +87,13 @@ class ShopServiceTest {
         when(loadShopProductPort.loadAll()).thenReturn(List.of(
                 ShopProduct.reconstitute(10L, null, "기본 선물", "예시", null, null, 8, null, ShopProductSource.PRESET, java.time.LocalDateTime.now()),
                 ShopProduct.reconstitute(11L, 1L, "내 선물", "직접 적음", null, null, 0, null, ShopProductSource.CUSTOM, java.time.LocalDateTime.now()),
-                ShopProduct.reconstitute(12L, 3L, "다른 아이 선물", "다른 가족", null, null, 10, null, ShopProductSource.CUSTOM, java.time.LocalDateTime.now())
+                ShopProduct.reconstitute(12L, 3L, "다른 아이 선물", "다른 가족", null, null, 10, null, ShopProductSource.CUSTOM, java.time.LocalDateTime.now()),
+                ShopProduct.reconstitute(13L, 1L, "클로버가 정해진 내 선물", "확인 완료", null, null, 6, null, ShopProductSource.CUSTOM, java.time.LocalDateTime.now())
         ));
 
         List<ShopProductResponse> products = shopService.getProducts(1L);
 
-        assertEquals(List.of(11L, 10L), products.stream().map(ShopProductResponse::productId).toList());
+        assertEquals(List.of(13L, 10L), products.stream().map(ShopProductResponse::productId).toList());
         verify(saveShopProductPort, never()).save(any(ShopProduct.class));
     }
 

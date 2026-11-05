@@ -31,7 +31,8 @@ public class MyProfileService implements GetMyProfileUseCase, UpdateMyProfileUse
         User user = loadUserAccountPort.loadAccount(userId);
         User updated = user.changeProfile(
                 request.nickname(),
-                ProfileAvatar.of(request.avatarPreset(), request.avatarImage())
+                ProfileAvatar.of(request.avatarPreset(), request.avatarImage(),
+                        request.avatarCharacter() == null ? user.avatar().character() : request.avatarCharacter())
         );
         return toResponse(saveUserProfilePort.saveProfile(updated));
     }
@@ -43,7 +44,8 @@ public class MyProfileService implements GetMyProfileUseCase, UpdateMyProfileUse
                 user.nickname(),
                 user.appRole().name().toLowerCase(),
                 user.avatar().preset(),
-                user.avatar().imageDataUrl()
+                user.avatar().imageDataUrl(),
+                user.avatar().character()
         );
     }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { getAuthSession } from '../../services/session/authSession';
-import { fetchReceivedGiftRequests, fetchSentGiftRequests } from '../../services/api/shopApi';
+import { fetchProductPricingRequests, fetchReceivedGiftRequests, fetchSentGiftRequests } from '../../services/api/shopApi';
 import NavIcon, { type NavIconName } from './NavIcon';
 import styles from './Layout.module.css';
 
@@ -40,9 +40,9 @@ function Layout() {
 
       try {
         if (authSession.appRole === 'family') {
-          const requests = await fetchReceivedGiftRequests();
+          const [requests, pricing] = await Promise.all([fetchReceivedGiftRequests(), fetchProductPricingRequests()]);
           if (!ignore) {
-            setGiftBadgeCount(requests.filter((request) => request.status === 'pending').length);
+            setGiftBadgeCount(requests.filter((request) => request.status === 'pending').length + pricing.length);
           }
           return;
         }
@@ -59,9 +59,12 @@ function Layout() {
     }
 
     void loadGiftBadgeCount();
+    const refresh = () => void loadGiftBadgeCount();
+    window.addEventListener('focus', refresh);
 
     return () => {
       ignore = true;
+      window.removeEventListener('focus', refresh);
     };
   }, [authSession?.appRole, authSession?.userId, location.pathname]);
 

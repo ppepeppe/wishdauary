@@ -1,4 +1,5 @@
 import styles from './CloverBalanceCard.module.css';
+import CloverIcon from '../common/CloverIcon';
 
 interface CloverBalanceCardProps {
   balance?: number;
@@ -30,7 +31,7 @@ function CloverBalanceCard({
   return (
     <div className={styles.card}>
       <div className={styles.header}>
-        <span className={styles.icon}>☘︎</span>
+        <span className={styles.icon}><CloverIcon /></span>
         <div className={styles.headerMeta}>
           <p className={styles.badge}>오늘의 여유</p>
           {recentGain > 0 ? <span className={styles.gainBadge}>{`+${recentGain} 적립`}</span> : null}

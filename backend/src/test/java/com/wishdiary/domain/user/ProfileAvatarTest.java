@@ -10,6 +10,19 @@ import org.junit.jupiter.api.Test;
 class ProfileAvatarTest {
 
     @Test
+    void characterAndBackgroundCanBeChosenIndependently() {
+        for (String character : new String[]{"my-melody", "kuromi", "cinnamoroll"}) {
+            for (String color : ProfileAvatar.PRESETS) {
+                ProfileAvatar avatar = ProfileAvatar.of(color, null, character);
+                assertEquals(character, avatar.character());
+                assertEquals(color, avatar.preset());
+            }
+        }
+        assertEquals("my-melody", ProfileAvatar.defaultAvatar().character());
+        assertThrows(InvalidProfileAvatarException.class, () -> ProfileAvatar.of("peach", null, "unknown"));
+    }
+
+    @Test
     void defaultAvatarUsesPeachPreset() {
         ProfileAvatar avatar = ProfileAvatar.defaultAvatar();
 

@@ -1,4 +1,6 @@
+import CardCarousel from '../components/common/CardCarousel';
 import { Link } from 'react-router-dom';
+import ProductArtwork from '../components/shop/ProductArtwork';
 import { useEffect, useState } from 'react';
 import HoverHint from '../components/common/HoverHint';
 import PageSection from '../components/common/PageSection';
@@ -107,8 +109,7 @@ function FamilySettingsPage() {
 
       {childrenGoals.length > 0 ? (
         <div className={styles.goalSection}>
-          <h2>아이가 모으고 있는 목표</h2>
-          <div className={styles.goalList}>
+          <CardCarousel title="아이가 모으고 있는 목표" itemLabel="목표">
             {childrenGoals.map((childGoal) => {
               const ratio =
                 childGoal.goal.targetCloverPrice > 0
@@ -125,12 +126,12 @@ function FamilySettingsPage() {
                     <span className={styles.goalBadge}>
                       {childGoal.goal.remainingClovers === 0
                         ? '달성!'
-                        : `${childGoal.goal.remainingClovers} ☘︎ 남음`}
+                        : `${childGoal.goal.remainingClovers} 클로버 남음`}
                     </span>
                   </div>
                   <div className={styles.goalNumbers}>
-                    <span>{childGoal.goal.currentCloverBalance} ☘︎</span>
-                    <span>{childGoal.goal.targetCloverPrice} ☘︎</span>
+                    <span>{childGoal.goal.currentCloverBalance} 클로버</span>
+                    <span>{childGoal.goal.targetCloverPrice} 클로버</span>
                   </div>
                   <div className={styles.goalTrack}>
                     <div className={styles.goalFill} style={{ width: `${ratio}%` }} />
@@ -138,19 +139,21 @@ function FamilySettingsPage() {
                 </article>
               );
             })}
-          </div>
+          </CardCarousel>
         </div>
       ) : null}
       {productPricingRequests.length > 0 ? (
         <div className={styles.pricingSection}>
-          <h2>가격 정하기</h2>
-          <div className={styles.requestList}>
+          <CardCarousel title="가격 정하기" itemLabel="상품">
             {productPricingRequests.map((product) => (
               <article key={product.productId} className={styles.requestCard}>
                 <div className={styles.requestHeader}>
-                  <div>
+                  <div className={styles.productSummary}>
+                    {product.imageUrl ? <ProductArtwork title={product.title} imageUrl={product.imageUrl} className={styles.photo} /> : null}
+                    <div>
                     <h3>{product.title}</h3>
                     <p>{product.description}</p>
+                    </div>
                   </div>
                   <span className={styles.price}>대기 중</span>
                 </div>
@@ -195,21 +198,24 @@ function FamilySettingsPage() {
                 </div>
               </article>
             ))}
-          </div>
+          </CardCarousel>
         </div>
       ) : null}
 
       {giftRequests.length > 0 ? (
-        <div className={styles.requestList}>
+        <CardCarousel title="받은 선물 요청" itemLabel="요청">
           {giftRequests.map((request) => (
             <article key={request.notificationId} className={styles.requestCard}>
               <div className={styles.requestHeader}>
-                <div>
+                <div className={styles.productSummary}>
+                  {request.productImageUrl ? <ProductArtwork title={request.productTitle} imageUrl={request.productImageUrl} className={styles.photo} /> : null}
+                  <div>
                   <h3>{request.productTitle}</h3>
                   <p>{request.requesterChildNickname}의 요청</p>
+                  </div>
                 </div>
                 <span className={styles.price}>
-                  {request.cloverPrice} ☘︎
+                  {request.cloverPrice} 클로버
                   {formatWon(request.purchasePriceWon) ? <small>{formatWon(request.purchasePriceWon)}</small> : null}
                 </span>
               </div>
@@ -253,7 +259,7 @@ function FamilySettingsPage() {
               <p className={styles.requestDate}>{formatDate(request.createdAt)}</p>
             </article>
           ))}
-        </div>
+        </CardCarousel>
       ) : null}
       {data && giftRequests.length === 0 && productPricingRequests.length === 0 ? (
         <StatusMessage kind="empty" message="아직 도착한 선물 요청이 없어요. 아이에게 연결을 요청하고 승인을 받으면 선물을 부탁받을 수 있어요." />

@@ -41,6 +41,9 @@ export function useShop() {
 
   useEffect(() => {
     void refetch();
+    const refresh = () => void refetch();
+    window.addEventListener('focus', refresh);
+    return () => window.removeEventListener('focus', refresh);
   }, [refetch]);
 
   const requestProductGift = useCallback(

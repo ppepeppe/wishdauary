@@ -1,25 +1,20 @@
-.list {
-  display: grid;
-  gap: var(--s-2);
-}
-
 .card {
-  padding: 22px 0;
-  border-radius: 0;
-  background: transparent;
-  border: 0;
   display: grid;
   gap: var(--s-2);
   transition:
     border-color var(--dur-1) var(--ease-out),
     box-shadow var(--dur-2) var(--ease-out);
-  border-bottom: 1px solid var(--line);
-  box-shadow: none;
+  padding: var(--card-padding);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
 }
 
 .card:hover {
-  border-color: var(--line-strong);
-  box-shadow: none;
+  border-color: var(--card-border-hover);
+  box-shadow: var(--card-shadow);
 }
 
 .header {
@@ -124,12 +119,12 @@
 }
 
 .commentItem {
-  padding: 10px 12px;
-  border-radius: var(--r-sm);
-  background: var(--surface-sunken);
-  border: 1px solid var(--line);
   display: grid;
   gap: var(--s-1);
+  padding: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: var(--card-inner-bg);
 }
 
 .commentContent {

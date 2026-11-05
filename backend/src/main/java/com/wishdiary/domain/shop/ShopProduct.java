@@ -16,6 +16,8 @@ public class ShopProduct {
     private final Integer purchasePriceWon;
     private final ShopProductSource source;
     private final LocalDateTime createdAt;
+    private final Long receiverFamilyUserId;
+    private final ShopPhoto photo;
 
     private ShopProduct(
             Long id,
@@ -29,6 +31,20 @@ public class ShopProduct {
             ShopProductSource source,
             LocalDateTime createdAt
     ) {
+        this(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon, source, createdAt, null);
+    }
+
+    private ShopProduct(Long id, Long childUserId, String title, String description, String imageUrl,
+            String productUrl, int cloverPrice, Integer purchasePriceWon, ShopProductSource source,
+            LocalDateTime createdAt, Long receiverFamilyUserId) {
+        this(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon,
+                source, createdAt, receiverFamilyUserId, null);
+    }
+
+    private ShopProduct(Long id, Long childUserId, String title, String description, String imageUrl,
+            String productUrl, int cloverPrice, Integer purchasePriceWon, ShopProductSource source,
+            LocalDateTime createdAt, Long receiverFamilyUserId, ShopPhoto photo) {
+        this.photo = photo;
         this.id = id;
         this.childUserId = childUserId;
         this.title = title;
@@ -39,6 +55,7 @@ public class ShopProduct {
         this.purchasePriceWon = purchasePriceWon;
         this.source = source;
         this.createdAt = createdAt;
+        this.receiverFamilyUserId = receiverFamilyUserId;
     }
 
     private String normalizeProductUrl(String productUrl) {
@@ -111,7 +128,32 @@ public class ShopProduct {
     }
 
     public ShopProduct price(int cloverPrice, Integer purchasePriceWon) {
-        return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon, source, createdAt);
+        return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon, source, createdAt, receiverFamilyUserId, photo);
+    }
+
+    public static ShopProduct createWish(Long childId, Long receiverId, String title, String description,
+            String imageUrl, String productUrl) {
+        return new ShopProduct(null, childId, title, description, imageUrl, productUrl, 0, null,
+                ShopProductSource.CUSTOM, LocalDateTime.now(), receiverId);
+    }
+
+    public static ShopProduct reconstitute(Long id, Long childId, String title, String description, String imageUrl,
+            String productUrl, int cloverPrice, Integer purchasePriceWon, ShopProductSource source,
+            LocalDateTime createdAt, Long receiverId) {
+        return new ShopProduct(id, childId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon, source, createdAt, receiverId);
+    }
+
+    public ShopProduct withPhoto(ShopPhoto photo) {
+        return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice,
+                purchasePriceWon, source, createdAt, receiverFamilyUserId, photo);
+    }
+
+    public ShopPhoto getPhoto() { return photo; }
+
+    public Long getReceiverFamilyUserId() { return receiverFamilyUserId; }
+
+    public boolean mayBePricedBy(Long familyId) {
+        return receiverFamilyUserId == null || receiverFamilyUserId.equals(familyId);
     }
 
     public boolean isAvailableTo(Long requestingChildUserId) {

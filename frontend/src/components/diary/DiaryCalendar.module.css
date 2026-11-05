@@ -1,10 +1,11 @@
 .calendar {
   margin-bottom: var(--s-3);
-  padding: 0 0 20px;
-  background: var(--surface);
-  border: 0;
-  border-radius: 0;
-  border-bottom: 1px solid var(--line);
+  padding: 16px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
 }
 
 .header {
@@ -118,8 +119,8 @@
 
 .daySelected {
   color: var(--ink-inverse);
-  background: var(--ink-strong);
   font-weight: 800;
+  background: var(--brand);
 }
 
 .day i,

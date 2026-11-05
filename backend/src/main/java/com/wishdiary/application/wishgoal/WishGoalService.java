@@ -49,6 +49,7 @@ public class WishGoalService implements SetWishGoalUseCase, GetWishGoalUseCase, 
         validateChildUser(childUser);
 
         ShopProduct product = loadShopProductPort.loadById(request.productId())
+                .filter(candidate -> candidate.isAvailableTo(childUserId))
                 .orElseThrow(() -> new ShopProductNotFoundException(request.productId()));
         if (product.getCloverPrice() <= 0) {
             throw new ShopProductPriceNotSetException();
@@ -70,7 +71,8 @@ public class WishGoalService implements SetWishGoalUseCase, GetWishGoalUseCase, 
             return null;
         }
 
-        Optional<ShopProduct> product = loadShopProductPort.loadById(goal.get().getProductId());
+        Optional<ShopProduct> product = loadShopProductPort.loadById(goal.get().getProductId())
+                .filter(candidate -> candidate.isAvailableTo(childUserId));
         if (product.isEmpty()) {
             return null;
         }
@@ -97,6 +99,7 @@ public class WishGoalService implements SetWishGoalUseCase, GetWishGoalUseCase, 
     private Optional<ChildWishGoalResponse> toChildGoalResponse(LoadedUser child) {
         return loadWishGoalPort.loadByChildUserId(child.id())
                 .flatMap(goal -> loadShopProductPort.loadById(goal.getProductId())
+                        .filter(product -> product.isAvailableTo(child.id()))
                         .map(product -> new ChildWishGoalResponse(
                                 child.id(),
                                 child.nickname(),

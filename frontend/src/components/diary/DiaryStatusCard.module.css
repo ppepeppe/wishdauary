@@ -2,10 +2,10 @@
   display: grid;
   gap: var(--s-4);
   padding: var(--s-5);
-  border-radius: var(--r-2xl);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
 }
 
 .header {
@@ -31,7 +31,7 @@
 
 .doneBadge {
   color: var(--green-ink);
-  background: var(--green-tint);
+  background: var(--card-bg);
 }
 
 .pendingBadge {
@@ -137,7 +137,7 @@
 
 .secondaryLink {
   color: var(--brand-ink);
-  background: var(--brand-tint);
+  background: var(--card-bg);
   border-color: rgba(239, 106, 94, 0.18);
 }
 

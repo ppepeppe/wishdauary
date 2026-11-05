@@ -1,5 +1,9 @@
 .container {
+  --home-card-bg: var(--card-bg);
+  --home-card-border: var(--card-border);
+  --home-card-shadow: var(--card-shadow);
   display: grid;
+  gap: 16px;
   padding-top: 4px;
 }
 
@@ -17,7 +21,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 0 26px;
+  padding: 8px 0;
 }
 
 .profileBadge {
@@ -61,11 +65,17 @@
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
-  color: var(--green-ink);
+  padding: 8px 10px;
+  border: 1px solid var(--home-card-border);
+  border-radius: 12px;
+  background: var(--home-card-bg);
+  color: var(--brand-ink);
 }
 
 .balanceIcon {
-  color: var(--green);
+  display: grid;
+  place-items: center;
+  color: var(--brand-ink);
   font-size: 20px;
 }
 
@@ -73,13 +83,23 @@
   font-size: var(--text-md);
 }
 
+.todayCard, .diaryCard, .goalCard {
+  min-width: 0;
+  border: 1px solid var(--home-card-border);
+  border-radius: 18px;
+  background: var(--home-card-bg);
+  box-shadow: var(--home-card-shadow);
+}
+
+.todayCard { padding: 16px 18px; }
+
 .dateBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 20px 0 12px;
-  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+  padding: 0 0 12px;
 }
 
 .dateBar > div {
@@ -108,7 +128,7 @@
 }
 
 .streakBanner {
-  padding: 0 0 26px;
+  padding: 0;
 }
 
 .streakCopy {
@@ -123,7 +143,7 @@
 }
 
 .streakTitle {
-  color: var(--green-ink);
+  color: var(--brand-ink);
   font-weight: 600;
 }
 
@@ -132,7 +152,7 @@
 }
 
 .diaryCard {
-  padding: 12px 0 32px;
+  padding: 22px 20px;
 }
 
 .diaryTitle {
@@ -151,8 +171,8 @@
 .emotionRow {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 6px;
-  margin: 26px 0 22px;
+  gap: 4px;
+  margin: 22px 0 20px;
 }
 
 .emotionButton, .emotionButtonActive {
@@ -221,6 +241,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
   margin-top: 14px;
 }
 
@@ -250,8 +271,7 @@
 }
 
 .goalCard {
-  padding: 26px 0;
-  border-top: 1px solid var(--line);
+  padding: 20px;
 }
 
 .goalTopRow {
@@ -259,6 +279,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .goalHeading, .goalName, .goalHelper {
@@ -275,17 +296,18 @@
   color: var(--ink-strong);
   font-size: var(--text-md);
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .goalBadge {
   flex-shrink: 0;
-  color: var(--green-ink);
+  color: var(--brand-ink);
   font-size: var(--text-2xs);
 }
 
 .goalContent {
   display: grid;
-  grid-template-columns: 64px 1fr;
+  grid-template-columns: 64px minmax(0, 1fr);
   align-items: center;
   gap: 16px;
   margin-top: 18px;
@@ -318,7 +340,7 @@
 
 .progressFill {
   height: 100%;
-  background: var(--green);
+  background: var(--brand);
   border-radius: inherit;
   transition: width var(--dur-3);
 }
@@ -342,11 +364,12 @@
 }
 
 @media (max-width: 370px) {
+  .todayCard, .diaryCard, .goalCard { padding: 16px; }
   .emotionEmoji {
     width: 36px;
     height: 36px;
   }
   .diaryTitle {
-    font-size: 24px;
+    font-size: 22px;
   }
 }

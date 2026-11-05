@@ -5,8 +5,12 @@ import java.util.Set;
 
 public record ProfileAvatar(
         String preset,
-        String imageDataUrl
+        String imageDataUrl,
+        String character
 ) {
+
+    public static final String DEFAULT_CHARACTER = "my-melody";
+    public static final Set<String> CHARACTERS = Set.of("my-melody", "kuromi", "cinnamoroll");
 
     public static final String DEFAULT_PRESET = "peach";
     public static final int MAX_IMAGE_CHARS = 300_000;
@@ -21,12 +25,27 @@ public record ProfileAvatar(
 
     private static final String DATA_IMAGE_PREFIX = "data:image/";
 
+    public ProfileAvatar(String preset, String imageDataUrl) {
+        this(preset, imageDataUrl, DEFAULT_CHARACTER);
+    }
+
     public static ProfileAvatar defaultAvatar() {
         return new ProfileAvatar(DEFAULT_PRESET, null);
     }
 
     public static ProfileAvatar of(String preset, String imageDataUrl) {
-        return new ProfileAvatar(normalizePreset(preset), normalizeImage(imageDataUrl));
+        return of(preset, imageDataUrl, DEFAULT_CHARACTER);
+    }
+
+    public static ProfileAvatar of(String preset, String imageDataUrl, String character) {
+        return new ProfileAvatar(normalizePreset(preset), normalizeImage(imageDataUrl), normalizeCharacter(character));
+    }
+
+    private static String normalizeCharacter(String character) {
+        if (character == null || character.isBlank()) return DEFAULT_CHARACTER;
+        String normalized = character.trim().toLowerCase(Locale.ROOT);
+        if (!CHARACTERS.contains(normalized)) throw new InvalidProfileAvatarException();
+        return normalized;
     }
 
     public boolean hasCustomImage() {

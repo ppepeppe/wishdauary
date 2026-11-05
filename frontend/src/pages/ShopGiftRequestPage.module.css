@@ -2,6 +2,7 @@
 .recipientPanel {
   display: grid;
   gap: var(--s-4);
+  min-width: 0;
 }
 
 .backLink {
@@ -20,12 +21,13 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--s-4);
-  padding: 18px 0;
-  border-radius: 0;
   color: var(--ink-strong);
-  background: transparent;
-  box-shadow: none;
-  border-bottom: 1px solid var(--line);
+  padding: var(--card-padding);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
 }
 
 .summaryLabel,
@@ -98,8 +100,8 @@
 }
 
 .recipientButton:hover {
-  border-color: rgba(239, 106, 94, 0.32);
   background: var(--surface-sunken);
+  border-color: var(--card-border-hover);
 }
 
 .recipientButtonActive {
@@ -145,11 +147,12 @@
   display: grid;
   gap: var(--s-3);
   margin-top: var(--s-1);
-  padding: 20px 0 0;
-  border-radius: 0;
-  background: transparent;
-  border: 0;
-  border-top: 1px solid var(--line);
+  padding: var(--card-padding);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
 }
 
 .finalPanel p,
@@ -214,3 +217,6 @@
   align-items: center;
   justify-content: center;
 }
+
+.recipientPanel, .messageField { padding: var(--card-padding); border: 1px solid var(--card-border); border-radius: var(--card-radius); background: var(--card-bg); box-shadow: var(--card-shadow); }
+@media (max-width: 370px) { .summary { flex-wrap: wrap; } .summary strong { text-align: left; } }

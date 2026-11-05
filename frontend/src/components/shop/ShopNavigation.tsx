@@ -5,7 +5,10 @@ function ShopNavigation() {
   return (
     <nav className={styles.navigation} aria-label="선물 메뉴">
       <NavLink to="/shop" end className={({ isActive }) => isActive ? styles.active : styles.link}>
-        내 선물
+        상점
+      </NavLink>
+      <NavLink to="/shop/wishlist" className={({ isActive }) => isActive ? styles.active : styles.link}>
+        갖고 싶은 선물
       </NavLink>
       <NavLink to="/shop/requests" className={({ isActive }) => isActive ? styles.active : styles.link}>
         요청 내역

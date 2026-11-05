@@ -14,6 +14,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .heading {
@@ -35,13 +36,14 @@
 
 .card,
 .editor {
-  padding: 22px 0;
-  border-bottom: 1px solid var(--line);
+  padding: var(--card-padding);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
 }
 
-.editor {
-  border-top: 1px solid var(--line);
-}
 
 .card p {
   color: var(--ink-muted);
@@ -81,10 +83,12 @@
   display: flex;
   align-items: end;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .search label {
-  flex: 1;
+  min-width: 0;
+  flex: 1 1 150px;
 }
 
 .hint {
@@ -105,8 +109,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
+  padding: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: var(--card-inner-bg);
+  margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
 .person span {

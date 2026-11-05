@@ -7,18 +7,19 @@
 .rewardCard {
   display: grid;
   gap: 3px;
-  padding: 0 0 18px;
-  border-radius: 0;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--line);
+  padding: 14px 18px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
 }
 
 .rewardEyebrow {
   margin: 0;
-  color: var(--green-ink);
   font-size: var(--text-2xs);
   font-weight: 800;
+  color: var(--brand-ink);
 }
 
 .rewardTitle {

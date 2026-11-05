@@ -1,3 +1,4 @@
+import CardCarousel from '../common/CardCarousel';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getVisibilityScopeLabel } from '../../constants/diary';
@@ -90,7 +91,7 @@ function DiaryList({ diaries, showVisibilityScope = true }: DiaryListProps) {
   }
 
   return (
-    <div className={styles.list}>
+    <CardCarousel title="일기 목록" itemLabel="일기">
       {diaries.map((diary) => {
         const emotion = getEmotionMeta(diary.emotion);
         const commentCount = diary.commentCount ?? 0;
@@ -134,9 +135,9 @@ function DiaryList({ diaries, showVisibilityScope = true }: DiaryListProps) {
                   <p className={styles.commentStatus}>아직 댓글이 없어요.</p>
                 ) : null}
                 {comments.length > 0 ? (
-                  <ul className={styles.commentList}>
+                  <CardCarousel title="댓글" itemLabel="댓글">
                     {comments.map((comment) => (
-                      <li key={getCommentItemKey(comment)} className={styles.commentItem}>
+                      <article key={getCommentItemKey(comment)} className={styles.commentItem}>
                         <p className={styles.commentContent}>
                           <span className={styles.commentActor}>
                             {getActorDisplayName(comment.actorRelationLabel, comment.actorNickname)}
@@ -147,16 +148,16 @@ function DiaryList({ diaries, showVisibilityScope = true }: DiaryListProps) {
                         {formatCommentDate(comment.createdAt) ? (
                           <span className={styles.commentMeta}>{formatCommentDate(comment.createdAt)}</span>
                         ) : null}
-                      </li>
+                      </article>
                     ))}
-                  </ul>
+                  </CardCarousel>
                 ) : null}
               </div>
             ) : null}
           </article>
         );
       })}
-    </div>
+    </CardCarousel>
   );
 }
 

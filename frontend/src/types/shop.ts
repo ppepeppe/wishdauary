@@ -8,6 +8,7 @@ export interface ShopProduct {
   purchasePriceWon?: number | null;
   source: string;
   childUserId?: number | null;
+  receiverFamilyUserId?: number | null;
   createdAt?: string;
 }
 
@@ -24,10 +25,15 @@ export interface GiftRequestPayload {
 }
 
 export interface CreateShopProductPayload {
+  imageData?: string | null;
   title: string;
   description: string;
   imageUrl?: string | null;
   productUrl?: string | null;
+}
+
+export interface CreateWishProductPayload extends CreateShopProductPayload {
+  receiverFamilyUserId: number;
 }
 
 export interface GiftRequestResult {

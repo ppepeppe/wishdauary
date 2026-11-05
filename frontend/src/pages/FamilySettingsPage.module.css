@@ -3,6 +3,10 @@
   gap: var(--s-3);
 }
 
+.productSummary { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.productSummary > div { min-width: 0; overflow-wrap: anywhere; }
+.photo { width: 64px; height: 64px; flex: 0 0 64px; border-radius: 10px; }
+
 /* =========================================================================
    Children's saving goals
    ========================================================================= */
@@ -13,8 +17,8 @@
   margin-bottom: var(--s-6);
 }
 
-.goalSection h2,
-.pricingSection h2 {
+.goalSection > h2,
+.pricingSection > h2 {
   margin: 0;
   color: var(--ink-strong);
   font-size: var(--text-lg);
@@ -30,11 +34,12 @@
 .goalCard {
   display: grid;
   gap: var(--s-2);
-  padding: var(--s-5);
-  border-radius: var(--r-xl);
-  border: 1px solid rgba(63, 156, 99, 0.16);
-  background: linear-gradient(160deg, var(--green-tint) 0%, var(--surface) 62%);
-  box-shadow: var(--shadow-sm);
+  padding: var(--card-padding);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
 }
 
 .goalHeader {
@@ -62,11 +67,11 @@
   flex: 0 0 auto;
   padding: 6px 11px;
   border-radius: var(--r-pill);
-  color: var(--green-ink);
   background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(63, 156, 99, 0.18);
   font-size: var(--text-2xs);
   font-weight: 800;
+  color: var(--brand-ink);
+  border: 1px solid var(--card-border);
 }
 
 .goalNumbers {
@@ -80,15 +85,15 @@
 .goalTrack {
   height: 9px;
   border-radius: var(--r-pill);
-  background: rgba(63, 156, 99, 0.14);
   overflow: hidden;
+  background: var(--brand-tint-strong);
 }
 
 .goalFill {
   height: 100%;
   border-radius: inherit;
-  background: var(--green);
   transition: width var(--dur-3) var(--ease-out);
+  background: var(--brand);
 }
 
 /* =========================================================================
@@ -97,11 +102,12 @@
 .requestCard {
   display: grid;
   gap: var(--s-3);
-  padding: var(--s-5);
-  border-radius: var(--r-xl);
-  border: 1px solid var(--line);
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
+  padding: var(--card-padding);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
 }
 
 .requestHeader {
@@ -139,10 +145,10 @@
   display: grid;
   gap: 2px;
   white-space: nowrap;
-  color: var(--green-ink);
   font-size: var(--text-sm);
   font-weight: 800;
   text-align: right;
+  color: var(--brand-ink);
 }
 
 .price small {
@@ -153,12 +159,12 @@
 
 .requestMessage {
   padding: 12px 14px;
-  border-radius: var(--r-md);
   color: var(--ink);
-  background: var(--surface-sunken);
-  border: 1px solid var(--line);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
+  background: var(--card-inner-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
 }
 
 .priceForm {
@@ -216,10 +222,10 @@
   justify-content: space-between;
   gap: var(--s-3);
   padding: 10px 12px;
-  border-radius: var(--r-md);
-  background: var(--surface-sunken);
-  border: 1px solid var(--line);
   min-width: 0;
+  background: var(--card-inner-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
 }
 
 .productLinkPanel span {
@@ -238,18 +244,18 @@
   padding: 0 14px;
   color: var(--brand-ink);
   background: var(--brand-tint);
-  border: 1px solid rgba(239, 106, 94, 0.18);
   font-size: var(--text-xs);
   font-weight: 800;
   white-space: nowrap;
   transition:
     background var(--dur-1) var(--ease-out),
     border-color var(--dur-1) var(--ease-out);
+  border: 1px solid var(--card-border);
 }
 
 .productLink:hover {
   background: var(--brand-tint-strong);
-  border-color: rgba(239, 106, 94, 0.3);
+  border-color: var(--card-border-hover);
 }
 
 /* =========================================================================
@@ -260,6 +266,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--s-3);
+  flex-wrap: wrap;
 }
 
 .statusPending,
@@ -271,18 +278,29 @@
 }
 
 .statusPending {
-  color: var(--amber-ink);
-  background: var(--amber-tint);
+  color: var(--brand-ink);
+  background: var(--brand-tint);
 }
 
 .statusDone {
-  color: var(--green-ink);
-  background: var(--green-tint);
+  color: var(--brand-ink);
+  background: var(--brand-tint-strong);
 }
 
 .actionGroup {
   display: flex;
   gap: var(--s-2);
+}
+
+.actionGroup > :last-child::after {
+  left: auto;
+  right: 0;
+  transform: translateY(4px);
+}
+
+.actionGroup > :last-child:hover::after,
+.actionGroup > :last-child:focus-within::after {
+  transform: translateY(0);
 }
 
 .actionGroup button {
@@ -292,17 +310,17 @@
   border-radius: var(--r-sm);
   padding: 0 14px;
   color: #ffffff;
-  background: var(--green);
   font-size: var(--text-sm);
   font-weight: 800;
   transition:
     background var(--dur-1) var(--ease-out),
     color var(--dur-1) var(--ease-out),
     border-color var(--dur-1) var(--ease-out);
+  background: var(--brand);
 }
 
 .actionGroup button:hover:not(:disabled) {
-  background: var(--green-hover);
+  background: var(--brand-hover);
 }
 
 .actionGroup button:disabled {

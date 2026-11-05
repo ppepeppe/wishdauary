@@ -1,3 +1,4 @@
+import CardCarousel from '../components/common/CardCarousel';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
@@ -79,7 +80,7 @@ function FamilyConnectionsPage() {
             </form>
             <p className={styles.hint}>같은 닉네임은 사용자 번호로 구분해 주세요. 검색 결과는 최대 20명이에요.</p>
             {searched && results.length === 0 ? <p role="status">검색된 아이가 없어요. 닉네임을 다시 확인해 주세요.</p> : null}
-            <div aria-live="polite">{results.map((child) => {
+            <div aria-live="polite"><CardCarousel title="검색된 아이" itemLabel="아이">{results.map((child) => {
               const connected = connectedIds.has(child.userId);
               const requested = pending.some((item) => item.childUserId === child.userId);
               return <div key={child.userId} className={styles.row}>
@@ -88,13 +89,13 @@ function FamilyConnectionsPage() {
                   {connected ? '연결됨' : requested ? '승인 기다리는 중' : '연결 요청'}
                 </Button>
               </div>;
-            })}</div>
+            })}</CardCarousel></div>
           </section>
         ) : null}
         {data ? <>
           <section className={styles.section}>
             <h2>{isFamily ? '보낸 연결 요청' : '받은 연결 요청'} <small>{pending.length}</small></h2>
-            {pending.length === 0 ? <p className={styles.hint}>기다리는 연결 요청이 없어요.</p> : pending.map((item) => (
+            {pending.length === 0 ? <p className={styles.hint}>기다리는 연결 요청이 없어요.</p> : <CardCarousel label={isFamily ? '보낸 연결 요청' : '받은 연결 요청'} itemLabel="요청">{pending.map((item) => (
               <article key={item.requestId} className={styles.row}>
                 <span><strong>{isFamily ? item.childNickname : item.familyNickname}</strong>
                   <small>#{isFamily ? item.childUserId : item.familyUserId}{!isFamily ? ` · ${item.relationLabel}` : ''}</small></span>
@@ -103,19 +104,19 @@ function FamilyConnectionsPage() {
                   <Button variant="secondary" disabled={busy} onClick={() => void act(() => processFamilyConnection(item.requestId, 'REJECT'), '요청을 거절했어요. 가족으로 연결되지 않았어요.')}>거절</Button>
                 </div>}
               </article>
-            ))}
+            ))}</CardCarousel>}
           </section>
           <section className={styles.section}>
             <h2>{isFamily ? '연결된 아이' : '연결된 가족'} <small>{data.connections.length}</small></h2>
-            {data.connections.length === 0 ? <p className={styles.hint}>아직 연결된 {isFamily ? '아이' : '가족'}가 없어요.</p> : data.connections.map((person) => (
+            {data.connections.length === 0 ? <p className={styles.hint}>아직 연결된 {isFamily ? '아이' : '가족'}가 없어요.</p> : <CardCarousel label={isFamily ? '연결된 아이' : '연결된 가족'} itemLabel="구성원">{data.connections.map((person) => (
               <div key={person.userId} className={styles.row}><span><strong>{person.nickname}</strong><small>#{person.userId}{person.relationLabel ? ` · ${person.relationLabel}` : ''}</small></span><span className={styles.status}>연결됨</span></div>
-            ))}
+            ))}</CardCarousel>}
             {!isFamily ? <p className={styles.hint}>연결을 해제하려면 그룹 관리에서 해당 가족을 모든 그룹에서 제외해 주세요.</p> : null}
           </section>
-          {history.length > 0 ? <section className={styles.section}><h2>처리한 요청</h2>{history.map((item) => {
+          {history.length > 0 ? <section className={styles.section}><CardCarousel title="처리한 요청" itemLabel="요청">{history.map((item) => {
             const connected = connectedIds.has(isFamily ? item.childUserId : item.familyUserId);
             return <div key={item.requestId} className={styles.row}><span>{isFamily ? item.childNickname : item.familyNickname}</span><small>{item.status === 'rejected' ? '거절됨' : connected ? '승인됨' : '연결 해제됨'}</small></div>;
-          })}</section> : null}
+          })}</CardCarousel></section> : null}
         </> : null}
       </div>
     </PageSection>

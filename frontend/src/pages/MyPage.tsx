@@ -4,7 +4,7 @@ import Button from '../components/common/Button';
 import PageSection from '../components/common/PageSection';
 import ProfileAvatar from '../components/common/ProfileAvatar';
 import StatusMessage from '../components/common/StatusMessage';
-import { AVATAR_PRESETS } from '../constants/avatar';
+import { AVATAR_CHARACTERS, AVATAR_PRESETS } from '../constants/avatar';
 import { fetchMyProfile, updateMyProfile } from '../services/api/userApi';
 import { clearAuthSession, getAuthSession, getDefaultRouteForRole, patchAuthSession } from '../services/session/authSession';
 import { compressImageFile } from '../utils/image';
@@ -15,6 +15,7 @@ function MyPage() {
   const authSession = getAuthSession();
   const [nickname, setNickname] = useState(authSession?.nickname?.trim() || '');
   const [avatarPreset, setAvatarPreset] = useState('peach');
+  const [avatarCharacter, setAvatarCharacter] = useState('my-melody');
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +36,7 @@ function MyPage() {
         }
         setNickname(profile.nickname);
         setAvatarPreset(profile.avatarPreset || 'peach');
+        setAvatarCharacter(profile.avatarCharacter);
         setAvatarImage(profile.avatarImage);
         setEmail(profile.email);
         patchAuthSession({ nickname: profile.nickname });
@@ -85,10 +87,12 @@ function MyPage() {
       const profile = await updateMyProfile({
         nickname: trimmedNickname,
         avatarPreset,
+        avatarCharacter,
         avatarImage,
       });
       setNickname(profile.nickname);
       setAvatarPreset(profile.avatarPreset);
+      setAvatarCharacter(profile.avatarCharacter);
       setAvatarImage(profile.avatarImage);
       patchAuthSession({ nickname: profile.nickname });
       setSuccessMessage('내 정보를 저장했어요.');
@@ -114,7 +118,7 @@ function MyPage() {
       {successMessage ? <StatusMessage kind="success" message={successMessage} /> : null}
 
       <div className={styles.preview}>
-        <ProfileAvatar preset={avatarPreset} imageUrl={avatarImage} size="lg" alt="" />
+        <ProfileAvatar preset={avatarPreset} character={avatarCharacter} imageUrl={avatarImage} size="lg" alt="" />
         <div>
           <p className={styles.previewName}>{nickname.trim() || '이름 없음'}</p>
           {email ? <p className={styles.previewEmail}>{email}</p> : null}
@@ -148,8 +152,23 @@ function MyPage() {
           />
         </label>
 
+        <fieldset className={styles.fieldset} disabled={isSaving || isLoading}>
+          <legend>기본 프로필 캐릭터</legend>
+          <div className={styles.presetGrid}>
+            {AVATAR_CHARACTERS.map((character) => (
+              <button key={character.key} type="button"
+                className={avatarCharacter === character.key && !avatarImage ? styles.presetButtonActive : styles.presetButton}
+                aria-pressed={avatarCharacter === character.key && !avatarImage}
+                onClick={() => { setAvatarCharacter(character.key); setAvatarImage(null); }}>
+                <ProfileAvatar preset={avatarPreset} character={character.key} size="md" />
+                <span>{character.label}</span>
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
         <fieldset className={styles.fieldset}>
-          <legend>기본 프로필색</legend>
+          <legend>기본 프로필 배경색</legend>
           <div className={styles.presetGrid}>
             {AVATAR_PRESETS.map((preset) => (
               <button
@@ -157,9 +176,10 @@ function MyPage() {
                 type="button"
                 className={avatarPreset === preset.key ? styles.presetButtonActive : styles.presetButton}
                 disabled={isSaving || isLoading}
+                aria-pressed={avatarPreset === preset.key}
                 onClick={() => setAvatarPreset(preset.key)}
               >
-                <ProfileAvatar preset={preset.key} size="sm" />
+                <ProfileAvatar preset={preset.key} character={avatarCharacter} size="sm" />
                 <span>{preset.label}</span>
               </button>
             ))}

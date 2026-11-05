@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class FamilyShopService implements ManageFamilyShopUseCase {
+    private final DecodeShopPhotoPort photos;
     private final LoadUserPort users;
     private final FamilyConnectionPort connections;
     private final SharingGroupPort groups;
@@ -20,7 +21,8 @@ public class FamilyShopService implements ManageFamilyShopUseCase {
     private final SaveShopProductPort saveProducts;
     private final ShopProductResponseMapper mapper;
     public FamilyShopService(LoadUserPort users, FamilyConnectionPort connections, SharingGroupPort groups,
-            LoadShopProductPort products, SaveShopProductPort saveProducts, ShopProductResponseMapper mapper) {
+            LoadShopProductPort products, SaveShopProductPort saveProducts, ShopProductResponseMapper mapper, DecodeShopPhotoPort photos) {
+        this.photos = photos;
         this.users = users; this.connections = connections; this.groups = groups;
         this.products = products; this.saveProducts = saveProducts; this.mapper = mapper;
     }
@@ -29,6 +31,7 @@ public class FamilyShopService implements ManageFamilyShopUseCase {
         List<Long> children = connections.findChildUserIds(familyId);
         return products.loadAll().stream().filter(product -> product.getSource() == ShopProductSource.FAMILY)
                 .filter(product -> children.contains(product.getChildUserId()))
+                .filter(product -> product.mayBePricedBy(familyId))
                 .sorted(Comparator.comparing(ShopProduct::getCreatedAt).reversed()).map(mapper::toResponse).toList();
     }
     public List<ShopProductResponse> listManaged(Long familyId) {
@@ -37,6 +40,7 @@ public class FamilyShopService implements ManageFamilyShopUseCase {
         return products.loadAll().stream()
                 .filter(product -> product.getSource() == ShopProductSource.CUSTOM || product.getSource() == ShopProductSource.FAMILY)
                 .filter(product -> children.contains(product.getChildUserId()))
+                .filter(product -> product.mayBePricedBy(familyId))
                 .sorted(Comparator.comparing(ShopProduct::getCreatedAt).reversed())
                 .map(mapper::toResponse).toList();
     }
@@ -48,7 +52,8 @@ public class FamilyShopService implements ManageFamilyShopUseCase {
             throw new FamilyConnectionAccessDeniedException();
         }
         return mapper.toResponse(saveProducts.save(ShopProduct.createFamily(request.childUserId(), request.title().trim(),
-                request.description().trim(), request.imageUrl(), request.productUrl(), request.cloverPrice(), request.purchasePriceWon())));
+                request.description().trim(), request.imageUrl(), request.productUrl(), request.cloverPrice(), request.purchasePriceWon())
+                .withPhoto(photos.decode(request.imageData()))));
     }
     private void requireFamily(Long familyId) {
         if (!users.loadById(familyId).isFamily()) throw new FamilyConnectionAccessDeniedException();

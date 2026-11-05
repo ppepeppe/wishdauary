@@ -1,12 +1,12 @@
-/* 클로버 카드는 초록 계열로 두어 '네잎클로버'라는 의미가 색으로 먼저 읽히게 한다. */
+/* 공통 청록색 박스 안에서 네잎클로버 정보를 보여준다. */
 .card {
   display: grid;
   gap: var(--s-4);
   padding: var(--s-5);
-  border-radius: var(--r-2xl);
-  background: var(--green-tint);
-  border: 1px solid rgba(63, 156, 99, 0.16);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
 }
 
 .header {

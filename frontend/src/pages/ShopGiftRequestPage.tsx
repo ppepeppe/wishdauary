@@ -6,6 +6,7 @@ import StatusMessage from '../components/common/StatusMessage';
 import { useShop } from '../hooks/useShop';
 import { formatWon } from '../utils/currency';
 import { getGiftRequestBlockReason } from '../utils/giftRequest';
+import { getProductListPath } from '../utils/shopNavigation';
 import styles from './ShopGiftRequestPage.module.css';
 
 const DEFAULT_MESSAGE = '이 선물이 갖고 싶어요. 모은 클로버로 부탁할게요!';
@@ -71,8 +72,8 @@ function ShopGiftRequestPage() {
       {lastRequest ? (
         <div className={styles.successActions}>
           <Link to="/shop/requests" className={styles.submitButton}>요청 내역 확인하기</Link>
-          <Link to={product?.source !== 'custom' ? '/shop/catalog' : '/shop'} className={styles.backLink}>
-            {product?.source !== 'custom' ? '상점으로 돌아가기 →' : '내 선물로 돌아가기 →'}
+          <Link to={getProductListPath(product?.source)} className={styles.backLink}>
+            {product?.source === 'preset' ? '상점으로 돌아가기 →' : '갖고 싶은 선물로 돌아가기 →'}
           </Link>
         </div>
       ) : null}
@@ -89,7 +90,7 @@ function ShopGiftRequestPage() {
               <h2>{product.title}</h2>
             </div>
             <strong>
-              {hasPrice ? `${product.cloverPrice} ☘︎` : '클로버 정하는 중'}
+              {hasPrice ? `${product.cloverPrice} 클로버` : '클로버 정하는 중'}
               {formatWon(product.purchasePriceWon) ? <small>{formatWon(product.purchasePriceWon)}</small> : null}
             </strong>
           </section>

@@ -1,6 +1,9 @@
 build/
 .gradle/
 out/
+# Hexagonal architecture adapters are source files, not build output.
+!**/adapter/out/
+!**/adapter/out/**
 *.iml
 .idea/
 

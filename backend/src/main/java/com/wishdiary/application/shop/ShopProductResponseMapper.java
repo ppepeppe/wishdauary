@@ -11,13 +11,14 @@ public class ShopProductResponseMapper {
                 product.getId(),
                 product.getTitle(),
                 product.getDescription(),
-                product.getImageUrl(),
+                ShopPhotoResponse.imageUrl(product.getPhoto(), product.getImageUrl()),
                 product.getProductUrl(),
                 product.getCloverPrice(),
                 product.getPurchasePriceWon(),
                 product.getSource().name().toLowerCase(),
                 product.getChildUserId(),
-                product.getCreatedAt()
+                product.getCreatedAt(),
+                product.getReceiverFamilyUserId()
         );
     }
 }

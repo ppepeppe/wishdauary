@@ -6,6 +6,7 @@ public record MyProfileResponse(
         String nickname,
         String appRole,
         String avatarPreset,
-        String avatarImage
+        String avatarImage,
+        String avatarCharacter
 ) {
 }

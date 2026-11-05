@@ -13,12 +13,13 @@
 }
 
 .wrapWithHint::after {
+  display: none;
   content: attr(data-hint);
   position: absolute;
   bottom: calc(100% + 9px);
   left: 50%;
   width: max-content;
-  max-width: 280px;
+  max-width: min(280px, calc(100vw - 40px));
   padding: 9px 12px;
   border-radius: var(--r-md);
   color: var(--ink-inverse);
@@ -39,6 +40,7 @@
 }
 
 .wrapWithHint::before {
+  display: none;
   content: '';
   position: absolute;
   bottom: calc(100% + 3px);
@@ -58,6 +60,7 @@
 .wrapWithHint:focus-within::after,
 .wrapWithHint:hover::before,
 .wrapWithHint:focus-within::before {
+  display: block;
   opacity: 1;
   transform: translate(-50%, 0);
 }

@@ -1,9 +1,11 @@
 package com.wishdiary.domain.notification;
 
 import java.time.LocalDateTime;
+import com.wishdiary.domain.shop.ShopPhoto;
 
 public class GiftRequestNotification {
 
+    private final ShopPhoto photo;
     private final Long id;
     private final Long productId;
     private final String productTitle;
@@ -39,6 +41,17 @@ public class GiftRequestNotification {
             LocalDateTime processedAt,
             LocalDateTime createdAt
     ) {
+        this(id, productId, productTitle, productImageUrl, productUrl, cloverPrice, purchasePriceWon,
+                requesterChildUserId, requesterChildNickname, receiverFamilyUserId, receiverRelationLabel,
+                message, status, processedByFamilyUserId, processedAt, createdAt, null);
+    }
+
+    private GiftRequestNotification(Long id, Long productId, String productTitle, String productImageUrl,
+            String productUrl, int cloverPrice, Integer purchasePriceWon, Long requesterChildUserId,
+            String requesterChildNickname, Long receiverFamilyUserId, String receiverRelationLabel,
+            String message, GiftRequestStatus status, Long processedByFamilyUserId,
+            LocalDateTime processedAt, LocalDateTime createdAt, ShopPhoto photo) {
+        this.photo = photo;
         this.id = id;
         this.productId = productId;
         this.productTitle = productTitle;
@@ -156,9 +169,19 @@ public class GiftRequestNotification {
                 nextStatus,
                 familyUserId,
                 LocalDateTime.now(),
-                createdAt
+                createdAt,
+                photo
         );
     }
+
+    public GiftRequestNotification withPhoto(ShopPhoto photo) {
+        return new GiftRequestNotification(id, productId, productTitle, productImageUrl, productUrl,
+                cloverPrice, purchasePriceWon, requesterChildUserId, requesterChildNickname,
+                receiverFamilyUserId, receiverRelationLabel, message, status, processedByFamilyUserId,
+                processedAt, createdAt, photo);
+    }
+
+    public ShopPhoto getPhoto() { return photo; }
 
     public Long getId() {
         return id;

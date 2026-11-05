@@ -21,5 +21,6 @@ export interface MyProfile {
   nickname: string;
   appRole: string;
   avatarPreset: string;
+  avatarCharacter: string;
   avatarImage: string | null;
 }

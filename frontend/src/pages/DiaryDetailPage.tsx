@@ -1,3 +1,4 @@
+import CardCarousel from '../components/common/CardCarousel';
 import DiaryAudiencePicker from '../components/sharing/DiaryAudiencePicker';
 import { getAuthSession } from '../services/session/authSession';
 import { useEffect, useState } from 'react';
@@ -212,17 +213,17 @@ function DiaryDetailPage() {
           {comments.length > 0 ? (
             <section className={styles.comments}>
               <h2>댓글</h2>
-              <ul>
+              <CardCarousel label="댓글" itemLabel="댓글">
                 {comments.map((comment) => (
-                  <li key={`${comment.id}-${comment.createdAt ?? comment.content}`}>
+                  <article className={styles.commentCard} key={`${comment.id}-${comment.createdAt ?? comment.content}`}>
                     <p>
                       <strong>{getActorDisplayName(comment.actorRelationLabel, comment.actorNickname)}</strong>
                       <span>{comment.content}</span>
                     </p>
                     {comment.createdAt ? <small>{formatDate(comment.createdAt)}</small> : null}
-                  </li>
+                  </article>
                 ))}
-              </ul>
+              </CardCarousel>
             </section>
           ) : null}
         </div>

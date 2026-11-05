@@ -21,7 +21,7 @@ import RootPage from './pages/RootPage';
 import ShopGiftRequestPage from './pages/ShopGiftRequestPage';
 import ShopNewProductPage from './pages/ShopNewProductPage';
 import ShopProductDetailPage from './pages/ShopProductDetailPage';
-import ShopPage from './pages/ShopPage';
+import ShopWishlistPage from './pages/ShopWishlistPage';
 import ShopCatalogPage from './pages/ShopCatalogPage';
 import ShopSentRequestsPage from './pages/ShopSentRequestsPage';
 import FamilyConnectionsPage from './pages/FamilyConnectionsPage';
@@ -44,8 +44,9 @@ function App() {
         <Route element={<RequireAppRole allowedRole="child" />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/feed" element={<FeedPage />} />
-          <Route path="/shop" element={<ShopPage />} />
-          <Route path="/shop/catalog" element={<ShopCatalogPage />} />
+          <Route path="/shop" element={<ShopCatalogPage />} />
+          <Route path="/shop/catalog" element={<Navigate to="/shop" replace />} />
+          <Route path="/shop/wishlist" element={<ShopWishlistPage />} />
           <Route path="/shop/requests" element={<ShopSentRequestsPage />} />
           <Route path="/shop/products/new" element={<ShopNewProductPage />} />
           <Route path="/shop/products/:productId" element={<ShopProductDetailPage />} />

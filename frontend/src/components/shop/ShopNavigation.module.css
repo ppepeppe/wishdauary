@@ -1,26 +1,39 @@
 .navigation {
-  display: flex;
-  gap: 24px;
-  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(8, 127, 149, 0.04);
 }
 
 .link,
 .active {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 46px;
-  padding: 0 2px;
-  border-bottom: 2px solid transparent;
+  min-width: 0;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 10px;
   color: var(--ink-muted);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
+  text-align: center;
 }
 
 .active {
-  border-bottom-color: var(--brand);
-  color: var(--brand);
+  border-color: rgba(8, 127, 149, 0.18);
+  background: var(--surface);
+  color: var(--brand-ink);
   font-weight: 700;
 }
 
 .link:hover {
   color: var(--ink-strong);
+}
+
+@media (max-width: 370px) {
+  .link, .active { padding-inline: 3px; font-size: 11px; }
 }

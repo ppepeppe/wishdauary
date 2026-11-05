@@ -1,2 +1,17 @@
-.notice { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 16px 0; margin-bottom: 16px; border-bottom: 1px solid var(--line); color: var(--brand); font-size: var(--text-sm); font-weight: 600; }
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: var(--brand);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: 14px 16px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  min-width: 0;
+}
 .notice span { font-size: var(--text-xs); }

@@ -1,3 +1,4 @@
+import CardCarousel from '../common/CardCarousel';
 import type { ReactionFeedItem } from '../../types/diary';
 import { getActorActionDisplayName } from '../../utils/actorDisplay';
 import styles from './ReactionFeedList.module.css';
@@ -47,14 +48,14 @@ function getReactionMessage(item: ReactionFeedItem) {
 
 function ReactionFeedList({ items }: ReactionFeedListProps) {
   return (
-    <div className={styles.list}>
+    <CardCarousel title="받은 소식" itemLabel="소식">
       {items.map((item) => (
         <article key={item.id} className={styles.card}>
           <p className={styles.message}>{getReactionMessage(item)}</p>
           {formatDate(item.createdAt) ? <span className={styles.date}>{formatDate(item.createdAt)}</span> : null}
         </article>
       ))}
-    </div>
+    </CardCarousel>
   );
 }
 

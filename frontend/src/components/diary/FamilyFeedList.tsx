@@ -1,3 +1,4 @@
+import CardCarousel from '../common/CardCarousel';
 import { Link } from 'react-router-dom';
 import { getVisibilityScopeLabel } from '../../constants/diary';
 import { useState } from 'react';
@@ -62,7 +63,7 @@ function FamilyFeedList({
   }
 
   return (
-    <div className={styles.list}>
+    <CardCarousel title="아이의 이야기" itemLabel="일기">
       {diaries.map((diary) => {
         const emotion = getEmotionMeta(diary.emotion);
         const hearted = diary.hearted ?? false;
@@ -135,7 +136,7 @@ function FamilyFeedList({
           </article>
         );
       })}
-    </div>
+    </CardCarousel>
   );
 }
 

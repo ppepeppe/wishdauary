@@ -22,7 +22,7 @@ test('only child accounts submit an approval decision',async()=>{
  assert.throws(()=>api.searchChildren('하루'),/가족 계정/);
 });
 test('family product uploads carry the selected child and price',async()=>{
- session('family');const payload={childUserId:42,title:'책',description:'함께 읽어요',cloverPrice:5,purchasePriceWon:10000};
+ session('family');const payload={childUserId:42,title:'책',description:'함께 읽어요',cloverPrice:5,purchasePriceWon:10000,imageData:'data:image/jpeg;base64,cGhvdG8='};
  globalThis.fetch=async(url,init)=>{assert.equal(new URL(url).pathname,'/api/v1/shop/family-products');assert.deepEqual(JSON.parse(init.body),payload);return Response.json({...payload,productId:8,source:'family'})};
  assert.equal((await shop.createFamilyShopProduct(payload)).source,'family');
  session('child');await assert.rejects(shop.createFamilyShopProduct(payload),/가족 계정/);
@@ -41,4 +41,16 @@ test('family management loads child products even after pricing and edits their 
  await shop.setProductPrice(42,8,12000);
  assert.equal((await shop.fetchManagedShopProducts())[0].cloverPrice,8);
  session('child');await assert.rejects(shop.fetchManagedShopProducts(),/가족 계정/);await assert.rejects(shop.setProductPrice(42,9),/가족 계정/);
+});
+
+test('child wish requests select a recipient without assigning their own clovers',async()=>{
+ session('child');
+ globalThis.fetch=async(url,init)=>{
+  assert.equal(new URL(url).pathname,'/api/v1/shop/wish-requests');
+  assert.deepEqual(JSON.parse(init.body),{title:'책',description:'읽고 싶어요',imageUrl:null,imageData:'data:image/jpeg;base64,cGhvdG8=',productUrl:null,receiverFamilyUserId:8});
+  return Response.json({productId:5,childUserId:1,receiverFamilyUserId:8,cloverPrice:0,source:'custom'});
+ };
+ const wish=await shop.createShopProduct({title:'책',description:'읽고 싶어요',receiverFamilyUserId:8,imageData:'data:image/jpeg;base64,cGhvdG8='});
+ assert.equal(wish.receiverFamilyUserId,8);assert.equal(wish.cloverPrice,0);
+ session('family');await assert.rejects(shop.fetchWishProductRequests(),/아이 계정/);
 });

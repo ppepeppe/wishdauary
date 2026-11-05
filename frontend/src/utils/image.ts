@@ -7,10 +7,14 @@ export async function compressImageFile(file: File, maxEdge = 256, quality = 0.7
 
   const context = canvas.getContext('2d');
   if (!context) {
+    bitmap.close();
     throw new Error('사진을 읽지 못했어요. 다른 사진으로 다시 시도해 주세요.');
   }
 
+  context.fillStyle = '#ffffff';
+  context.fillRect(0, 0, canvas.width, canvas.height);
   context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
   const dataUrl = canvas.toDataURL('image/jpeg', quality);
 
   if (dataUrl.length > 280_000) {

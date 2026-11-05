@@ -73,6 +73,15 @@
   --line: #eaedef;
   --line-strong: #dadfe3;
 
+  /* ---------- Shared content cards ---------- */
+  --card-bg: rgba(8, 127, 149, 0.035);
+  --card-border: rgba(8, 127, 149, 0.16);
+  --card-border-hover: rgba(8, 127, 149, 0.28);
+  --card-radius: 18px;
+  --card-padding: 18px;
+  --card-shadow: 0 4px 14px rgba(8, 70, 85, 0.05);
+  --card-inner-bg: rgba(255, 255, 255, 0.78);
+
   /* ---------- Radius ---------- */
   --r-xs: 4px;
   --r-sm: 8px;

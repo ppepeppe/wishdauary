@@ -1,3 +1,4 @@
+import CardCarousel from '../common/CardCarousel';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import ProductArtwork from './ProductArtwork';
@@ -13,6 +14,7 @@ interface ShopProductGridProps {
   products: ShopProduct[];
   cloverBalance: number;
   hasRecipients: boolean;
+  showPurchasePrice?: boolean;
 }
 
 const REQUEST_STATUS_META: Record<string, { label: string; className: 'requestPending' | 'requestApproved' | 'requestRejected' }> = {
@@ -21,7 +23,7 @@ const REQUEST_STATUS_META: Record<string, { label: string; className: 'requestPe
   rejected: { label: '거절됨', className: 'requestRejected' },
 };
 
-function ShopProductGrid({ products, cloverBalance, hasRecipients }: ShopProductGridProps) {
+function ShopProductGrid({ products, cloverBalance, hasRecipients, showPurchasePrice = true }: ShopProductGridProps) {
   const { data: sentRequests } = useAsyncData(fetchSentGiftRequests);
   const requestStatusByProductId = useMemo(() => {
     const statusMap = new Map<number, ReceivedGiftRequest['status']>();
@@ -54,11 +56,12 @@ function ShopProductGrid({ products, cloverBalance, hasRecipients }: ShopProduct
               <h3>{product.title}</h3>
               <strong>
                 {hasPrice ? `${product.cloverPrice} 클로버` : '클로버 정하는 중'}
-                {formatWon(product.purchasePriceWon) ? <small>{formatWon(product.purchasePriceWon)}</small> : null}
+                {showPurchasePrice && formatWon(product.purchasePriceWon) ? <small>{formatWon(product.purchasePriceWon)}</small> : null}
               </strong>
             </div>
             <p>{product.description}</p>
             <div className={styles.badgeRow}>
+              {product.source === 'family' ? <span className={styles.sourceBadge}>가족이 골라준 선물</span> : null}
               {requestMeta ? <span className={styles[requestMeta.className]}>{requestMeta.label}</span> : null}
               {productUrlHost ? <span className={styles.sourceBadge}>{productUrlHost}</span> : null}
             </div>
@@ -80,7 +83,7 @@ function ShopProductGrid({ products, cloverBalance, hasRecipients }: ShopProduct
     );
   }
 
-  return <div className={styles.productGrid}>{products.map(renderProduct)}</div>;
+  return <CardCarousel title="선물 둘러보기" itemLabel="선물">{products.map(renderProduct)}</CardCarousel>;
 }
 
 export default ShopProductGrid;

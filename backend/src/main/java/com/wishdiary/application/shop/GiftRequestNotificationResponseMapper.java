@@ -18,7 +18,7 @@ public class GiftRequestNotificationResponseMapper {
                 notification.getId(),
                 notification.getProductId(),
                 notification.getProductTitle(),
-                notification.getProductImageUrl(),
+                ShopPhotoResponse.imageUrl(notification.getPhoto(), notification.getProductImageUrl()),
                 notification.getProductUrl(),
                 notification.getCloverPrice(),
                 notification.getPurchasePriceWon(),

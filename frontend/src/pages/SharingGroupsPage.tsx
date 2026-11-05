@@ -1,3 +1,4 @@
+import CardCarousel from '../components/common/CardCarousel';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
@@ -118,13 +119,13 @@ export default function SharingGroupsPage() {
             </fieldset>
           </form>
         ) : null}
-        {groups.map((group) => (
+        <CardCarousel title="내 그룹" itemLabel="그룹">{groups.map((group) => (
           <article key={group.id} className={styles.card}>
             <div className={styles.heading}><h2>{group.name}</h2><span>{group.defaultGroup ? '기본 · ' : ''}{group.memberIds.length}명</span></div>
             <p>{group.members.map((member) => member.nickname).join(', ') || '아직 구성원이 없어요.'}</p>
             <div className={styles.actions}><Button variant="secondary" disabled={busy} onClick={() => openForm(group)}>수정</Button><button type="button" disabled={busy} onClick={() => void remove(group)}>그룹 삭제</button></div>
           </article>
-        ))}
+        ))}</CardCarousel>
       </div>
     </PageSection>
   );

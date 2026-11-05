@@ -1,3 +1,4 @@
+import CardCarousel from '../components/common/CardCarousel';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
@@ -64,10 +65,10 @@ function FamilyHomePage() {
         <div className={styles.heading}><h2 id="family-diaries-title">최근 아이 일기</h2><Link to="/family-feed">전체 보기 →</Link></div>
         {diaries.isLoading && !diaries.data ? <StatusMessage kind="loading" message="아이의 일기를 불러오고 있어요." /> : null}
         {diaries.error ? <><StatusMessage kind="error" message={diaries.error} /><Button variant="ghost" onClick={() => void refreshDiaries()}>일기 다시 불러오기</Button></> : null}
-        {recentDiaries.map((diary) => <Link key={diary.id} to={`/diaries/${diary.id}`} className={styles.diaryRow}>
+        <CardCarousel label="최근 아이 일기" itemLabel="일기">{recentDiaries.map((diary) => <Link key={diary.id} to={`/diaries/${diary.id}`} className={styles.diaryRow}>
           <div className={styles.meta}><strong>{diary.actorNickname || '아이'}</strong><time>{formatKoreanDate(diary.writtenDate ?? diary.createdAt, false)}</time></div>
           <p>{diary.contentPreview}</p><span className={styles.readLink}>일기 읽기 <span aria-hidden="true">→</span></span>
-        </Link>)}
+        </Link>)}</CardCarousel>
         {diaries.data?.length === 0 ? <p className={styles.helper}>아이가 가족에게 공유한 일기가 여기에 보여요.</p> : null}
       </section>
 
@@ -75,9 +76,9 @@ function FamilyHomePage() {
         <div className={styles.heading}><h2 id="family-gifts-title">확인할 선물 요청 {requests.data ? <span>{pendingCount}</span> : null}</h2><Link to="/family-settings">요청 보기 →</Link></div>
         {requests.isLoading && !requests.data ? <StatusMessage kind="loading" message="선물 요청을 확인하고 있어요." /> : null}
         {requests.error ? <><StatusMessage kind="error" message={requests.error} /><Button variant="ghost" onClick={() => void refreshRequests()}>선물 요청 다시 불러오기</Button></> : null}
-        {requests.data?.gifts.slice(0, 2).map((gift) => <Link key={gift.notificationId} to="/family-settings" className={styles.requestRow}>
+        <CardCarousel label="확인할 선물 요청" itemLabel="요청">{requests.data?.gifts.map((gift) => <Link key={gift.notificationId} to="/family-settings" className={styles.requestRow}>
           <span><strong>{gift.productTitle}</strong><small>{gift.requesterChildNickname}의 요청</small></span><span className={styles.requestStatus}>승인 대기 →</span>
-        </Link>)}
+        </Link>)}</CardCarousel>
         {requests.data && requests.data.pricing.length > 0 ? <Link to="/family-settings" className={styles.pendingLink}>가격을 정해 줄 선물 {requests.data.pricing.length}개 →</Link> : null}
         {requests.data && pendingCount === 0 ? <p className={styles.helper}>지금은 기다리는 요청이 없어요.</p> : null}
       </section>

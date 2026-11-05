@@ -9,6 +9,7 @@ import { useWishGoal } from '../hooks/useWishGoal';
 import { formatWon } from '../utils/currency';
 import { getProductUrlHost } from '../utils/productUrl';
 import { getGiftRequestBlockReason } from '../utils/giftRequest';
+import { getProductListPath } from '../utils/shopNavigation';
 import styles from './ShopProductDetailPage.module.css';
 
 function ShopProductDetailPage() {
@@ -61,8 +62,8 @@ function ShopProductDetailPage() {
 
       {data && product ? (
         <div className={styles.detail}>
-          <Link to={product.source !== 'custom' ? '/shop/catalog' : '/shop'} className={styles.backLink}>
-            {product.source !== 'custom' ? '← 상점' : '← 내 선물'}
+          <Link to={getProductListPath(product.source)} className={styles.backLink}>
+            {product.source === 'preset' ? '← 상점' : '← 갖고 싶은 선물'}
           </Link>
           <section className={styles.hero}>
             <div className={styles.productPanel}>
@@ -73,7 +74,7 @@ function ShopProductDetailPage() {
               />
               <h2>{product.title}</h2>
               <p className={styles.price}>
-                {hasPrice ? `${product.cloverPrice} ☘︎` : '클로버 정하는 중'}
+                {hasPrice ? `${product.cloverPrice} 클로버` : '클로버 정하는 중'}
                 {formatWon(product.purchasePriceWon) ? <small>{formatWon(product.purchasePriceWon)}</small> : null}
               </p>
               <p>{product.description}</p>
@@ -90,7 +91,7 @@ function ShopProductDetailPage() {
               ) : null}
               <div className={styles.balanceRow}>
                 <span>내 클로버</span>
-                <strong>{data.cloverBalance} ☘︎</strong>
+                <strong>{data.cloverBalance} 클로버</strong>
               </div>
               <section className={styles.recipientPanel}>
                 <h3>누구에게 부탁할까요?</h3>
@@ -143,10 +144,10 @@ function ShopProductDetailPage() {
                   disabled={isSaving}
                   onClick={() => void handleGoalToggle()}
                 >
-                  {isSaving ? '저장하는 중...' : isCurrentGoal ? '내 목표예요 (누르면 해제)' : '이 선물을 목표로 정하기 ☘︎'}
+                  {isSaving ? '저장하는 중...' : isCurrentGoal ? '내 목표예요 (누르면 해제)' : '이 선물을 목표로 정하기 클로버'}
                 </button>
               ) : null}
-              <Link to="/shop/catalog" className={styles.secondaryLink}>
+              <Link to="/shop" className={styles.secondaryLink}>
                 다른 선물 구경하기
               </Link>
             </div>

@@ -1,4 +1,5 @@
 import { getTodayDateInKorea } from '../../constants/date';
+import { getAvatarCharacter } from '../../constants/avatar';
 import type { DiaryEmotion } from '../../types/diary';
 import type { HomeSummary, MyProfile, UserStreak } from '../../types/user';
 import { getCurrentUserIdOrThrow } from '../session/authSession';
@@ -69,6 +70,7 @@ interface MyProfileApiResponse {
   nickname?: string | null;
   appRole?: string | null;
   avatarPreset?: string | null;
+  avatarCharacter?: string | null;
   avatarImage?: string | null;
 }
 
@@ -79,6 +81,7 @@ function normalizeMyProfile(data: MyProfileApiResponse): MyProfile {
     nickname: data.nickname?.trim() || '',
     appRole: data.appRole?.trim() || '',
     avatarPreset: data.avatarPreset?.trim() || 'peach',
+    avatarCharacter: getAvatarCharacter(data.avatarCharacter).key,
     avatarImage: data.avatarImage?.trim() || null,
   };
 }
@@ -94,6 +97,7 @@ export async function fetchMyProfile() {
 export async function updateMyProfile(payload: {
   nickname: string;
   avatarPreset: string;
+  avatarCharacter?: string;
   avatarImage: string | null;
 }) {
   getCurrentUserIdOrThrow();

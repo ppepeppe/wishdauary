@@ -1,5 +1,6 @@
 import type {
   CreateShopProductPayload,
+  CreateWishProductPayload,
   GiftRequestPayload,
   GiftRequestResult,
   ReceivedGiftRequest,
@@ -20,6 +21,7 @@ interface ShopProductApiItem {
   purchasePriceWon?: number | null;
   source?: string;
   childUserId?: number | null;
+  receiverFamilyUserId?: number | null;
   createdAt?: string;
 }
 
@@ -61,6 +63,7 @@ function normalizeProduct(item: ShopProductApiItem): ShopProduct {
     purchasePriceWon: item.purchasePriceWon ?? null,
     source: item.source ?? 'custom',
     childUserId: item.childUserId ?? null,
+    receiverFamilyUserId: item.receiverFamilyUserId ?? null,
     createdAt: item.createdAt,
   };
 }
@@ -103,19 +106,27 @@ export async function fetchShopProducts() {
   return products.map(normalizeProduct).filter((product) => product.productId > 0);
 }
 
-export async function createShopProduct(payload: CreateShopProductPayload) {
+export async function createShopProduct(payload: CreateWishProductPayload) {
   getCurrentChildUserIdOrThrow();
-  const product = await request<ShopProductApiItem>('/api/v1/shop/products', {
+  const product = await request<ShopProductApiItem>('/api/v1/shop/wish-requests', {
     method: 'POST',
     body: JSON.stringify({
       title: payload.title,
       description: payload.description,
       imageUrl: payload.imageUrl || null,
+      imageData: payload.imageData || null,
       productUrl: payload.productUrl || null,
+      receiverFamilyUserId: payload.receiverFamilyUserId,
     }),
   });
 
   return normalizeProduct(product);
+}
+
+export async function fetchWishProductRequests() {
+  getCurrentChildUserIdOrThrow();
+  const products = await request<ShopProductApiItem[]>('/api/v1/shop/wish-requests');
+  return products.map(normalizeProduct).filter((product) => product.productId > 0);
 }
 
 export async function fetchShopRecipients() {

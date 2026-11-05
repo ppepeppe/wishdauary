@@ -1,3 +1,4 @@
+import CardCarousel from '../common/CardCarousel';
 import { useState } from 'react';
 import type { DiaryComment } from '../../types/diary';
 import { getActorDisplayName } from '../../utils/actorDisplay';
@@ -78,9 +79,9 @@ function FamilyFeedComments({
       {!isLoading && !error && comments.length === 0 ? <p className={styles.status}>아직 댓글이 없어요.</p> : null}
 
       {comments.length > 0 ? (
-        <ul className={styles.commentList}>
+        <CardCarousel title="댓글" itemLabel="댓글">
           {comments.map((comment) => (
-            <li key={getCommentItemKey(comment)} className={styles.commentItem}>
+            <article key={getCommentItemKey(comment)} className={styles.commentItem}>
               <p className={styles.commentContent}>
                 <span className={styles.actor}>
                   {getActorDisplayName(comment.actorRelationLabel, comment.actorNickname)}
@@ -91,9 +92,9 @@ function FamilyFeedComments({
               {formatDate(comment.createdAt) ? (
                 <span className={styles.commentMeta}>{formatDate(comment.createdAt)}</span>
               ) : null}
-            </li>
+            </article>
           ))}
-        </ul>
+        </CardCarousel>
       ) : null}
     </div>
   );

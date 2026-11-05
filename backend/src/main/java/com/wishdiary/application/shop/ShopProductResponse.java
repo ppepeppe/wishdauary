@@ -12,6 +12,7 @@ public record ShopProductResponse(
         Integer purchasePriceWon,
         String source,
         Long childUserId,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        Long receiverFamilyUserId
 ) {
 }

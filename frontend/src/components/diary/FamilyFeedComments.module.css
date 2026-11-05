@@ -73,12 +73,12 @@
 }
 
 .commentItem {
-  padding: 12px 14px;
-  border-radius: var(--r-lg);
-  background: var(--surface-sunken);
-  border: 1px solid var(--line);
   display: grid;
   gap: var(--s-1);
+  padding: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: var(--card-inner-bg);
 }
 
 .commentContent {

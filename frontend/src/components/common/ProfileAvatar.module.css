@@ -31,37 +31,11 @@
   object-fit: cover;
 }
 
-.face {
-  position: relative;
-  width: 66%;
-  height: 70%;
-  margin-bottom: -6%;
-  background: #f3b998;
-  border-radius: 48% 48% 42% 42%;
-  box-shadow: inset 0 10px 0 #493335;
-}
-
-.face::before {
-  content: '';
-  position: absolute;
-  left: 22%;
-  top: 58%;
-  width: 7%;
-  height: 7%;
-  background: #3a292b;
-  border-radius: 50%;
-  box-shadow: 180% 0 #3a292b;
-}
-
-.face::after {
-  content: '';
-  position: absolute;
-  left: 38%;
-  top: 74%;
-  width: 24%;
-  height: 10%;
-  border-bottom: 1.5px solid #a95753;
-  border-radius: 50%;
+.character {
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  align-self: center;
 }
 
 .peach {
@@ -72,40 +46,18 @@
   background: #d7f0e6;
 }
 
-.mint .face {
-  box-shadow: inset 0 10px 0 #3d4f46;
-}
-
 .sky {
   background: #d7ebf7;
-}
-
-.sky .face {
-  box-shadow: inset 0 10px 0 #3a4654;
 }
 
 .lavender {
   background: #e8def6;
 }
 
-.lavender .face {
-  box-shadow: inset 0 10px 0 #4a3d55;
-}
-
 .honey {
   background: #f8e7c4;
 }
 
-.honey .face {
-  background: #f0c094;
-  box-shadow: inset 0 10px 0 #5a4630;
-}
-
 .rose {
   background: #f8d7de;
-}
-
-.rose .face {
-  background: #f0b8b0;
-  box-shadow: inset 0 10px 0 #5a3340;
 }
