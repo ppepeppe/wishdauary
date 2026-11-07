@@ -50,7 +50,9 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
         Diary diary = loadDiary(diaryId);
         LoadedUser author = loadUserPort.loadById(diary.getAuthorId());
         validateReadAccess(viewer, diary, author);
-        return toDetailResponse(diary);
+        boolean hearted = viewer.isFamily()
+                && heartReactionRepository.findByDiaryIdAndFamilyUserId(diaryId, viewerUserId).isPresent();
+        return toDetailResponse(diary, hearted);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
                 request.sharingGroupIds()
         );
         audiencePolicy.validateSelection(updatedDiary);
-        return toDetailResponse(diaryRepository.save(updatedDiary));
+        return toDetailResponse(diaryRepository.save(updatedDiary), false);
     }
 
     @Override
@@ -98,10 +100,10 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
         }
     }
 
-    private DiaryDetailResponse toDetailResponse(Diary diary) {
+    private DiaryDetailResponse toDetailResponse(Diary diary, boolean hearted) {
         List<Long> diaryIds = List.of(diary.getId());
         long heartCount = heartReactionRepository.countByDiaryIds(diaryIds).getOrDefault(diary.getId(), 0L);
         long commentCount = diaryCommentRepository.countByDiaryIds(diaryIds).getOrDefault(diary.getId(), 0L);
-        return diaryDetailResponseMapper.toResponse(diary, heartCount, commentCount);
+        return diaryDetailResponseMapper.toResponse(diary, heartCount, commentCount, hearted);
     }
 }

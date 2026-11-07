@@ -59,7 +59,7 @@ function DiaryWritePage() {
             선택한 날짜에 기록이 저장돼요. 미래 날짜는 선택할 수 없어요.
           </p>
         </div>
-        {isStatusLoading ? <StatusMessage kind="loading" message="오늘 작성 상태를 확인하고 있어요." /> : null}
+        {isStatusLoading ? <StatusMessage kind="loading" message="선택한 날짜의 작성 상태를 확인하고 있어요." /> : null}
         {statusError ? <StatusMessage kind="error" message={statusError} /> : null}
         {dateStatus?.exists ? (
           <StatusMessage

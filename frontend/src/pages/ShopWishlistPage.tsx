@@ -1,5 +1,6 @@
 import CardCarousel from '../components/common/CardCarousel';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useAsyncData } from '../hooks/useAsyncData';
 import { Link } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
@@ -8,7 +9,7 @@ import CloverIcon from '../components/common/CloverIcon';
 import ShopProductGrid from '../components/shop/ShopProductGrid';
 import ShopNavigation from '../components/shop/ShopNavigation';
 import { useShop } from '../hooks/useShop';
-import { fetchCloverHistory, type CloverHistoryEntry } from '../services/api/cloverApi';
+import { fetchCloverHistory } from '../services/api/cloverApi';
 import { getAuthSession } from '../services/session/authSession';
 import { getChildWishProducts } from '../utils/shopNavigation';
 import styles from './ShopPage.module.css';
@@ -27,33 +28,11 @@ function formatHistoryDate(value: string) {
 
 function ShopWishlistPage() {
   const { data, isLoading, error, refetch } = useShop();
-  const [history, setHistory] = useState<CloverHistoryEntry[]>([]);
+  const { data: historyData } = useAsyncData(fetchCloverHistory, true);
+  const history = historyData ?? [];
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const myProducts = getChildWishProducts(data?.products ?? [], getAuthSession()?.userId);
-
-  useEffect(() => {
-    let ignore = false;
-
-    async function loadHistory() {
-      try {
-        const entries = await fetchCloverHistory();
-        if (!ignore) {
-          setHistory(entries);
-        }
-      } catch {
-        if (!ignore) {
-          setHistory([]);
-        }
-      }
-    }
-
-    void loadHistory();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
 
   return (
     <PageSection

@@ -14,6 +14,7 @@ public record DiaryDetailResponse(
         long commentCount,
         LocalDate writtenDate,
         LocalDateTime createdAt,
-        List<Long> sharingGroupIds
+        List<Long> sharingGroupIds,
+        boolean hearted
 ) {
 }

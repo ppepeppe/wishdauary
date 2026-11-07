@@ -8,7 +8,7 @@ import { useShop } from '../hooks/useShop';
 import { useWishGoal } from '../hooks/useWishGoal';
 import { formatWon } from '../utils/currency';
 import { getProductUrlHost } from '../utils/productUrl';
-import { getGiftRequestBlockReason } from '../utils/giftRequest';
+import { getGiftRecipient, getGiftRequestBlockReason } from '../utils/giftRequest';
 import { getProductListPath } from '../utils/shopNavigation';
 import styles from './ShopProductDetailPage.module.css';
 
@@ -19,13 +19,10 @@ function ShopProductDetailPage() {
   const { goal, isSaving, actionError, saveGoal, removeGoal } = useWishGoal();
   const [selectedRecipientId, setSelectedRecipientId] = useState<number | null>(null);
   const product = data?.products.find((item) => item.productId === parsedProductId) ?? null;
-  const selectedRecipient = useMemo(() => {
-    if (!data?.recipients.length) {
-      return null;
-    }
-
-    return data.recipients.find((recipient) => recipient.userId === selectedRecipientId) ?? data.recipients[0];
-  }, [data?.recipients, selectedRecipientId]);
+  const selectedRecipient = useMemo(
+    () => getGiftRecipient(data?.recipients ?? [], product, selectedRecipientId),
+    [data?.recipients, product, selectedRecipientId],
+  );
   const hasPrice = Boolean(product && product.cloverPrice > 0);
   const productUrlHost = getProductUrlHost(product?.productUrl);
   const isCurrentGoal = Boolean(goal && product && goal.productId === product.productId);

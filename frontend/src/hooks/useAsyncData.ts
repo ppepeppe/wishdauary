@@ -8,7 +8,7 @@ interface AsyncState<T> {
   refetch: () => Promise<void>;
 }
 
-export function useAsyncData<T>(fetcher: () => Promise<T>): AsyncState<T> {
+export function useAsyncData<T>(fetcher: () => Promise<T>, refreshOnFocus = false): AsyncState<T> {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +32,13 @@ export function useAsyncData<T>(fetcher: () => Promise<T>): AsyncState<T> {
     void refetch();
     return () => request.current.invalidate();
   }, [refetch]);
+
+  useEffect(() => {
+    if (!refreshOnFocus) return;
+    const refresh = () => void refetch();
+    window.addEventListener('focus', refresh);
+    return () => window.removeEventListener('focus', refresh);
+  }, [refetch, refreshOnFocus]);
 
   return { data, isLoading, error, refetch };
 }

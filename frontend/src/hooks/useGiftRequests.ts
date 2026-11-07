@@ -16,7 +16,7 @@ async function fetchFamilyShopData() {
 }
 
 export function useGiftRequests() {
-  const state = useAsyncData(fetchFamilyShopData);
+  const state = useAsyncData(fetchFamilyShopData, true);
 
   async function processRequest(notificationId: number, action: 'APPROVE' | 'REJECT') {
     await processGiftRequest(notificationId, action);

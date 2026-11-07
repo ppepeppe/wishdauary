@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { DiaryComment, DiaryEntry } from '../types/diary';
 import { createDiaryComment, fetchDiaryComments, fetchFamilyFeed, toggleDiaryHeart } from '../services/api/diaryApi';
 import { useAsyncData } from './useAsyncData';
@@ -25,7 +25,8 @@ function updateDiaryHeartState(
 }
 
 export function useFamilyFeed() {
-  const { data, isLoading, error, refetch } = useAsyncData(fetchFamilyFeed);
+  const { data, isLoading, error, refetch } = useAsyncData(fetchFamilyFeed, true);
+  const commentRequests = useRef(new Set<number>());
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
   const [pendingIds, setPendingIds] = useState<number[]>([]);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -87,9 +88,10 @@ export function useFamilyFeed() {
   }
 
   async function submitComment(diaryId: number, content: string) {
-    if (isCommentSubmitting(diaryId)) {
-      return;
+    if (commentRequests.current.has(diaryId)) {
+      return false;
     }
+    commentRequests.current.add(diaryId);
 
     setCommentErrors((current) => ({
       ...current,
@@ -98,17 +100,25 @@ export function useFamilyFeed() {
     setCommentSubmittingIds((current) => [...current, diaryId]);
 
     try {
-      await createDiaryComment({
+      const comment = await createDiaryComment({
         diaryId,
         content,
       });
-      await loadComments(diaryId);
+      setCommentsByDiary((current) => ({
+        ...current,
+        [diaryId]: [...(current[diaryId] ?? []), comment],
+      }));
+      setDiaries((current) => current.map((diary) => diary.id === diaryId
+        ? { ...diary, commentCount: (diary.commentCount ?? 0) + 1 } : diary));
+      return true;
     } catch {
       setCommentErrors((current) => ({
         ...current,
         [diaryId]: DEFAULT_COMMENT_CREATE_ERROR_MESSAGE,
       }));
+      return false;
     } finally {
+      commentRequests.current.delete(diaryId);
       setCommentSubmittingIds((current) => current.filter((id) => id !== diaryId));
     }
   }

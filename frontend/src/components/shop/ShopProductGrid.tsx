@@ -24,7 +24,7 @@ const REQUEST_STATUS_META: Record<string, { label: string; className: 'requestPe
 };
 
 function ShopProductGrid({ products, cloverBalance, hasRecipients, showPurchasePrice = true }: ShopProductGridProps) {
-  const { data: sentRequests } = useAsyncData(fetchSentGiftRequests);
+  const { data: sentRequests } = useAsyncData(fetchSentGiftRequests, true);
   const requestStatusByProductId = useMemo(() => {
     const statusMap = new Map<number, ReceivedGiftRequest['status']>();
     // 목록이 최신순이므로, 상품별로 가장 최근 요청 상태만 남긴다.

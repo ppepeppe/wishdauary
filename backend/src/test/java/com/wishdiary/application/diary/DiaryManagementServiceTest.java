@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -72,6 +74,22 @@ class DiaryManagementServiceTest {
         assertEquals("full diary", response.content());
         assertEquals(2L, response.heartCount());
         assertEquals(3L, response.commentCount());
+        assertEquals(false, response.hearted());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void detailReflectsTheViewingFamilyMembersOwnHeart(boolean hearted) {
+        LoadedUser family = new LoadedUser(3L, "family@test.com", "엄마", AppRole.FAMILY,
+                13L, 100L, GroupMemberRole.FAMILY, null, "엄마");
+        Diary publicDiary = diary().update("public diary", DiaryEmotion.HAPPY, DiaryVisibilityScope.PUBLIC);
+        when(loadUserPort.loadById(3L)).thenReturn(family);
+        when(loadUserPort.loadById(1L)).thenReturn(childUser());
+        when(loadDiaryQueryPort.loadById(10L)).thenReturn(Optional.of(publicDiary));
+        when(heartReactionRepository.findByDiaryIdAndFamilyUserId(10L, 3L)).thenReturn(hearted
+                ? Optional.of(com.wishdiary.domain.reaction.HeartReaction.create(10L, 3L)) : Optional.empty());
+
+        assertEquals(hearted, diaryManagementService.getDetail(3L, 10L).hearted());
     }
 
     @Test

@@ -11,7 +11,7 @@ interface FamilyFeedCommentsProps {
   isLoading: boolean;
   isSubmitting: boolean;
   error: string | null;
-  onSubmitComment: (diaryId: number, content: string) => Promise<void>;
+  onSubmitComment: (diaryId: number, content: string) => Promise<boolean>;
 }
 
 function formatDate(value?: string) {
@@ -45,12 +45,11 @@ function FamilyFeedComments({
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!trimmedContent) {
+    if (!trimmedContent || isSubmitting || isLoading) {
       return;
     }
 
-    await onSubmitComment(diaryId, trimmedContent);
-    setContent('');
+    if (await onSubmitComment(diaryId, trimmedContent)) setContent('');
   }
 
   return (
@@ -68,7 +67,7 @@ function FamilyFeedComments({
           hint={!isSubmitting && !trimmedContent ? '한마디를 적으면 남길 수 있어요' : null}
           className={styles.submitWrap}
         >
-          <button type="submit" className={styles.submitButton} disabled={isSubmitting || !trimmedContent}>
+          <button type="submit" className={styles.submitButton} disabled={isSubmitting || isLoading || !trimmedContent}>
             {isSubmitting ? '남기는 중...' : '작성'}
           </button>
         </HoverHint>

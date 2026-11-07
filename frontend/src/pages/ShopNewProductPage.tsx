@@ -18,7 +18,7 @@ function ShopNewProductPage() {
   const [productUrl, setProductUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { data: recipients, isLoading: recipientsLoading, error: recipientsError, refetch } = useAsyncData(fetchShopRecipients);
+  const { data: recipients, isLoading: recipientsLoading, error: recipientsError, refetch } = useAsyncData(fetchShopRecipients, true);
   const [receiverId, setReceiverId] = useState('');
   const busyRef = useRef(false);
   const selectedReceiver = recipients?.find((person) => person.userId === Number(receiverId));

@@ -9,8 +9,10 @@ import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
 import EmotionIcon from '../components/diary/EmotionIcon';
 import EmotionSelector from '../components/diary/EmotionSelector';
+import FamilyDiaryReactions from '../components/diary/FamilyDiaryReactions';
 import { getVisibilityScopeLabel } from '../constants/diary';
 import { getEmotionMeta } from '../constants/emotion';
+import { formatKoreanDate } from '../constants/date';
 import { fetchDiaryComments, fetchDiaryDetail, updateDiary, deleteDiary } from '../services/api/diaryApi';
 import type { DiaryComment, DiaryDetail, DiaryEmotion, DiaryVisibilityScope } from '../types/diary';
 import { getActorDisplayName } from '../utils/actorDisplay';
@@ -46,6 +48,7 @@ function DiaryDetailPage() {
   const [visibilityScope, setVisibilityScope] = useState<DiaryVisibilityScope>('private');
   const [sharingGroupIds, setSharingGroupIds] = useState<number[]>([]);
   const isOwner = diary?.authorId === getAuthSession()?.userId;
+  const isFamily = getAuthSession()?.appRole === 'family';
   const [emotion, setEmotion] = useState<DiaryEmotion | null>(null);
 
   useEffect(() => {
@@ -138,7 +141,7 @@ function DiaryDetailPage() {
   return (
     <PageSection
       title="일기 상세"
-      description="남겨둔 마음을 다시 읽고 필요하면 조용히 다듬을 수 있어요."
+      description={isFamily ? '아이의 마음을 읽고 댓글과 하트로 응원해 주세요.' : '남겨둔 마음을 다시 읽고 필요하면 조용히 다듬을 수 있어요.'}
     >
       {isLoading ? <StatusMessage kind="loading" message="일기를 펼치고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
@@ -146,14 +149,14 @@ function DiaryDetailPage() {
 
       {diary ? (
         <div className={styles.container}>
-          <Link to={isOwner ? "/diaries" : "/shared-feed"} className={styles.backLink}>
-            {isOwner ? "내 일기 목록으로 가기" : "공개·그룹 피드로 가기"}
+          <Link to={isOwner ? '/diaries' : isFamily ? '/family-feed' : '/shared-feed'} className={styles.backLink}>
+            {isOwner ? '내 일기 목록으로 가기' : isFamily ? '아이 일기 목록으로 가기' : '공개·그룹 피드로 가기'}
           </Link>
 
           {!isEditing ? (
             <article className={styles.detailCard}>
               <div className={styles.metaRow}>
-                <span>{formatDate(diary.createdAt)}</span>
+                <span>{formatKoreanDate(diary.writtenDate)}</span>
                 <span className={styles.scopeBadge}>{getVisibilityScopeLabel(diary.visibilityScope)}</span>
               </div>
               {getEmotionMeta(diary.emotion) ? (
@@ -210,7 +213,18 @@ function DiaryDetailPage() {
             </form>
           )}
 
-          {comments.length > 0 ? (
+          {isFamily ? <section className={styles.comments}>
+            <h2>아이에게 응원 남기기</h2>
+            <FamilyDiaryReactions key={diary.id} diary={diary} comments={comments}
+              onHeartChanged={(result) => setDiary((current) => current?.id === result.diaryId
+                ? { ...current, hearted: result.hearted, heartCount: result.heartCount } : current)}
+              onCommentCreated={(comment) => {
+                setComments((current) => [...current, comment]);
+                setDiary((current) => current ? { ...current, commentCount: (current.commentCount ?? 0) + 1 } : current);
+              }} />
+          </section> : null}
+
+          {!isFamily && comments.length > 0 ? (
             <section className={styles.comments}>
               <h2>댓글</h2>
               <CardCarousel label="댓글" itemLabel="댓글">

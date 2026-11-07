@@ -1,13 +1,13 @@
 import CardCarousel from '../components/common/CardCarousel';
 import { Link } from 'react-router-dom';
 import ProductArtwork from '../components/shop/ProductArtwork';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useAsyncData } from '../hooks/useAsyncData';
 import HoverHint from '../components/common/HoverHint';
 import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
 import { useGiftRequests } from '../hooks/useGiftRequests';
 import { fetchChildrenWishGoals } from '../services/api/wishGoalApi';
-import type { ChildWishGoal } from '../types/wishGoal';
 import { formatWon } from '../utils/currency';
 import { getProductUrlHost } from '../utils/productUrl';
 import styles from './FamilySettingsPage.module.css';
@@ -29,30 +29,8 @@ function FamilySettingsPage() {
   const [priceInputs, setPriceInputs] = useState<Record<number, string>>({});
   const [purchasePriceInputs, setPurchasePriceInputs] = useState<Record<number, string>>({});
   const [actionError, setActionError] = useState<string | null>(null);
-  const [childrenGoals, setChildrenGoals] = useState<ChildWishGoal[]>([]);
-
-  useEffect(() => {
-    let ignore = false;
-
-    async function loadChildrenGoals() {
-      try {
-        const goals = await fetchChildrenWishGoals();
-        if (!ignore) {
-          setChildrenGoals(goals);
-        }
-      } catch {
-        if (!ignore) {
-          setChildrenGoals([]);
-        }
-      }
-    }
-
-    void loadChildrenGoals();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
+  const { data: goals } = useAsyncData(fetchChildrenWishGoals, true);
+  const childrenGoals = goals ?? [];
 
   async function handleProcess(notificationId: number, action: 'APPROVE' | 'REJECT') {
     try {

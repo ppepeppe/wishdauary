@@ -1,4 +1,14 @@
-import type { ShopProduct } from '../types/shop';
+import type { ShopFamilyRecipient, ShopProduct } from '../types/shop';
+
+export function getGiftRecipient(
+  recipients: ShopFamilyRecipient[],
+  product?: Pick<ShopProduct, 'receiverFamilyUserId'> | null,
+  selectedId?: number | null,
+) {
+  return recipients.find((person) => person.userId === selectedId)
+    ?? recipients.find((person) => person.userId === product?.receiverFamilyUserId)
+    ?? recipients[0] ?? null;
+}
 
 export function getGiftRequestBlockReason(
   product: Pick<ShopProduct, 'cloverPrice'>,

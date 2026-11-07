@@ -5,7 +5,7 @@ import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
 import { useShop } from '../hooks/useShop';
 import { formatWon } from '../utils/currency';
-import { getGiftRequestBlockReason } from '../utils/giftRequest';
+import { getGiftRecipient, getGiftRequestBlockReason } from '../utils/giftRequest';
 import { getProductListPath } from '../utils/shopNavigation';
 import styles from './ShopGiftRequestPage.module.css';
 
@@ -23,13 +23,10 @@ function ShopGiftRequestPage() {
   const [message, setMessage] = useState(DEFAULT_MESSAGE);
 
   const product = data?.products.find((item) => item.productId === parsedProductId) ?? null;
-  const selectedRecipient = useMemo(() => {
-    if (!data?.recipients.length) {
-      return null;
-    }
-
-    return data.recipients.find((recipient) => recipient.userId === selectedRecipientId) ?? data.recipients[0];
-  }, [data?.recipients, selectedRecipientId]);
+  const selectedRecipient = useMemo(
+    () => getGiftRecipient(data?.recipients ?? [], product, selectedRecipientId),
+    [data?.recipients, product, selectedRecipientId],
+  );
   const hasPrice = Boolean(product && product.cloverPrice > 0);
   const hasEnoughClovers = Boolean(product && data && data.cloverBalance >= product.cloverPrice);
   const canSubmit = Boolean(product && selectedRecipient && hasPrice && hasEnoughClovers && pendingProductId === null);

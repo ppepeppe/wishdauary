@@ -105,7 +105,7 @@ function HomePage() {
   return (
     <div className={styles.container}>
       <FamilyConnectionNotice />
-      {showSavedMessage ? <StatusMessage kind="success" message="오늘 일기를 저장했어요. 클로버도 함께 모았어요." /> : null}
+      {showSavedMessage ? <StatusMessage kind="success" message="일기를 저장했어요. 클로버도 함께 모았어요." /> : null}
       {error ? <StatusMessage kind="error" message="홈을 새로 불러오지 못했어요. 잠시 후 다시 시도해 주세요." /> : null}
 
       <section className={styles.headerCard}>

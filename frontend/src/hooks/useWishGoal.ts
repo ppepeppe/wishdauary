@@ -4,7 +4,7 @@ import type { WishGoal } from '../types/wishGoal';
 import { useAsyncData } from './useAsyncData';
 
 export function useWishGoal() {
-  const { data, isLoading, error, refetch } = useAsyncData<WishGoal | null>(fetchWishGoal);
+  const { data, isLoading, error, refetch } = useAsyncData<WishGoal | null>(fetchWishGoal, true);
   const [isSaving, setIsSaving] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 

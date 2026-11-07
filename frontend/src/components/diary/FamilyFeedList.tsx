@@ -14,7 +14,7 @@ interface FamilyFeedListProps {
   onToggleHeart: (diaryId: number) => Promise<void>;
   isHeartPending: (diaryId: number) => boolean;
   onLoadComments: (diaryId: number) => Promise<void>;
-  onSubmitComment: (diaryId: number, content: string) => Promise<void>;
+  onSubmitComment: (diaryId: number, content: string) => Promise<boolean>;
   getComments: (diaryId: number) => DiaryComment[];
   getCommentError: (diaryId: number) => string | null;
   isCommentLoading: (diaryId: number) => boolean;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiaryDetailResponseMapper {
 
-    public DiaryDetailResponse toResponse(Diary diary, long heartCount, long commentCount) {
+    public DiaryDetailResponse toResponse(Diary diary, long heartCount, long commentCount, boolean hearted) {
         return new DiaryDetailResponse(
                 diary.getId(),
                 diary.getAuthorId(),
@@ -17,7 +17,8 @@ public class DiaryDetailResponseMapper {
                 commentCount,
                 diary.getWrittenDate(),
                 diary.getCreatedAt(),
-                diary.getSharingGroupIds()
+                diary.getSharingGroupIds(),
+                hearted
         );
     }
 }
