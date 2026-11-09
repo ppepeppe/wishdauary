@@ -15,6 +15,7 @@ interface ShopProductGridProps {
   cloverBalance: number;
   hasRecipients: boolean;
   showPurchasePrice?: boolean;
+  layout?: 'grid' | 'carousel';
 }
 
 const REQUEST_STATUS_META: Record<string, { label: string; className: 'requestPending' | 'requestApproved' | 'requestRejected' }> = {
@@ -23,7 +24,7 @@ const REQUEST_STATUS_META: Record<string, { label: string; className: 'requestPe
   rejected: { label: '거절됨', className: 'requestRejected' },
 };
 
-function ShopProductGrid({ products, cloverBalance, hasRecipients, showPurchasePrice = true }: ShopProductGridProps) {
+function ShopProductGrid({ products, cloverBalance, hasRecipients, showPurchasePrice = true, layout = 'carousel' }: ShopProductGridProps) {
   const { data: sentRequests } = useAsyncData(fetchSentGiftRequests, true);
   const requestStatusByProductId = useMemo(() => {
     const statusMap = new Map<number, ReceivedGiftRequest['status']>();
@@ -83,6 +84,9 @@ function ShopProductGrid({ products, cloverBalance, hasRecipients, showPurchaseP
     );
   }
 
+  if (layout === 'grid') {
+    return <div className={styles.productGrid} role="region" aria-label="선물 둘러보기">{products.map(renderProduct)}</div>;
+  }
   return <CardCarousel title="선물 둘러보기" itemLabel="선물">{products.map(renderProduct)}</CardCarousel>;
 }
 

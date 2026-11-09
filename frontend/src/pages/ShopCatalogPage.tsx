@@ -35,7 +35,7 @@ function ShopCatalogPage() {
           </section>
           <div className={styles.catalogProducts}>
             {products.length > 0 ? (
-              <ShopProductGrid products={products} cloverBalance={data.cloverBalance} hasRecipients={data.recipients.length > 0} />
+              <ShopProductGrid products={products} cloverBalance={data.cloverBalance} hasRecipients={data.recipients.length > 0} layout="grid" />
             ) : (
               <div className={styles.emptyState}>
                 <h3>아직 등록된 선물이 없어요</h3>
