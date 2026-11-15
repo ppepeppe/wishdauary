@@ -15,7 +15,7 @@ COPY . .
 ARG VITE_API_BASE_URL=""
 RUN VITE_API_BASE_URL="${VITE_API_BASE_URL}" npm run build
 
-FROM nginx:1.27-alpine AS runtime
+FROM nginx:stable-alpine AS runtime
 
 ENV BACKEND_URL=http://backend:8080
 

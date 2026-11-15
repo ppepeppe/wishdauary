@@ -9,6 +9,16 @@ import org.junit.jupiter.api.Test;
 class UserProfileTest {
 
     @Test
+    void profileChangesPreserveAdminRoleSeparatelyFromAppRole() {
+        User admin = new User(1L, "admin@test.com", "관리자", AppRole.FAMILY,
+                ProfileAvatar.defaultAvatar(), UserRole.ADMIN);
+        User updated = admin.changeProfile("새 이름", ProfileAvatar.of("mint", null));
+        assertEquals(UserRole.ADMIN, updated.userRole());
+        assertEquals(AppRole.FAMILY, updated.appRole());
+        assertEquals(UserRole.USER, new User(2L, "user@test.com", "아이", AppRole.CHILD).userRole());
+    }
+
+    @Test
     void changeProfileUpdatesNicknameAndAvatar() {
         User user = new User(1L, "child@test.com", "미아", AppRole.CHILD);
 

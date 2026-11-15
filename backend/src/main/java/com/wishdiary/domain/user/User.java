@@ -5,8 +5,17 @@ public record User(
         String email,
         String nickname,
         AppRole appRole,
-        ProfileAvatar avatar
+        ProfileAvatar avatar,
+        UserRole userRole
 ) {
+
+    public User {
+        userRole = userRole == null ? UserRole.USER : userRole;
+    }
+
+    public User(Long id, String email, String nickname, AppRole appRole, ProfileAvatar avatar) {
+        this(id, email, nickname, appRole, avatar, UserRole.USER);
+    }
 
     public User(Long id, String email, String nickname, AppRole appRole) {
         this(id, email, nickname, appRole, ProfileAvatar.defaultAvatar());
@@ -18,7 +27,8 @@ public record User(
                 email,
                 requireNickname(nickname),
                 appRole,
-                avatar == null ? ProfileAvatar.defaultAvatar() : avatar
+                avatar == null ? ProfileAvatar.defaultAvatar() : avatar,
+                userRole
         );
     }
 

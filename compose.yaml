@@ -1,0 +1,102 @@
+name: wishdauary
+
+x-service-defaults: &service-defaults
+  restart: unless-stopped
+  logging:
+    driver: local
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  proxy:
+    <<: *service-defaults
+    image: caddy:2-alpine
+    environment:
+      SITE_ADDRESS: ${WISHDIARY_SITE_ADDRESS:-:80}
+    ports:
+      - "${WISHDIARY_BIND_ADDRESS:-0.0.0.0}:${WISHDIARY_HTTP_PORT:-80}:80"
+      - "${WISHDIARY_BIND_ADDRESS:-0.0.0.0}:${WISHDIARY_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    mem_limit: 128m
+
+  frontend:
+    <<: *service-defaults
+    image: wishdauary-frontend:local
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: ""
+    environment:
+      BACKEND_URL: http://backend:8080
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    mem_limit: 96m
+
+  backend:
+    <<: *service-defaults
+    image: wishdauary-backend:local
+    build:
+      context: ./backend
+    environment:
+      WISHDIARY_DB_URL: jdbc:postgresql://postgres:5432/wishdauary
+      WISHDIARY_DB_USERNAME: wishdauary
+      WISHDIARY_DB_PASSWORD: ${WISHDIARY_DB_PASSWORD:?Run sh deploy/init-env.sh first}
+      WISHDIARY_AUTH_TOKEN_SECRET: ${WISHDIARY_AUTH_TOKEN_SECRET:?Run sh deploy/init-env.sh first}
+      WISHDIARY_ALLOWED_ORIGINS: ${WISHDIARY_PUBLIC_ORIGIN:?Set the public origin in .env}
+      WISHDIARY_FLYWAY_BASELINE_ON_MIGRATE: "false"
+      WISHDIARY_SQL_LOG_LEVEL: info
+      WISHDIARY_HIBERNATE_FORMAT_SQL: "false"
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: "5"
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx384m -XX:MaxMetaspaceSize=192m -Djava.awt.headless=true"
+    healthcheck:
+      # This protected endpoint must return 401 once the web/auth layer is ready.
+      test: ["CMD-SHELL", "wget -S -O /dev/null http://127.0.0.1:8080/api/v1/users/me 2>&1 | grep -q 'HTTP/1.1 401'"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+    stop_grace_period: 30s
+    mem_limit: 768m
+
+  postgres:
+    <<: *service-defaults
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: wishdauary
+      POSTGRES_USER: wishdauary
+      POSTGRES_PASSWORD: ${WISHDIARY_DB_PASSWORD:?Run sh deploy/init-env.sh first}
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+    stop_grace_period: 30s
+    mem_limit: 384m
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

@@ -75,12 +75,12 @@ function FamilyFeedList({
           <article key={getDiaryItemKey(diary)} className={styles.card}>
             <div className={styles.header}>
               <div className={styles.headerMain}>
-                <strong>{formatDate(getDiaryDisplayDate(diary))}</strong>
                 {diary.actorRelationLabel || diary.actorNickname ? (
                   <span className={styles.actor}>
                     {getActorDisplayName(diary.actorRelationLabel, diary.actorNickname)}
                   </span>
                 ) : null}
+                <strong>{formatDate(getDiaryDisplayDate(diary))}</strong>
               </div>
               {emotion ? (
                 <span className={styles.emotionBadge}>

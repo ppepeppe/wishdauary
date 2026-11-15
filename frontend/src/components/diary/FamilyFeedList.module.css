@@ -28,17 +28,19 @@
   gap: var(--s-1);
 }
 
+.headerMain > strong { color: var(--ink-muted); font-size: 12px; font-weight: 450; }
+
 .actor {
   color: var(--ink-strong);
   font-size: var(--text-sm);
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .emotionBadge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 11px 6px 6px;
+  padding: 4px 9px 4px 4px;
   border-radius: var(--r-pill);
   color: var(--ink-muted);
   background: var(--surface-sunken);
@@ -98,7 +100,7 @@
 
 .heartButton,
 .commentButton {
-  min-height: 38px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 5px;

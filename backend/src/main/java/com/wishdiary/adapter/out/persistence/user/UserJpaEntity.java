@@ -1,6 +1,7 @@
 package com.wishdiary.adapter.out.persistence.user;
 
 import com.wishdiary.domain.user.AppRole;
+import com.wishdiary.domain.user.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,6 +28,10 @@ public class UserJpaEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private AppRole appRole;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserRole userRole = UserRole.USER;
 
     @Column(nullable = false)
     private String passwordHash;
@@ -67,6 +72,8 @@ public class UserJpaEntity {
     public AppRole getAppRole() {
         return appRole;
     }
+
+    public UserRole getUserRole() { return userRole; }
 
     public String getPasswordHash() {
         return passwordHash;

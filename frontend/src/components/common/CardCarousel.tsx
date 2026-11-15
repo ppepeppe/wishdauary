@@ -100,7 +100,7 @@ function CardCarousel({ title, label = title ?? '목록', itemLabel = '항목', 
 
   return (
     <section className={styles.section} aria-label={label} aria-roledescription="캐러셀">
-      <div className={styles.heading}>
+      <div className={`${styles.heading} ${!title && !multiple ? styles.quietHeading : ''}`}>
         {title ? <h2>{title}</h2> : null}
         <div className={styles.controls}>
           {multiple ? <button type="button" onClick={() => moveTo(activeIndex - 1)} disabled={activeIndex === 0}

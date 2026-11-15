@@ -45,7 +45,8 @@ public class MyProfileService implements GetMyProfileUseCase, UpdateMyProfileUse
                 user.appRole().name().toLowerCase(),
                 user.avatar().preset(),
                 user.avatar().imageDataUrl(),
-                user.avatar().character()
+                user.avatar().character(),
+                user.userRole().name().toLowerCase()
         );
     }
 }

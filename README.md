@@ -7,6 +7,9 @@
 - `frontend/`: React · TypeScript · Vite 웹 화면과 Capacitor Android/iPhone 프로젝트
 - `backend/`: Java 21 · Spring Boot · PostgreSQL API
 - `frontend/MOBILE.md`: 모바일 앱 빌드와 로컬 기기 연결 안내
+- `compose.yaml`, `deploy/`: EC2 한 대에서 웹·API·PostgreSQL 실행, HTTPS·백업 안내
+
+EC2 배포는 [서버 배포 안내](deploy/README.md)를 따릅니다. `sh deploy/init-env.sh`로 비밀값을 생성하고 접속 주소를 설정한 뒤 Docker Compose로 실행합니다. 기존 로컬 DB를 유지하려면 안내의 백업·복원 단계도 진행합니다.
 
 ## 주요 기능
 
@@ -16,6 +19,19 @@
 - 아이의 희망 상품 등록, 가족의 선물 등록·클로버 설정과 수정
 - 선물 요청 승인·거절과 클로버 사용·환불
 - 프로필과 가족 연결 관리
+- 관리자·일반 사용자 권한 저장과 관리자 공통 상점 상품 등록
+
+## 공통 상점 관리
+
+아이·가족 구분(`app_role`)과 별도로 `users.user_role`에 `ADMIN` 또는 `USER`를 저장합니다. 기존 계정과 신규 가입은 기본 `USER`입니다. 관리자 지정은 운영 DB에서 해당 계정만 변경합니다.
+
+```sql
+UPDATE users SET user_role = 'ADMIN' WHERE email = '관리자로 지정할 이메일';
+```
+
+관리자 계정의 마이페이지에 **공통 상점 상품 관리**가 표시됩니다. `/admin/shop`에서 상품명, 설명, 사진, 클로버, 선택 구매가·쇼핑몰 링크를 입력하면 모든 아이의 공통 상점에 즉시 표시됩니다. 사진은 기존 상품 사진과 동일하게 PostgreSQL에 저장됩니다. 개인 선물과 가족별 요청에는 추가되지 않습니다.
+
+`GET /api/v1/admin/shop/products`, `POST /api/v1/admin/shop/products`는 기존 로그인 확인만 적용합니다. 요청에 따라 `ADMIN` 권한 검사와 관리자 전용 접근 차단은 아직 적용하지 않았습니다. 메뉴 표시는 권한에 따라 구분하지만, 로그인한 일반 사용자도 직접 주소나 API로 접근할 수 있는 현재 단계의 의도된 동작입니다. 프로필 수정·가입 API로 `user_role`을 변경할 수는 없습니다.
 
 ## 로컬 실행
 

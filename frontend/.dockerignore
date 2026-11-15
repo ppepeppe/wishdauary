@@ -3,6 +3,10 @@
 .openai
 node_modules
 dist
+dist-native
+artifacts
+android
+ios
 *.tsbuildinfo
 .env
 .env.*

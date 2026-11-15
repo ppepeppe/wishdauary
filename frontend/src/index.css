@@ -33,9 +33,9 @@
   --tracking-tight: -0.025em;
 
   /* ---------- Ink (charcoal, not pure black) ---------- */
-  --ink-strong: #2f3438;
-  --ink: #424242;
-  --ink-muted: #70777d;
+  --ink-strong: #24343b;
+  --ink: #3b4d55;
+  --ink-muted: #697b83;
   --ink-subtle: #767e85;
   --ink-inverse: #ffffff;
 
@@ -68,27 +68,28 @@
   /* ---------- Surfaces ---------- */
   --canvas: #ffffff;
   --surface: #ffffff;
-  --surface-sunken: #f7f8fa;
+  --surface-sunken: #f3f7f8;
+  --app-bg: #f7fafb;
   --surface-inverse: #2f3438;
   --line: #eaedef;
   --line-strong: #dadfe3;
 
   /* ---------- Shared content cards ---------- */
-  --card-bg: rgba(8, 127, 149, 0.035);
-  --card-border: rgba(8, 127, 149, 0.16);
-  --card-border-hover: rgba(8, 127, 149, 0.28);
+  --card-bg: #ffffff;
+  --card-border: rgba(8, 85, 106, 0.11);
+  --card-border-hover: rgba(8, 127, 149, 0.24);
   --card-radius: 18px;
-  --card-padding: 18px;
-  --card-shadow: 0 4px 14px rgba(8, 70, 85, 0.05);
-  --card-inner-bg: rgba(255, 255, 255, 0.78);
+  --card-padding: 20px;
+  --card-shadow: 0 3px 16px rgba(24, 65, 78, 0.035);
+  --card-inner-bg: #f6fafb;
 
   /* ---------- Radius ---------- */
   --r-xs: 4px;
   --r-sm: 8px;
-  --r-md: 6px;
-  --r-lg: 8px;
-  --r-xl: 10px;
-  --r-2xl: 12px;
+  --r-md: 10px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-2xl: 20px;
   --r-pill: 999px;
 
   /* ---------- Elevation (light borders first, shadow last) ---------- */
@@ -119,8 +120,8 @@
 
   /* ---------- Layout ---------- */
   --shell-max: 980px;
-  --mobile-max: 480px;
-  --nav-height: 64px;
+  --mobile-max: 600px;
+  --nav-height: 70px;
 
   /* ---------- Legacy aliases (kept so existing modules keep working) ------ */
   --brand-deep: var(--brand-hover);

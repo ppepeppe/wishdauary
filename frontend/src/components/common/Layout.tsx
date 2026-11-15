@@ -76,6 +76,10 @@ function Layout() {
             <Outlet />
           </main>
           <nav className={styles.bottomNav} aria-label="주요 메뉴">
+            <Link to={authSession.appRole === 'family' ? '/family-home' : '/home'} className={styles.desktopBrand}>
+              <span className={styles.desktopMark}>W</span>
+              <span>위시다유어리<small>{authSession.appRole === 'family' ? '함께 읽는 아이의 하루' : '나의 하루를 차곡차곡'}</small></span>
+            </Link>
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -99,6 +103,11 @@ function Layout() {
                 <span className={styles.bottomNavLabel}>{item.label}</span>
               </NavLink>
             ))}
+            <Link to="/me" className={styles.desktopAccount} aria-label="내 계정">
+              <NavIcon name="profile" />
+              <span>{authSession.nickname || '내 계정'}<small>프로필과 가족 관리</small></span>
+              <span aria-hidden="true">›</span>
+            </Link>
           </nav>
         </div>
       </div>

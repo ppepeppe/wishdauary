@@ -32,6 +32,8 @@ local.properties
 *.keystore
 
 # Local databases and backups
+backups/
+*.dump.partial
 *.dump
 *.sqlite
 *.sqlite3

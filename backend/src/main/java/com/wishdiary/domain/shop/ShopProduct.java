@@ -127,6 +127,12 @@ public class ShopProduct {
                 cloverPrice, purchasePriceWon, ShopProductSource.FAMILY, LocalDateTime.now());
     }
 
+    public static ShopProduct createPreset(String title, String description, String productUrl,
+            int cloverPrice, Integer purchasePriceWon) {
+        return new ShopProduct(null, null, title, description, null, productUrl,
+                cloverPrice, purchasePriceWon, ShopProductSource.PRESET, LocalDateTime.now());
+    }
+
     public ShopProduct price(int cloverPrice, Integer purchasePriceWon) {
         return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon, source, createdAt, receiverFamilyUserId, photo);
     }

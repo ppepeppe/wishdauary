@@ -69,6 +69,7 @@ interface MyProfileApiResponse {
   email?: string | null;
   nickname?: string | null;
   appRole?: string | null;
+  userRole?: string | null;
   avatarPreset?: string | null;
   avatarCharacter?: string | null;
   avatarImage?: string | null;
@@ -80,6 +81,7 @@ function normalizeMyProfile(data: MyProfileApiResponse): MyProfile {
     email: data.email?.trim() || '',
     nickname: data.nickname?.trim() || '',
     appRole: data.appRole?.trim() || '',
+    userRole: data.userRole === 'admin' ? 'admin' : 'user',
     avatarPreset: data.avatarPreset?.trim() || 'peach',
     avatarCharacter: getAvatarCharacter(data.avatarCharacter).key,
     avatarImage: data.avatarImage?.trim() || null,

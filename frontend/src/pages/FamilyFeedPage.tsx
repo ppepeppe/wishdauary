@@ -27,8 +27,8 @@ function FamilyFeedPage() {
     >
       <p><Link to="/family-connections">연결된 아이 관리 →</Link> · <Link to="/shared-feed">공개·그룹 일기 →</Link></p>
       {isLoading ? <StatusMessage kind="loading" message="아이의 일기를 불러오고 있어요." /> : null}
-      {error ? <StatusMessage kind="error" message="가족 이야기를 가져오다 잠시 멈췄어요. 조금 뒤에 다시 보면 괜찮아요." /> : null}
-      {actionError ? <StatusMessage kind="error" message="반응을 남기는 중에 잠깐 멈췄어요. 한 번만 다시 시도해 주세요." /> : null}
+      {error ? <StatusMessage kind="error" message="일기를 불러오지 못했어요. 잠시 후 다시 시도해 주세요." /> : null}
+      {actionError ? <StatusMessage kind="error" message="반응을 남기지 못했어요. 다시 시도해 주세요." /> : null}
       {data && data.length > 0 ? (
         <FamilyFeedList
           diaries={data}

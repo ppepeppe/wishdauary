@@ -6,6 +6,7 @@ import DiaryCalendar from '../components/diary/DiaryCalendar';
 import DiaryList from '../components/diary/DiaryList';
 import { formatKoreanDate, getDateKey } from '../constants/date';
 import { useDiaryList } from '../hooks/useDiaryList';
+import styles from './DiaryListPage.module.css';
 
 function DiaryListPage() {
   const { data, isLoading, error } = useDiaryList();
@@ -20,23 +21,25 @@ function DiaryListPage() {
 
   return (
     <PageSection
-      title="내 일기 목록"
-      description="작성했던 기록을 날짜와 공개 범위 중심으로 빠르게 확인할 수 있어요."
+      title="내 일기"
+      description="날짜를 골라 그날의 이야기를 다시 읽어봐요."
     >
-      <p><Link to="/sharing-groups">그룹 관리</Link> · <Link to="/shared-feed">공개·그룹 피드</Link></p>
-      {isLoading ? <StatusMessage kind="loading" message="내 기록을 가지런히 모아오고 있어요." /> : null}
-      {error ? <StatusMessage kind="error" message="기록을 불러오다 잠시 멈췄어요. 잠깐 뒤에 다시 살펴보면 괜찮아요." /> : null}
+      <div className={styles.toolbar}><Link to="/sharing-groups">그룹 관리 <span aria-hidden="true">›</span></Link><Link to="/shared-feed">공개·그룹 피드 <span aria-hidden="true">›</span></Link></div>
+      {isLoading ? <StatusMessage kind="loading" message="일기를 불러오고 있어요." /> : null}
+      {error ? <StatusMessage kind="error" message="일기를 불러오지 못했어요. 잠시 후 다시 시도해 주세요." /> : null}
       {data && data.length > 0 ? (
-        <>
+        <div className={styles.content}>
           <DiaryCalendar diaries={data} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+          <div className={styles.entries}>
           {filteredDiaries.length > 0 ? <DiaryList diaries={filteredDiaries} /> : null}
           {selectedDate && filteredDiaries.length === 0 ? (
             <StatusMessage kind="empty" message={`${formatKoreanDate(selectedDate)}에는 아직 기록이 없어요.`} />
           ) : null}
-        </>
+          </div>
+        </div>
       ) : null}
       {data && data.length === 0 ? (
-        <StatusMessage kind="empty" message="아직 남겨둔 기록이 없어요. 첫 마음 한 줄부터 가볍게 시작해 보세요." />
+        <div className={styles.empty}><StatusMessage kind="empty" message="아직 쓴 일기가 없어요. 오늘의 이야기부터 남겨볼까요?" /><Link to="/diaries/write">첫 일기 쓰기 <span aria-hidden="true">→</span></Link></div>
       ) : null}
     </PageSection>
   );

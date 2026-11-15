@@ -141,7 +141,7 @@ function DiaryDetailPage() {
   return (
     <PageSection
       title="일기 상세"
-      description={isFamily ? '아이의 마음을 읽고 댓글과 하트로 응원해 주세요.' : '남겨둔 마음을 다시 읽고 필요하면 조용히 다듬을 수 있어요.'}
+      description={isFamily ? '아이의 마음을 읽고 댓글과 하트로 응원해 주세요.' : '기록한 이야기와 가족의 반응을 확인해요.'}
     >
       {isLoading ? <StatusMessage kind="loading" message="일기를 펼치고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}

@@ -122,7 +122,8 @@ public class UserPersistenceAdapter implements LoadUserPort, LoadUserAccountPort
                 user.getEmail(),
                 user.getNickname(),
                 user.getAppRole(),
-                ProfileAvatar.of(user.getAvatarPreset(), user.getAvatarImage(), user.getAvatarCharacter())
+                ProfileAvatar.of(user.getAvatarPreset(), user.getAvatarImage(), user.getAvatarCharacter()),
+                user.getUserRole()
         );
     }
 

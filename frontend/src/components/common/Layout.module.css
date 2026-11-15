@@ -13,7 +13,7 @@
 
 .mobileShell {
   min-height: 100vh;
-  background: #f5f6f6;
+  background: #edf3f5;
 }
 
 .mobileFrame {
@@ -23,7 +23,7 @@
   min-height: 100vh;
   margin: 0 auto;
   padding: calc(24px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(var(--nav-height) + 32px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
-  background: var(--surface);
+  background: var(--app-bg);
   box-shadow: none;
 }
 
@@ -47,7 +47,8 @@
   align-items: center;
   gap: 2px;
   padding: 7px 7px calc(7px + env(safe-area-inset-bottom, 0px));
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
   border: 0;
   border-top: 1px solid var(--line);
   border-radius: 0;
@@ -72,6 +73,8 @@
     background var(--dur-1) var(--ease-out);
 }
 
+.desktopBrand, .desktopAccount { display: none; }
+
 .bottomNavItem:hover {
   color: var(--ink-muted);
 }
@@ -95,11 +98,11 @@
 
 /* The "write" action reads as the one primary act in the whole app. */
 .bottomNavPrimary .bottomNavIcon {
-  width: 36px;
+  width: 40px;
   height: 36px;
   color: #ffffff;
   background: var(--brand);
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: none;
   font-size: 1.24rem;
   transition: transform var(--dur-1) var(--ease-out);
@@ -490,4 +493,85 @@
     top: var(--s-3);
     right: var(--s-3);
   }
+}
+
+@media (min-width: 1024px) {
+  .mobileShell { background: var(--app-bg); }
+  .mobileFrame {
+    max-width: 1180px;
+    padding: 40px 36px 64px 284px;
+    background: transparent;
+  }
+  .mobileContent { max-width: 840px; margin: 0 auto; }
+  .bottomNav {
+    top: 24px;
+    bottom: 24px;
+    left: max(24px, calc((100vw - 1180px) / 2 + 20px));
+    width: 216px;
+    min-height: 0;
+    transform: none;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 12px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+    background: var(--surface);
+    box-shadow: var(--card-shadow);
+  }
+  .desktopBrand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 6px 32px;
+    color: var(--ink-strong);
+    font-size: 15px;
+    font-weight: 750;
+  }
+  .desktopMark {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 12px;
+    color: white;
+    background: var(--brand);
+    font-size: 20px;
+    letter-spacing: -1px;
+  }
+  .desktopBrand > span:last-child, .desktopAccount > span:nth-child(2) { display: grid; min-width: 0; gap: 5px; }
+  .desktopBrand small, .desktopAccount small { font-size: 11px; font-weight: 400; color: var(--ink-muted); }
+  .bottomNavItem, .bottomNavItemActive {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: 48px;
+    padding: 10px 14px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+  .bottomNavItem:hover { background: var(--surface-sunken); color: var(--ink-strong); }
+  .bottomNavItemActive, .bottomNavPrimary.bottomNavItemActive { background: var(--brand-tint); color: var(--brand-ink); }
+  .bottomNavPrimary .bottomNavIcon { width: 28px; height: 26px; background: transparent; color: inherit; }
+  .bottomNavPrimary:hover .bottomNavIcon { background: transparent; }
+  .desktopAccount {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+    padding: 18px 10px 6px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-strong);
+    font-size: 13px;
+    font-weight: 650;
+  }
+  .desktopAccount > svg { flex-shrink: 0; color: var(--brand); }
+  .desktopAccount > span:last-child { margin-left: auto; color: var(--ink-muted); }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  .mobileFrame { padding-inline: 32px; }
 }

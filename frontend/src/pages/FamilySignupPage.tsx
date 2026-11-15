@@ -6,7 +6,7 @@ import StatusMessage from '../components/common/StatusMessage';
 import { signupFamily } from '../services/api/authApi';
 import { saveSignupSession } from '../services/session/authSession';
 
-const DEFAULT_FAMILY_SIGNUP_ERROR_MESSAGE = '가족 가입을 이어가다 잠시 멈췄어요. 입력한 내용을 한 번만 다시 확인해 주세요.';
+const DEFAULT_FAMILY_SIGNUP_ERROR_MESSAGE = '가입하지 못했어요. 입력한 내용을 확인해 주세요.';
 
 function FamilySignupPage() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ function FamilySignupPage() {
       title="가족 가입"
       description="가입 후 아이의 닉네임을 검색해 연결을 요청해요. 아이가 승인하면 가족으로 연결돼요."
     >
-      {isSubmitting ? <StatusMessage kind="loading" message="가족 계정을 차분히 만들고 있어요." /> : null}
+      {isSubmitting ? <StatusMessage kind="loading" message="계정을 만들고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       <FamilySignupForm
         onSubmit={handleSubmit}

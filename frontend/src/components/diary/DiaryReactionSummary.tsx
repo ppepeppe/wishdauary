@@ -1,4 +1,5 @@
 import styles from './DiaryReactionSummary.module.css';
+import NavIcon from '../common/NavIcon';
 
 interface DiaryReactionSummaryProps {
   heartCount?: number;
@@ -8,8 +9,8 @@ interface DiaryReactionSummaryProps {
 function DiaryReactionSummary({ heartCount = 0, commentCount = 0 }: DiaryReactionSummaryProps) {
   return (
     <div className={styles.reactions}>
-      <span className={styles.reaction}>❤️ {heartCount}</span>
-      <span className={styles.reaction}>💬 {commentCount}</span>
+      <span className={styles.reaction} aria-label={`하트 ${heartCount}`}><NavIcon name="feed" />{heartCount}</span>
+      <span className={styles.reaction} aria-label={`댓글 ${commentCount}`}><NavIcon name="comment" />{commentCount}</span>
     </div>
   );
 }

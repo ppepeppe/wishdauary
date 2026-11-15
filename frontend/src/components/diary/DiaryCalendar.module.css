@@ -10,7 +10,7 @@
 
 .header {
   display: grid;
-  grid-template-columns: 28px auto 28px 1fr;
+  grid-template-columns: 36px auto 36px 1fr;
   align-items: center;
   gap: 6px;
   margin-bottom: 10px;
@@ -18,7 +18,7 @@
 
 .header strong {
   color: var(--ink-strong);
-  font-size: 0.86rem;
+  font-size: 14px;
   text-align: center;
 }
 
@@ -30,13 +30,13 @@
 }
 
 .monthButton {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   padding: 0;
   color: var(--ink);
   background: var(--surface-sunken);
   border: 1px solid var(--line);
-  border-radius: var(--r-xs);
+  border-radius: 10px;
   font-size: 1.15rem;
   transition: background var(--dur-1) var(--ease-out);
 }
@@ -75,7 +75,7 @@
 .weekdays {
   margin-bottom: 3px;
   color: var(--ink-muted);
-  font-size: 0.62rem;
+  font-size: 11px;
   text-align: center;
 }
 

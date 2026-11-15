@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { getCommonShopProducts, getChildWishProducts, getProductListPath } from '../src/utils/shopNavigation.ts';
+import { getCommonShopProducts, getChildWishProducts, getProductListPath, getCatalogListing } from '../src/utils/shopNavigation.ts';
 
 const products = [
   { productId: 1, source: 'preset', childUserId: null },
@@ -26,4 +26,22 @@ test('detail and request links return to the appropriate product list', () => {
   assert.equal(getProductListPath('custom'), '/shop/wishlist');
   assert.equal(getProductListPath('family'), '/shop/wishlist');
   assert.equal(getProductListPath(), '/shop');
+});
+
+const catalog = [
+  { productId: 3, title: '그림책', description: '바다 이야기', source: 'preset', cloverPrice: 8, createdAt: '2026-11-01' },
+  { productId: 1, title: '색연필', description: '그림을 그려요', source: 'preset', cloverPrice: 3, createdAt: '2026-11-02' },
+  { productId: 2, title: '그림책', description: '가족 이야기', source: 'custom', cloverPrice: 1 },
+];
+
+test('catalog search matches title or description while keeping personal gifts out', () => {
+  assert.deepEqual(getCatalogListing(catalog, ' 그림 ', 'clovers-asc').map(p => p.productId), [1, 3]);
+  assert.deepEqual(getCatalogListing(catalog, '바다', 'clovers-asc').map(p => p.productId), [3]);
+  assert.deepEqual(getCatalogListing(catalog, '없는 상품', 'clovers-asc'), []);
+});
+
+test('catalog sorting uses clovers or registration time without mutating the loaded products', () => {
+  assert.deepEqual(getCatalogListing(catalog, '', 'clovers-desc').map(p => p.productId), [3, 1]);
+  assert.deepEqual(getCatalogListing(catalog, '', 'newest').map(p => p.productId), [1, 3]);
+  assert.deepEqual(catalog.map(p => p.productId), [3, 1, 2]);
 });

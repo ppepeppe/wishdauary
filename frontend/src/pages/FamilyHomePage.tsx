@@ -47,15 +47,23 @@ function FamilyHomePage() {
       </header>
       <section className={styles.greeting} aria-labelledby="family-home-title">
         <p>{formatKoreanDate(getTodayDateInKorea(), false)}</p>
-        <h1 id="family-home-title"><span className={styles.greetingName}>{session?.nickname || session?.relationLabel || '가족'}님,</span>아이의 하루를 함께 읽어요.</h1>
-        <span>작은 이야기에 따뜻한 한마디를 남겨 주세요.</span>
+        <h1 id="family-home-title"><span className={styles.greetingName}>{session?.nickname || session?.relationLabel || '가족'}님, 안녕하세요.</span></h1>
+        <span>아이의 하루와 새로 온 부탁을 확인해 보세요.</span>
       </section>
+
+      {requests.data ? <Link to="/family-settings" className={styles.requestOverview}>
+        <span className={styles.overviewIcon}><NavIcon name="gift" /></span>
+        <span><strong>{pendingCount > 0 ? `확인할 선물 요청이 ${pendingCount}개 있어요` : '새로운 선물 요청이 없어요'}</strong>
+          <small>{pendingCount > 0 ? '클로버 설정과 선물 부탁을 확인해 주세요.' : '아이가 보낸 부탁은 여기에 모아둘게요.'}</small></span>
+        <NavIcon name="arrowRight" />
+      </Link> : null}
 
       <section className={styles.section} aria-labelledby="family-children-title">
         <div className={styles.heading}><h2 id="family-children-title">함께하는 아이</h2><Link to="/family-connections">연결 관리 →</Link></div>
         {connections.isLoading && !connections.data ? <StatusMessage kind="loading" message="연결된 아이를 확인하고 있어요." /> : null}
         {connections.error ? <><StatusMessage kind="error" message={connections.error} /><Button variant="ghost" onClick={() => void refreshConnections()}>아이 연결 다시 불러오기</Button></> : null}
-        {connections.data?.connections.length ? <p className={styles.childNames}>{connections.data.connections.map((child) => child.nickname).join(' · ')}</p> : null}
+        {connections.data?.connections.length ? <div className={styles.childNames}>{connections.data.connections.map((child) =>
+          <span className={styles.childChip} key={child.userId}><span aria-hidden="true">{child.nickname.slice(0, 1)}</span>{child.nickname}</span>)}</div> : null}
         {connections.data?.connections.length === 0 ? <p className={styles.helper}>{pendingConnections.length ? '아이에게 연결을 요청했어요. 아이가 승인하면 함께할 수 있어요.' : '아이에게 연결을 요청해 주세요. 아이가 승인한 뒤 일기와 선물을 함께할 수 있어요.'}</p> : null}
         {pendingConnections.length > 0 ? <Link to="/family-connections" className={styles.pendingLink}>아이의 승인을 기다리는 요청 {pendingConnections.length}개 →</Link> : null}
         {connections.data && connections.data.connections.length === 0 && pendingConnections.length === 0 ? <Link to="/family-connections" className={styles.primaryLink}>아이 찾아 연결하기 <span aria-hidden="true">→</span></Link> : null}

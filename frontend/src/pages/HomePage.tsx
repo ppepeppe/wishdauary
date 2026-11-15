@@ -5,6 +5,7 @@ import EmotionIcon from '../components/diary/EmotionIcon';
 import ProfileAvatar from '../components/common/ProfileAvatar';
 import StatusMessage from '../components/common/StatusMessage';
 import CloverIcon from '../components/common/CloverIcon';
+import NavIcon from '../components/common/NavIcon';
 import ProductArtwork from '../components/shop/ProductArtwork';
 import { formatKoreanDate, getTodayDateInKorea } from '../constants/date';
 import { EMOTIONS } from '../constants/emotion';
@@ -120,14 +121,14 @@ function HomePage() {
           <div className={styles.profileCopy}>
             <p className={styles.greeting}>안녕!</p>
             <p className={styles.name}>{nickname}</p>
-            <span className={styles.profileHint}>마이페이지</span>
+            <span className={styles.profileHint}>내 프로필 <span aria-hidden="true">›</span></span>
           </div>
         </Link>
         <div className={styles.balanceChip} role="group" aria-label={`모은 클로버 ${(data?.cloverBalance ?? 0).toFixed(1)}개`}>
           <span className={styles.balanceIcon} aria-hidden="true">
             <CloverIcon />
           </span>
-          <strong className={styles.balanceValue}>{(data?.cloverBalance ?? 0).toFixed(1)}</strong>
+          <span className={styles.balanceCopy}><small>모은 클로버</small><strong className={styles.balanceValue}>{(data?.cloverBalance ?? 0).toLocaleString('ko-KR')}</strong></span>
         </div>
       </section>
 
@@ -148,15 +149,16 @@ function HomePage() {
             <p className={styles.streakDescription}>
               {data?.currentStreak && data.currentStreak >= 3
                 ? '꾸준히 기록하며 클로버를 모아보세요.'
-                : '짧은 일기라도 괜찮아요.'}
+                : '오늘의 이야기를 남겨봐요.'}
             </p>
           </div>
         </div>
       </section>
 
       <section className={styles.diaryCard}>
+        <p className={styles.sectionEyebrow}>오늘의 마음</p>
         <h2 className={styles.diaryTitle}>오늘 기분은 어땠어?</h2>
-        <p className={styles.diarySubtitle}>지금 마음과 가까운 표정을 골라줘.</p>
+        <p className={styles.diarySubtitle}>지금 내 마음과 가까운 표정을 골라줘.</p>
 
         <div className={styles.emotionRow}>
           {EMOTIONS.map((emotion) => {
@@ -181,7 +183,7 @@ function HomePage() {
 
         <button type="button" className={styles.writeButton} onClick={handleWriteNow}>
           오늘 마음 기록하기
-          <span aria-hidden="true">→</span>
+          <NavIcon name="arrowRight" />
         </button>
 
         <div className={styles.diaryMetaRow}>
@@ -246,13 +248,12 @@ function HomePage() {
           </>
         ) : (
           <div className={styles.goalEmpty}>
-            <div>
+            <span className={styles.goalEmptyIcon} aria-hidden="true"><NavIcon name="gift" /></span>
+            <div className={styles.goalEmptyCopy}>
               <p className={styles.goalHeading}>내가 모으는 목표</p>
-              <p className={styles.goalName}>아직 정한 목표가 없어요</p>
+              <p className={styles.goalName}>받고 싶은 선물을 골라봐요</p>
+              <Link to="/shop" className={styles.goalDetailLink}>갖고 싶은 선물 고르기 <span aria-hidden="true">→</span></Link>
             </div>
-            <Link to="/shop" className={styles.goalDetailLink}>
-              갖고 싶은 선물 고르기
-            </Link>
           </div>
         )}
       </section>

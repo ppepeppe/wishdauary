@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
 import PageSection from '../components/common/PageSection';
 import ProfileAvatar from '../components/common/ProfileAvatar';
+import NavIcon from '../components/common/NavIcon';
 import StatusMessage from '../components/common/StatusMessage';
 import { AVATAR_CHARACTERS, AVATAR_PRESETS } from '../constants/avatar';
 import { fetchMyProfile, updateMyProfile } from '../services/api/userApi';
 import { clearAuthSession, getAuthSession, getDefaultRouteForRole, patchAuthSession } from '../services/session/authSession';
 import { compressImageFile } from '../utils/image';
 import styles from './MyPage.module.css';
+import type { UserRole } from '../types/user';
 
 function MyPage() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ function MyPage() {
   const [avatarCharacter, setAvatarCharacter] = useState('my-melody');
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
   const [email, setEmail] = useState('');
+  const [userRole, setUserRole] = useState<UserRole>('user');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +42,7 @@ function MyPage() {
         setAvatarCharacter(profile.avatarCharacter);
         setAvatarImage(profile.avatarImage);
         setEmail(profile.email);
+        setUserRole(profile.userRole);
         patchAuthSession({ nickname: profile.nickname });
       } catch (caughtError) {
         if (!ignore) {
@@ -94,6 +98,7 @@ function MyPage() {
       setAvatarPreset(profile.avatarPreset);
       setAvatarCharacter(profile.avatarCharacter);
       setAvatarImage(profile.avatarImage);
+      setUserRole(profile.userRole);
       patchAuthSession({ nickname: profile.nickname });
       setSuccessMessage('내 정보를 저장했어요.');
     } catch (caughtError) {
@@ -122,11 +127,16 @@ function MyPage() {
         <div>
           <p className={styles.previewName}>{nickname.trim() || '이름 없음'}</p>
           {email ? <p className={styles.previewEmail}>{email}</p> : null}
+          {!isLoading ? <span className={styles.roleBadge}>{userRole === 'admin' ? '관리자' : '일반 사용자'}</span> : null}
         </div>
       </div>
 
       {authSession ? (
         <nav className={styles.managementNav} aria-label="내 활동 관리">
+          {userRole === 'admin' ? <Link to="/admin/shop" className={styles.managementLink}>
+            <span><strong>공통 상점 상품 관리</strong><small>모든 아이가 볼 수 있는 상점 상품을 등록해요.</small></span>
+            <span aria-hidden="true">→</span>
+          </Link> : null}
           <Link to="/family-connections" className={styles.managementLink}>
             <span><strong>{authSession.appRole === 'child' ? '가족 연결 요청' : '아이와 연결하기'}</strong><small>{authSession.appRole === 'child' ? '가족이 보낸 요청을 확인하고 승인해요.' : '아이를 검색하고 보낸 요청을 확인해요.'}</small></span><span aria-hidden="true">→</span>
           </Link>
@@ -152,60 +162,69 @@ function MyPage() {
           />
         </label>
 
-        <fieldset className={styles.fieldset} disabled={isSaving || isLoading}>
-          <legend>기본 프로필 캐릭터</legend>
-          <div className={styles.presetGrid}>
-            {AVATAR_CHARACTERS.map((character) => (
-              <button key={character.key} type="button"
-                className={avatarCharacter === character.key && !avatarImage ? styles.presetButtonActive : styles.presetButton}
-                aria-pressed={avatarCharacter === character.key && !avatarImage}
-                onClick={() => { setAvatarCharacter(character.key); setAvatarImage(null); }}>
-                <ProfileAvatar preset={avatarPreset} character={character.key} size="md" />
-                <span>{character.label}</span>
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        <details className={styles.appearance}>
+          <summary><span><strong>프로필 꾸미기</strong><small>캐릭터 · 배경색 · 내 사진</small></span><span className={styles.disclosureArrow} aria-hidden="true">›</span></summary>
+          <div className={styles.appearanceContent}>
+            <fieldset className={styles.fieldset} disabled={isSaving || isLoading}>
+              <legend>기본 프로필 캐릭터</legend>
+              <div className={styles.presetGrid}>
+                {AVATAR_CHARACTERS.map((character) => (
+                  <button key={character.key} type="button"
+                    className={avatarCharacter === character.key && !avatarImage ? styles.presetButtonActive : styles.presetButton}
+                    aria-pressed={avatarCharacter === character.key && !avatarImage}
+                    onClick={() => { setAvatarCharacter(character.key); setAvatarImage(null); }}>
+                    <ProfileAvatar preset={avatarPreset} character={character.key} size="md" />
+                    <span>{character.label}</span>
+                  </button>
+                ))}
+              </div>
+            </fieldset>
 
-        <fieldset className={styles.fieldset}>
-          <legend>기본 프로필 배경색</legend>
-          <div className={styles.presetGrid}>
-            {AVATAR_PRESETS.map((preset) => (
-              <button
-                key={preset.key}
-                type="button"
-                className={avatarPreset === preset.key ? styles.presetButtonActive : styles.presetButton}
+            <fieldset className={styles.fieldset}>
+              <legend>기본 프로필 배경색</legend>
+              <div className={styles.presetGrid}>
+                {AVATAR_PRESETS.map((preset) => (
+                  <button
+                    key={preset.key}
+                    type="button"
+                    className={avatarPreset === preset.key ? styles.presetButtonActive : styles.presetButton}
+                    disabled={isSaving || isLoading}
+                    aria-pressed={avatarPreset === preset.key}
+                    onClick={() => setAvatarPreset(preset.key)}
+                  >
+                    <ProfileAvatar preset={preset.key} character={avatarCharacter} size="sm" />
+                    <span>{preset.label}</span>
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <div className={styles.photoField}>
+              <span>내 사진으로 바꾸기</span>
+              <input
+                id="profile-photo"
+                type="file"
+                className={styles.photoInput}
+                aria-label="프로필 이미지 올리기"
+                accept="image/*"
                 disabled={isSaving || isLoading}
-                aria-pressed={avatarPreset === preset.key}
-                onClick={() => setAvatarPreset(preset.key)}
+                onChange={handlePhotoChange}
+              />
+              <label htmlFor="profile-photo" className={styles.uploadButton}><NavIcon name="profile" />사진 선택하기</label>
+            </div>
+
+            {avatarImage ? (
+              <button
+                type="button"
+                className={styles.clearPhoto}
+                disabled={isSaving}
+                onClick={() => setAvatarImage(null)}
               >
-                <ProfileAvatar preset={preset.key} character={avatarCharacter} size="sm" />
-                <span>{preset.label}</span>
+                프로필 이미지 지우기
               </button>
-            ))}
+            ) : null}
           </div>
-        </fieldset>
-
-        <label className={styles.photoField}>
-          <span>프로필 이미지 올리기</span>
-          <input
-            type="file"
-            accept="image/*"
-            disabled={isSaving || isLoading}
-            onChange={handlePhotoChange}
-          />
-        </label>
-
-        {avatarImage ? (
-          <button
-            type="button"
-            className={styles.clearPhoto}
-            disabled={isSaving}
-            onClick={() => setAvatarImage(null)}
-          >
-            프로필 이미지 지우기
-          </button>
-        ) : null}
+        </details>
 
         <Button type="submit" fullWidth disabled={isSaving || isLoading}>
           {isSaving ? '저장하는 중...' : '내 정보 저장하기'}

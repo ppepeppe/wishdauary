@@ -73,7 +73,7 @@ function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
         />
       </label>
 
-      <p className={styles.helpText}>아이 가입은 바로 새 그룹을 만드는 흐름으로 시작돼요. 가족은 나중에 연결할 수 있어요.</p>
+      <p className={styles.helpText}>가입하면 바로 일기를 쓸 수 있어요.</p>
 
       <Button type="submit" fullWidth disabled={isSubmitting}>
         {isSubmitting ? '가입 준비 중...' : '아이로 시작하기'}

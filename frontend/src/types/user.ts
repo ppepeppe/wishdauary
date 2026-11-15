@@ -1,3 +1,5 @@
+export type UserRole = 'admin' | 'user';
+
 export interface UserStreak {
   currentStreak: number;
   maxStreak: number;
@@ -20,6 +22,7 @@ export interface MyProfile {
   email: string;
   nickname: string;
   appRole: string;
+  userRole: UserRole;
   avatarPreset: string;
   avatarCharacter: string;
   avatarImage: string | null;

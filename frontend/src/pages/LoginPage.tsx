@@ -6,7 +6,7 @@ import StatusMessage from '../components/common/StatusMessage';
 import { login } from '../services/api/authApi';
 import { getDefaultRouteForRole, saveLoginSession } from '../services/session/authSession';
 
-const DEFAULT_LOGIN_ERROR_MESSAGE = '로그인을 이어가다 잠시 멈췄어요. 입력한 내용을 한 번만 다시 확인해 주세요.';
+const DEFAULT_LOGIN_ERROR_MESSAGE = '로그인하지 못했어요. 이메일과 비밀번호를 확인해 주세요.';
 
 function LoginPage() {
   const navigate = useNavigate();

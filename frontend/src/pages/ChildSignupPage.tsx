@@ -6,7 +6,7 @@ import StatusMessage from '../components/common/StatusMessage';
 import { signupChild } from '../services/api/authApi';
 import { getDefaultRouteForRole, saveSignupSession } from '../services/session/authSession';
 
-const DEFAULT_CHILD_SIGNUP_ERROR_MESSAGE = '아이 가입을 이어가다 잠시 멈췄어요. 입력한 내용을 한 번만 다시 확인해 주세요.';
+const DEFAULT_CHILD_SIGNUP_ERROR_MESSAGE = '가입하지 못했어요. 입력한 내용을 확인해 주세요.';
 
 function ChildSignupPage() {
   const navigate = useNavigate();
@@ -34,9 +34,9 @@ function ChildSignupPage() {
   return (
     <PageSection
       title="아이 가입"
-      description="복잡하게 정하지 않아도 괜찮아요. 자주 쓰는 이름으로 바로 시작하고, 가족은 나중에 연결할 수 있어요."
+      description="이메일과 닉네임으로 시작해요. 가족은 가입 후 연결할 수 있어요."
     >
-      {isSubmitting ? <StatusMessage kind="loading" message="아이 계정을 차분히 만들고 있어요." /> : null}
+      {isSubmitting ? <StatusMessage kind="loading" message="계정을 만들고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       <ChildSignupForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       <p>

@@ -1,4 +1,7 @@
 const paths = {
+  search: 'M21 21l-5-5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z',
+  arrowRight: 'M5 12h14M13 6l6 6-6 6',
+  comment: 'M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z',
   home: 'M3 10 12 3l9 7M5 9v12h5v-7h4v7h5V9',
   diary: 'M5 3h14v18H5zM3 7h4M3 12h4M3 17h4M10 8h5M10 12h5',
   write: 'M12 5v14M5 12h14',

@@ -7,11 +7,13 @@ WORKDIR /app
 COPY gradlew settings.gradle build.gradle ./
 COPY gradle ./gradle
 RUN --mount=type=cache,target=/root/.gradle \
-    ./gradlew dependencies --no-daemon
+    ./gradlew dependencies --no-daemon --max-workers=2 \
+        '-Dorg.gradle.jvmargs=-Xmx384m -XX:MaxMetaspaceSize=256m'
 
 COPY src ./src
 RUN --mount=type=cache,target=/root/.gradle \
-    ./gradlew bootJar --no-daemon && \
+    ./gradlew bootJar --no-daemon --max-workers=2 \
+        '-Dorg.gradle.jvmargs=-Xmx384m -XX:MaxMetaspaceSize=256m' && \
     find build/libs -type f -name '*.jar' ! -name '*-plain.jar' \
         -exec cp '{}' /app/app.jar \;
 

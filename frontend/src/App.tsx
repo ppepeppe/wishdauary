@@ -27,6 +27,7 @@ import ShopSentRequestsPage from './pages/ShopSentRequestsPage';
 import FamilyConnectionsPage from './pages/FamilyConnectionsPage';
 import FamilyShopPage from './pages/FamilyShopPage';
 import SignupRolePage from './pages/SignupRolePage';
+import AdminShopPage from './pages/AdminShopPage';
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
         </Route>
 
         <Route element={<RequireAppRole />}>
+          <Route path="/admin/shop" element={<AdminShopPage />} />
           <Route path="/family-connections" element={<FamilyConnectionsPage />} />
           <Route path="/shared-feed" element={<SharedDiaryFeedPage />} />
           <Route path="/diaries/:diaryId" element={<DiaryDetailPage />} />
