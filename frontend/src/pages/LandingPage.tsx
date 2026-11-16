@@ -69,7 +69,7 @@ function LandingPage() {
           </div>
         </section>
       </div>
-      <footer className={styles.footer}><div><strong>위시다유어리</strong><p>아이와 가족이 함께하는 일상 기록</p></div><Link to="/login">로그인</Link><Link to="/signup">회원가입</Link></footer>
+      <footer className={styles.footer}><div><strong>wish 다유어리</strong><p>아이와 가족이 함께하는 일상 기록</p></div><Link to="/login">로그인</Link><Link to="/signup">회원가입</Link></footer>
     </div>
   );
 }

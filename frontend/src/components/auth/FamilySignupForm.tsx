@@ -57,7 +57,6 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
           value={email}
           required
           disabled={isSubmitting}
-          placeholder="name@example.com"
           onChange={(event) => setEmail(event.target.value)}
         />
       </label>
@@ -70,7 +69,6 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
           value={password}
           required
           disabled={isSubmitting}
-          placeholder="비밀번호를 입력해 주세요"
           onChange={(event) => setPassword(event.target.value)}
         />
       </label>
@@ -83,7 +81,6 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
           value={nickname}
           required
           disabled={isSubmitting}
-          placeholder="가족 안에서 부를 이름"
           onChange={(event) => setNickname(event.target.value)}
         />
       </label>
@@ -113,7 +110,6 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
           value={relationLabel}
           required
           disabled={isSubmitting}
-          placeholder="아이에게 보일 관계 이름"
           onChange={(event) => setRelationLabel(event.target.value)}
         />
         <p className={styles.helpText}>기본값은 자동으로 들어가고, 필요하면 더 편한 호칭으로 바꿀 수 있어요.</p>

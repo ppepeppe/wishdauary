@@ -42,7 +42,7 @@ function FamilyHomePage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <span className={styles.wordmark}>위시다유어리 <span>가족</span></span>
+        <span className={styles.wordmark}>wish 다유어리 <span>가족</span></span>
         <Link to="/me" className={styles.profileLink} aria-label="마이페이지"><NavIcon name="profile" /></Link>
       </header>
       <section className={styles.greeting} aria-labelledby="family-home-title">

@@ -78,7 +78,7 @@ function Layout() {
           <nav className={styles.bottomNav} aria-label="주요 메뉴">
             <Link to={authSession.appRole === 'family' ? '/family-home' : '/home'} className={styles.desktopBrand}>
               <span className={styles.desktopMark}>W</span>
-              <span>위시다유어리<small>{authSession.appRole === 'family' ? '함께 읽는 아이의 하루' : '나의 하루를 차곡차곡'}</small></span>
+              <span>wish 다유어리<small>{authSession.appRole === 'family' ? '함께 읽는 아이의 하루' : '나의 하루를 차곡차곡'}</small></span>
             </Link>
             {navItems.map((item) => (
               <NavLink
@@ -121,7 +121,7 @@ function Layout() {
           <Link to="/" className={isLandingPage ? styles.landingBrand : styles.brand}>
             <span className={isLandingPage ? styles.landingBrandMark : styles.brandMark} aria-hidden="true">W</span>
             <span className={styles.brandCopy}>
-              <span className={isLandingPage ? styles.landingWordmark : styles.eyebrow}>위시다유어리</span>
+              <span className={isLandingPage ? styles.landingWordmark : styles.eyebrow}>wish 다유어리</span>
               <span className={isLandingPage ? styles.landingTagline : styles.title}>마음을 잇는 가족 다유어리</span>
             </span>
           </Link>

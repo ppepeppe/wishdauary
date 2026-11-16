@@ -37,7 +37,6 @@ function LoginForm({ onSubmit, isSubmitting }: LoginFormProps) {
           value={email}
           required
           disabled={isSubmitting}
-          placeholder="name@example.com"
           onChange={(event) => setEmail(event.target.value)}
         />
       </label>
@@ -50,7 +49,6 @@ function LoginForm({ onSubmit, isSubmitting }: LoginFormProps) {
           value={password}
           required
           disabled={isSubmitting}
-          placeholder="비밀번호를 입력해 주세요"
           onChange={(event) => setPassword(event.target.value)}
         />
       </label>

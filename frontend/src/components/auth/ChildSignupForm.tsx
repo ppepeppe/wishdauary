@@ -42,7 +42,6 @@ function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
           value={email}
           required
           disabled={isSubmitting}
-          placeholder="name@example.com"
           onChange={(event) => setEmail(event.target.value)}
         />
       </label>
@@ -55,7 +54,6 @@ function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
           value={password}
           required
           disabled={isSubmitting}
-          placeholder="비밀번호를 입력해 주세요"
           onChange={(event) => setPassword(event.target.value)}
         />
       </label>
@@ -68,7 +66,6 @@ function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
           value={nickname}
           required
           disabled={isSubmitting}
-          placeholder="친구들이 부르기 편한 이름"
           onChange={(event) => setNickname(event.target.value)}
         />
       </label>
