@@ -108,7 +108,7 @@ function FamilyConnectionsPage() {
           </section>
           <section className={styles.section}>
             <h2>{isFamily ? '연결된 아이' : '연결된 가족'} <small>{data.connections.length}</small></h2>
-            {data.connections.length === 0 ? <p className={styles.hint}>아직 연결된 {isFamily ? '아이' : '가족'}가 없어요.</p> : <CardCarousel label={isFamily ? '연결된 아이' : '연결된 가족'} itemLabel="구성원">{data.connections.map((person) => (
+            {data.connections.length === 0 ? <p className={styles.hint}>{isFamily ? '아직 연결된 아이가 없어요.' : '아직 연결된 가족이 없어요.'}</p> : <CardCarousel label={isFamily ? '연결된 아이' : '연결된 가족'} itemLabel="구성원">{data.connections.map((person) => (
               <div key={person.userId} className={styles.row}><span><strong>{person.nickname}</strong><small>#{person.userId}{person.relationLabel ? ` · ${person.relationLabel}` : ''}</small></span><span className={styles.status}>연결됨</span></div>
             ))}</CardCarousel>}
             {!isFamily ? <p className={styles.hint}>연결을 해제하려면 그룹 관리에서 해당 가족을 모든 그룹에서 제외해 주세요.</p> : null}
