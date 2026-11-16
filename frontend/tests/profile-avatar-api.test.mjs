@@ -30,3 +30,17 @@ test('saving a character also preserves its independent background on reload', a
     assert.equal(reloaded.avatarPreset, 'sky');
   }
 });
+
+test('family profiles load and save the typed relationship while older profile requests omit it', async () => {
+  storage.set('wishdiary.auth.session', JSON.stringify({ userId: 1, groupId: 1, appRole: 'family', accessToken: 'fixture' }));
+  let saved = { nickname: '가족', relationLabel: '고모' };
+  globalThis.fetch = async (_url, init) => {
+    if (init.method === 'PATCH') saved = JSON.parse(init.body);
+    return Response.json({ userId: 1, appRole: 'family', ...saved });
+  };
+  assert.equal((await fetchMyProfile()).relationLabel, '고모');
+  const updated = await updateMyProfile({ nickname: '가족', avatarPreset: 'mint', avatarImage: null, relationLabel: '큰고모' });
+  assert.equal(saved.relationLabel, '큰고모');
+  assert.equal(updated.relationLabel, '큰고모');
+  assert.equal((await fetchMyProfile()).relationLabel, '큰고모');
+});

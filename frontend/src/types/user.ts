@@ -23,6 +23,7 @@ export interface MyProfile {
   nickname: string;
   appRole: string;
   userRole: UserRole;
+  relationLabel: string | null;
   avatarPreset: string;
   avatarCharacter: string;
   avatarImage: string | null;

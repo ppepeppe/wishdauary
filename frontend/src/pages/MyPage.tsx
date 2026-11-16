@@ -15,11 +15,13 @@ import type { UserRole } from '../types/user';
 function MyPage() {
   const navigate = useNavigate();
   const authSession = getAuthSession();
+  const isFamily = authSession?.appRole === 'family';
   const [nickname, setNickname] = useState(authSession?.nickname?.trim() || '');
   const [avatarPreset, setAvatarPreset] = useState('peach');
   const [avatarCharacter, setAvatarCharacter] = useState('my-melody');
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
   const [loginId, setLoginId] = useState('');
+  const [relationLabel, setRelationLabel] = useState(authSession?.relationLabel || '');
   const [userRole, setUserRole] = useState<UserRole>('user');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -43,7 +45,8 @@ function MyPage() {
         setAvatarImage(profile.avatarImage);
         setLoginId(profile.loginId);
         setUserRole(profile.userRole);
-        patchAuthSession({ nickname: profile.nickname });
+        setRelationLabel(profile.relationLabel || '');
+        patchAuthSession({ nickname: profile.nickname, relationLabel: profile.relationLabel });
       } catch (caughtError) {
         if (!ignore) {
           setError(caughtError instanceof Error ? caughtError.message : '내 정보를 불러오지 못했어요.');
@@ -79,8 +82,13 @@ function MyPage() {
   async function handleSave(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const trimmedNickname = nickname.trim();
+    const trimmedRelationLabel = relationLabel.trim();
     if (!trimmedNickname) {
       setError('닉네임을 적어 주세요.');
+      return;
+    }
+    if (isFamily && !trimmedRelationLabel) {
+      setError('아이와의 관계를 적어 주세요.');
       return;
     }
 
@@ -93,13 +101,15 @@ function MyPage() {
         avatarPreset,
         avatarCharacter,
         avatarImage,
+        ...(isFamily ? { relationLabel: trimmedRelationLabel } : {}),
       });
       setNickname(profile.nickname);
       setAvatarPreset(profile.avatarPreset);
       setAvatarCharacter(profile.avatarCharacter);
       setAvatarImage(profile.avatarImage);
       setUserRole(profile.userRole);
-      patchAuthSession({ nickname: profile.nickname });
+      setRelationLabel(profile.relationLabel || '');
+      patchAuthSession({ nickname: profile.nickname, relationLabel: profile.relationLabel });
       setSuccessMessage('내 정보를 저장했어요.');
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : '내 정보를 저장하지 못했어요.');
@@ -161,6 +171,18 @@ function MyPage() {
             onChange={(event) => setNickname(event.target.value)}
           />
         </label>
+
+        {isFamily ? <label className={styles.field}>
+          <span>아이와의 관계</span>
+          <input
+            value={relationLabel}
+            maxLength={100}
+            required
+            disabled={isSaving || isLoading}
+            onChange={(event) => setRelationLabel(event.target.value)}
+          />
+          <small className={styles.fieldHint}>입력한 호칭이 가족 목록과 선물 요청 화면에 보여요.</small>
+        </label> : null}
 
         <details className={styles.appearance}>
           <summary><span><strong>프로필 꾸미기</strong><small>캐릭터 · 배경색 · 내 사진</small></span><span className={styles.disclosureArrow} aria-hidden="true">›</span></summary>

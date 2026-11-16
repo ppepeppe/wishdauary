@@ -26,7 +26,8 @@ class MyProfileServiceTest {
         when(loadUserAccountPort.loadAccount(1L)).thenReturn(new User(1L, "child@test.com", "미아",
                 AppRole.CHILD, ProfileAvatar.of("mint", null, "kuromi")));
         when(saveUserProfilePort.saveProfile(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        MyProfileResponse response = new MyProfileService(loadUserAccountPort, saveUserProfilePort)
+        MyProfileResponse response = new MyProfileService(loadUserAccountPort, saveUserProfilePort,
+                loadFamilyRelationshipPort, saveFamilyRelationshipPort)
                 .update(1L, new UpdateMyProfileRequest("별이", "sky", null));
         assertEquals("kuromi", response.avatarCharacter());
         assertEquals("sky", response.avatarPreset());
@@ -38,11 +39,18 @@ class MyProfileServiceTest {
     @Mock
     private SaveUserProfilePort saveUserProfilePort;
 
+    @Mock
+    private LoadFamilyRelationshipPort loadFamilyRelationshipPort;
+
+    @Mock
+    private SaveFamilyRelationshipPort saveFamilyRelationshipPort;
+
     private MyProfileService myProfileService;
 
     @BeforeEach
     void setUp() {
-        myProfileService = new MyProfileService(loadUserAccountPort, saveUserProfilePort);
+        myProfileService = new MyProfileService(loadUserAccountPort, saveUserProfilePort,
+                loadFamilyRelationshipPort, saveFamilyRelationshipPort);
     }
 
     @Test

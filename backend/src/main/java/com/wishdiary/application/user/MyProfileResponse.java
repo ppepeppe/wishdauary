@@ -10,7 +10,8 @@ public record MyProfileResponse(
         String avatarPreset,
         String avatarImage,
         String avatarCharacter,
-        String userRole
+        String userRole,
+        String relationLabel
 ) {
     // Older app builds still read this response property.
     @JsonProperty("email")

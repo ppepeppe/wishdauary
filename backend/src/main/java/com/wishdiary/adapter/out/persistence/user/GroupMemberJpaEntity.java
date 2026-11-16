@@ -82,4 +82,9 @@ public class GroupMemberJpaEntity {
     public String getRelationLabel() {
         return relationLabel;
     }
+
+    public void updateRelationship(com.wishdiary.domain.user.FamilyRelationship relationship) {
+        this.familyRelation = relationship.type();
+        this.relationLabel = relationship.label();
+    }
 }

@@ -14,6 +14,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(com.wishdiary.domain.user.InvalidFamilyRelationshipException.class)
+    public ResponseEntity<CommonResponse<Void>> handleInvalidFamilyRelationship(RuntimeException exception) {
+        return ResponseEntity.badRequest().body(CommonResponse.fail("INVALID_FAMILY_RELATIONSHIP", exception.getMessage()));
+    }
+
     @ExceptionHandler(com.wishdiary.domain.user.DuplicateLoginIdException.class)
     public ResponseEntity<CommonResponse<Void>> handleDuplicateLoginId(RuntimeException exception) {
         return ResponseEntity.status(409).body(CommonResponse.fail("DUPLICATE_LOGIN_ID", exception.getMessage()));
@@ -86,7 +91,7 @@ public class GlobalExceptionHandler {
             case "password" -> "비밀번호";
             case "nickname" -> "닉네임";
             case "inviteCode" -> "초대 코드";
-            case "familyRelation", "relationLabel" -> "가족 관계";
+            case "familyRelation", "relationLabel" -> "아이와의 관계";
             case "content" -> "내용";
             case "visibilityScope" -> "공개 범위";
             case "writtenDate" -> "기록 날짜";

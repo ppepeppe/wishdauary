@@ -71,6 +71,7 @@ interface MyProfileApiResponse {
   nickname?: string | null;
   appRole?: string | null;
   userRole?: string | null;
+  relationLabel?: string | null;
   avatarPreset?: string | null;
   avatarCharacter?: string | null;
   avatarImage?: string | null;
@@ -83,6 +84,7 @@ function normalizeMyProfile(data: MyProfileApiResponse): MyProfile {
     nickname: data.nickname?.trim() || '',
     appRole: data.appRole?.trim() || '',
     userRole: data.userRole === 'admin' ? 'admin' : 'user',
+    relationLabel: data.relationLabel?.trim() || null,
     avatarPreset: data.avatarPreset?.trim() || 'peach',
     avatarCharacter: getAvatarCharacter(data.avatarCharacter).key,
     avatarImage: data.avatarImage?.trim() || null,
@@ -102,6 +104,7 @@ export async function updateMyProfile(payload: {
   avatarPreset: string;
   avatarCharacter?: string;
   avatarImage: string | null;
+  relationLabel?: string;
 }) {
   getCurrentUserIdOrThrow();
   const data = await request<MyProfileApiResponse>('/api/v1/users/me', {
