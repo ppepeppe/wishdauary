@@ -24,6 +24,10 @@ public class SharingUserDirectoryAdapter implements SharingUserDirectoryPort {
     }
 
     public List<SharingUser> searchChildren(String nickname) {
+        if (nickname.length() == 1) {
+            return users.findTop20ByAppRoleAndNicknameIgnoreCaseOrderByNicknameAscIdAsc(
+                    com.wishdiary.domain.user.AppRole.CHILD, nickname).stream().map(this::toResponse).toList();
+        }
         return users.findTop20ByAppRoleAndNicknameContainingIgnoreCaseOrderByNicknameAscIdAsc(
                 com.wishdiary.domain.user.AppRole.CHILD, nickname).stream().map(this::toResponse).toList();
     }

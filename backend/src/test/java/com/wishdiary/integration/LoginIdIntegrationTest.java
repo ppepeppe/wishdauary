@@ -85,6 +85,34 @@ class LoginIdIntegrationTest {
         call(post("/api/v1/auth/login"), Map.of("loginId", loginId, "password", "wrong"), 401);
     }
 
+    @Test
+    void signupTrimsNamesAndFamilyLabelsLikeProfileEditing() throws Exception {
+        for (String role : new String[]{"child", "family"}) {
+            var body = signupBody("loginId", UUID.randomUUID().toString(), role);
+            body.put("nickname", " 하루 ");
+            if (role.equals("family")) body.put("relationLabel", " 고모 ");
+            JsonNode account = call(post("/api/v1/auth/signup/" + role), body, 201).get("data");
+            assertEquals("하루", account.get("nickname").asText());
+            if (role.equals("family")) assertEquals("고모", account.get("relationLabel").asText());
+        }
+    }
+
+    @Test
+    void overlongSignupNamesAndRelationshipsReturnValidationErrorsWithoutCreatingAccounts() throws Exception {
+        for (String role : new String[]{"child", "family"}) {
+            var body = signupBody("loginId", UUID.randomUUID().toString(), role);
+            body.put("nickname", "가".repeat(21));
+            JsonNode error = call(post("/api/v1/auth/signup/" + role), body, 400);
+            assertTrue(error.get("message").asText().startsWith("닉네임:"));
+            assertEquals(0, database.queryForObject("select count(*) from users where email = ?", Integer.class, body.get("loginId")));
+        }
+        var family = signupBody("loginId", UUID.randomUUID().toString(), "family");
+        family.put("relationLabel", "가".repeat(101));
+        JsonNode error = call(post("/api/v1/auth/signup/family"), family, 400);
+        assertTrue(error.get("message").asText().startsWith("아이와의 관계:"));
+        assertEquals(0, database.queryForObject("select count(*) from users where email = ?", Integer.class, family.get("loginId")));
+    }
+
     private Map<String, Object> signupBody(String key, String loginId, String role) {
         var body = new HashMap<String, Object>(Map.of(key, loginId,
                 "password", "password", "nickname", "가입 확인"));

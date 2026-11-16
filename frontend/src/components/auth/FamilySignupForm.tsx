@@ -76,6 +76,7 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
           className={styles.input}
           type="text"
           value={nickname}
+          maxLength={20}
           required
           disabled={isSubmitting}
           onChange={(event) => setNickname(event.target.value)}

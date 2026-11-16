@@ -27,8 +27,8 @@ public class FamilyConnectionService implements ManageFamilyConnectionsUseCase {
     public List<SharingUser> searchChildren(Long familyId, String query) {
         requireFamily(familyId);
         if (query == null || query.isBlank()) return List.of();
-        if (query.trim().length() < 2 || query.trim().length() > 50) {
-            throw new InvalidFamilyConnectionRequestException("아이 닉네임을 2~50자로 입력해 주세요.");
+        if (query.trim().length() > 50) {
+            throw new InvalidFamilyConnectionRequestException("아이 닉네임을 1~50자로 입력해 주세요.");
         }
         return directory.searchChildren(query.trim());
     }

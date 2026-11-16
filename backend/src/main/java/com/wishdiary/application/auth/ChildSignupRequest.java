@@ -8,9 +8,10 @@ import jakarta.validation.constraints.Size;
 public record ChildSignupRequest(
         @JsonAlias("email") @NotBlank @Size(max = 255) @Pattern(regexp = "(?U)\\S+") String loginId,
         @NotBlank String password,
-        @NotBlank String nickname
+        @NotBlank @Size(max = 20) String nickname
 ) {
     public ChildSignupRequest {
         loginId = loginId == null ? null : loginId.strip();
+        nickname = nickname == null ? null : nickname.strip();
     }
 }

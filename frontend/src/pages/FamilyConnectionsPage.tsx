@@ -73,12 +73,12 @@ function FamilyConnectionsPage() {
           <section className={styles.section}>
             <h2>아이 찾기</h2>
             <form className={styles.search} onSubmit={(event) => void search(event)}>
-              <label>아이 닉네임<input value={query} minLength={2} maxLength={50} required placeholder="두 글자 이상 입력해 주세요" onChange={(event) => {
+              <label>아이 닉네임<input value={query} minLength={1} maxLength={50} required placeholder="아이의 닉네임을 입력해 주세요" onChange={(event) => {
                 setQuery(event.target.value); setResults([]); setSearched(false); setSearching(false); version.current += 1;
               }} /></label>
-              <Button type="submit" disabled={searching || query.trim().length < 2}>{searching ? '찾는 중…' : '아이 검색'}</Button>
+              <Button type="submit" disabled={searching || !query.trim()}>{searching ? '찾는 중…' : '아이 검색'}</Button>
             </form>
-            <p className={styles.hint}>같은 닉네임은 사용자 번호로 구분해 주세요. 검색 결과는 최대 20명이에요.</p>
+            <p className={styles.hint}>한 글자 닉네임은 정확히 입력해 주세요. 같은 닉네임은 사용자 번호로 구분하고, 검색 결과는 최대 20명이에요.</p>
             {searched && results.length === 0 ? <p role="status">검색된 아이가 없어요. 닉네임을 다시 확인해 주세요.</p> : null}
             <div aria-live="polite"><CardCarousel title="검색된 아이" itemLabel="아이">{results.map((child) => {
               const connected = connectedIds.has(child.userId);

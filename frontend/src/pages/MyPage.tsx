@@ -137,6 +137,7 @@ function MyPage() {
         <div>
           <p className={styles.previewName}>{nickname.trim() || '이름 없음'}</p>
           {loginId ? <p className={styles.previewEmail}>{loginId}</p> : null}
+          {authSession?.appRole === 'child' ? <p className={styles.previewEmail}>사용자 번호 #{authSession.userId} · 가족에게 알려 주세요.</p> : null}
           {!isLoading ? <span className={styles.roleBadge}>{userRole === 'admin' ? '관리자' : '일반 사용자'}</span> : null}
         </div>
       </div>

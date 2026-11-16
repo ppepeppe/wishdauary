@@ -4,6 +4,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserJpaRepository extends JpaRepository<UserJpaEntity, Long> {
+    List<UserJpaEntity> findTop20ByAppRoleAndNicknameIgnoreCaseOrderByNicknameAscIdAsc(
+            com.wishdiary.domain.user.AppRole role, String nickname);
+
     List<UserJpaEntity> findTop20ByAppRoleAndNicknameContainingIgnoreCaseOrderByNicknameAscIdAsc(
             com.wishdiary.domain.user.AppRole role, String nickname);
 

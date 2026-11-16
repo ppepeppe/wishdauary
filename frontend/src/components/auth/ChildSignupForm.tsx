@@ -69,6 +69,7 @@ function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
           className={styles.input}
           type="text"
           value={nickname}
+          maxLength={20}
           required
           disabled={isSubmitting}
           onChange={(event) => setNickname(event.target.value)}
