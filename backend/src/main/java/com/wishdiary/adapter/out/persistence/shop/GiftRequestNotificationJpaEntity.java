@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import com.wishdiary.domain.notification.GiftRequestStatus;
 import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "gift_request_notifications")
@@ -63,6 +64,8 @@ public class GiftRequestNotificationJpaEntity {
 
     private LocalDateTime processedAt;
 
+    private Instant receivedAt;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
@@ -111,6 +114,13 @@ public class GiftRequestNotificationJpaEntity {
     }
 
     public byte[] getImageData() { return productImageData; }
+
+    public GiftRequestNotificationJpaEntity withReceivedAt(Instant receivedAt) {
+        this.receivedAt = receivedAt;
+        return this;
+    }
+
+    public Instant getReceivedAt() { return receivedAt; }
 
     public Long getId() {
         return id;

@@ -14,6 +14,16 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(com.wishdiary.domain.shop.GiftReceiptAccessDeniedException.class)
+    public ResponseEntity<CommonResponse<Void>> handleGiftReceiptAccessDenied(RuntimeException exception) {
+        return ResponseEntity.status(403).body(CommonResponse.fail("GIFT_RECEIPT_ACCESS_DENIED", exception.getMessage()));
+    }
+
+    @ExceptionHandler(com.wishdiary.domain.shop.GiftReceiptNotApprovedException.class)
+    public ResponseEntity<CommonResponse<Void>> handleGiftReceiptNotApproved(RuntimeException exception) {
+        return ResponseEntity.status(409).body(CommonResponse.fail("GIFT_RECEIPT_NOT_APPROVED", exception.getMessage()));
+    }
+
     @ExceptionHandler(com.wishdiary.domain.user.InvalidFamilyRelationshipException.class)
     public ResponseEntity<CommonResponse<Void>> handleInvalidFamilyRelationship(RuntimeException exception) {
         return ResponseEntity.badRequest().body(CommonResponse.fail("INVALID_FAMILY_RELATIONSHIP", exception.getMessage()));

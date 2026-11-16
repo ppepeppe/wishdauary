@@ -36,6 +36,8 @@ export interface CreateWishProductPayload extends CreateShopProductPayload {
   receiverFamilyUserId: number;
 }
 
+export type GiftRequestStatus = 'pending' | 'approved' | 'rejected' | 'received';
+
 export interface GiftRequestResult {
   notificationId: number;
   productId: number;
@@ -49,7 +51,7 @@ export interface GiftRequestResult {
   receiverRelationLabel: string;
   message: string;
   remainingCloverBalance: number;
-  status: 'pending' | 'approved' | 'rejected';
+  status: GiftRequestStatus;
   createdAt: string;
 }
 
@@ -66,7 +68,8 @@ export interface ReceivedGiftRequest {
   message: string;
   cloverPrice: number;
   purchasePriceWon?: number | null;
-  status: 'pending' | 'approved' | 'rejected';
+  status: GiftRequestStatus;
+  receivedAt?: string | null;
   processedByFamilyUserId?: number | null;
   processedAt?: string | null;
   createdAt: string;

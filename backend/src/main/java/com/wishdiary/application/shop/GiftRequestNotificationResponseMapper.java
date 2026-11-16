@@ -30,7 +30,8 @@ public class GiftRequestNotificationResponseMapper {
                 notification.getStatus().name().toLowerCase(),
                 notification.getProcessedByFamilyUserId(),
                 notification.getProcessedAt(),
-                notification.getCreatedAt()
+                notification.getCreatedAt(),
+                notification.getReceivedAt()
         );
     }
 }

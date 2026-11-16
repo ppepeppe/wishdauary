@@ -218,7 +218,7 @@ function FamilySettingsPage() {
               <p className={styles.requestMessage}>{request.message}</p>
               <div className={styles.requestFooter}>
                 <span className={request.status === 'pending' ? styles.statusPending : styles.statusDone}>
-                  {request.status === 'pending' ? '대기 중' : request.status === 'approved' ? '승인됨' : '거절됨'}
+                  {request.status === 'pending' ? '대기 중' : request.status === 'approved' ? '승인됨' : request.status === 'received' ? '수령 완료' : '거절됨'}
                 </span>
                 {request.status === 'pending' ? (
                   <div className={styles.actionGroup}>
@@ -245,6 +245,7 @@ function FamilySettingsPage() {
                 ) : null}
               </div>
               <p className={styles.requestDate}>{formatDate(request.createdAt)}</p>
+              {request.status === 'received' && request.receivedAt ? <p className={styles.requestDate}>아이가 선물을 받았어요 · {formatDate(request.receivedAt)}</p> : null}
             </article>
           ))}
         </CardCarousel>

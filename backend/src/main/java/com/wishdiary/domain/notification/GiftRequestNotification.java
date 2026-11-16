@@ -1,6 +1,8 @@
 package com.wishdiary.domain.notification;
 
 import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import com.wishdiary.domain.shop.ShopPhoto;
 
 public class GiftRequestNotification {
@@ -22,6 +24,7 @@ public class GiftRequestNotification {
     private final Long processedByFamilyUserId;
     private final LocalDateTime processedAt;
     private final LocalDateTime createdAt;
+    private final Instant receivedAt;
 
     private GiftRequestNotification(
             Long id,
@@ -43,14 +46,14 @@ public class GiftRequestNotification {
     ) {
         this(id, productId, productTitle, productImageUrl, productUrl, cloverPrice, purchasePriceWon,
                 requesterChildUserId, requesterChildNickname, receiverFamilyUserId, receiverRelationLabel,
-                message, status, processedByFamilyUserId, processedAt, createdAt, null);
+                message, status, processedByFamilyUserId, processedAt, createdAt, null, null);
     }
 
     private GiftRequestNotification(Long id, Long productId, String productTitle, String productImageUrl,
             String productUrl, int cloverPrice, Integer purchasePriceWon, Long requesterChildUserId,
             String requesterChildNickname, Long receiverFamilyUserId, String receiverRelationLabel,
             String message, GiftRequestStatus status, Long processedByFamilyUserId,
-            LocalDateTime processedAt, LocalDateTime createdAt, ShopPhoto photo) {
+            LocalDateTime processedAt, LocalDateTime createdAt, ShopPhoto photo, Instant receivedAt) {
         this.photo = photo;
         this.id = id;
         this.productId = productId;
@@ -68,6 +71,7 @@ public class GiftRequestNotification {
         this.processedByFamilyUserId = processedByFamilyUserId;
         this.processedAt = processedAt;
         this.createdAt = createdAt;
+        this.receivedAt = receivedAt;
     }
 
     public static GiftRequestNotification create(
@@ -145,6 +149,31 @@ public class GiftRequestNotification {
         return process(familyUserId, GiftRequestStatus.APPROVED);
     }
 
+    public static GiftRequestNotification reconstitute(Long id, Long productId, String productTitle,
+            String productImageUrl, String productUrl, int cloverPrice, Integer purchasePriceWon,
+            Long requesterChildUserId, String requesterChildNickname, Long receiverFamilyUserId,
+            String receiverRelationLabel, String message, GiftRequestStatus status,
+            Long processedByFamilyUserId, LocalDateTime processedAt, LocalDateTime createdAt, Instant receivedAt) {
+        return new GiftRequestNotification(id, productId, productTitle, productImageUrl, productUrl,
+                cloverPrice, purchasePriceWon, requesterChildUserId, requesterChildNickname,
+                receiverFamilyUserId, receiverRelationLabel, message, status, processedByFamilyUserId,
+                processedAt, createdAt, null, receivedAt);
+    }
+
+    public GiftRequestNotification receive(Long childUserId) {
+        if (!requesterChildUserId.equals(childUserId)) {
+            throw new com.wishdiary.domain.shop.GiftReceiptAccessDeniedException();
+        }
+        if (status == GiftRequestStatus.RECEIVED) return this;
+        if (status != GiftRequestStatus.APPROVED) {
+            throw new com.wishdiary.domain.shop.GiftReceiptNotApprovedException();
+        }
+        return new GiftRequestNotification(id, productId, productTitle, productImageUrl, productUrl,
+                cloverPrice, purchasePriceWon, requesterChildUserId, requesterChildNickname,
+                receiverFamilyUserId, receiverRelationLabel, message, GiftRequestStatus.RECEIVED,
+                processedByFamilyUserId, processedAt, createdAt, photo, Instant.now().truncatedTo(ChronoUnit.MICROS));
+    }
+
     public GiftRequestNotification reject(Long familyUserId) {
         return process(familyUserId, GiftRequestStatus.REJECTED);
     }
@@ -170,7 +199,8 @@ public class GiftRequestNotification {
                 familyUserId,
                 LocalDateTime.now(),
                 createdAt,
-                photo
+                photo,
+                receivedAt
         );
     }
 
@@ -178,10 +208,12 @@ public class GiftRequestNotification {
         return new GiftRequestNotification(id, productId, productTitle, productImageUrl, productUrl,
                 cloverPrice, purchasePriceWon, requesterChildUserId, requesterChildNickname,
                 receiverFamilyUserId, receiverRelationLabel, message, status, processedByFamilyUserId,
-                processedAt, createdAt, photo);
+                processedAt, createdAt, photo, receivedAt);
     }
 
     public ShopPhoto getPhoto() { return photo; }
+
+    public Instant getReceivedAt() { return receivedAt; }
 
     public Long getId() {
         return id;

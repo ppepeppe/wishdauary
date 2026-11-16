@@ -1,6 +1,7 @@
 package com.wishdiary.application.shop;
 
 import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record GiftRequestNotificationResponse(
         Long notificationId,
@@ -18,6 +19,7 @@ public record GiftRequestNotificationResponse(
         String status,
         Long processedByFamilyUserId,
         LocalDateTime processedAt,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        Instant receivedAt
 ) {
 }

@@ -1,12 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
 import ShopNavigation from '../components/shop/ShopNavigation';
 import ProductArtwork from '../components/shop/ProductArtwork';
 import RequestCarousel from '../components/shop/RequestCarousel';
 import { useAsyncData } from '../hooks/useAsyncData';
-import { fetchSentGiftRequests, fetchWishProductRequests, fetchShopRecipients } from '../services/api/shopApi';
+import { confirmGiftReceipt, fetchSentGiftRequests, fetchWishProductRequests, fetchShopRecipients } from '../services/api/shopApi';
+import { GIFT_REQUESTS_CHANGED_EVENT } from '../constants/events';
 import { formatWon } from '../utils/currency';
 import { getProductUrlHost } from '../utils/productUrl';
 import styles from './ShopSentRequestsPage.module.css';
@@ -22,6 +23,7 @@ function formatDate(value: string) {
 
 const STATUS_META: Record<string, { label: string; className: 'statusPending' | 'statusApproved' | 'statusRejected' }> = {
   approved: { label: '선물 요청 승인됨', className: 'statusApproved' },
+  received: { label: '수령 완료', className: 'statusApproved' },
   rejected: { label: '클로버가 돌아왔어요', className: 'statusRejected' },
   pending: { label: '기다리는 중', className: 'statusPending' },
 };
@@ -37,6 +39,27 @@ async function loadRequests() {
 
 function ShopSentRequestsPage() {
   const { data, isLoading, error, refetch } = useAsyncData(loadRequests);
+  const [receivingId, setReceivingId] = useState<number | null>(null);
+  const [receiptError, setReceiptError] = useState<string | null>(null);
+  const [receiptMessage, setReceiptMessage] = useState<string | null>(null);
+  const receiving = useRef(false);
+
+  async function handleReceipt(notificationId: number) {
+    if (receiving.current) return;
+    receiving.current = true;
+    setReceivingId(notificationId); setReceiptError(null); setReceiptMessage(null);
+    try {
+      await confirmGiftReceipt(notificationId);
+      await refetch();
+      window.dispatchEvent(new Event(GIFT_REQUESTS_CHANGED_EVENT));
+      setReceiptMessage('선물을 받았다고 기록했어요!');
+    } catch (caught) {
+      setReceiptError(caught instanceof Error ? caught.message : '수령 완료를 저장하지 못했어요. 다시 눌러 주세요.');
+    } finally {
+      receiving.current = false;
+      setReceivingId(null);
+    }
+  }
   useEffect(() => {
     const refresh = () => void refetch();
     window.addEventListener('focus', refresh);
@@ -56,6 +79,8 @@ function ShopSentRequestsPage() {
       {sent ? <StatusMessage kind="success" message="요청을 보냈어요. 가족이 클로버를 정하면 ‘갖고 싶은 선물’에서 볼 수 있어요." /> : null}
       {isLoading ? <StatusMessage kind="loading" message="보낸 부탁을 찾고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="보낸 부탁을 불러오지 못했어요. 잠시 후 다시 봐주세요." /> : null}
+      {receiptError ? <StatusMessage kind="error" message={receiptError} /> : null}
+      {receiptMessage ? <StatusMessage kind="success" message={receiptMessage} /> : null}
 
       <div className={styles.container}>
         <Link to="/shop/products/new" className={styles.backLink}>+ 갖고 싶은 선물 요청하기</Link>
@@ -114,7 +139,14 @@ function ShopSentRequestsPage() {
                     <p className={styles.message}>{request.message}</p>
                   </details>
                   <p className={styles.date}>{formatDate(request.createdAt)}</p>
-                  {request.status === 'approved' ? <p className={styles.date}>가족이 요청을 승인했어요. 선물은 가족에게 받아 주세요.</p> : null}
+                  {request.status === 'approved' ? <>
+                    <p className={styles.date}>선물을 실제로 받았다면 수령 완료를 눌러 주세요.</p>
+                    <button type="button" className={styles.receiptButton} disabled={receivingId !== null}
+                      onClick={() => void handleReceipt(request.notificationId)}>
+                      {receivingId === request.notificationId ? '저장하는 중…' : '수령 완료'}
+                    </button>
+                  </> : null}
+                  {request.status === 'received' && request.receivedAt ? <p className={styles.date}>수령 완료 · {formatDate(request.receivedAt)}</p> : null}
                 </article>
               );
             })}

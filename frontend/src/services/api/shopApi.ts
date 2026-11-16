@@ -49,6 +49,7 @@ interface ReceivedGiftRequestApiItem {
   status?: string;
   processedByFamilyUserId?: number | null;
   processedAt?: string | null;
+  receivedAt?: string | null;
   createdAt?: string;
 }
 
@@ -90,9 +91,10 @@ function normalizeReceivedGiftRequest(item: ReceivedGiftRequestApiItem): Receive
     message: item.message?.trim() || '',
     cloverPrice: Math.max(0, item.cloverPrice ?? 0),
     purchasePriceWon: item.purchasePriceWon ?? null,
-    status: item.status === 'approved' || item.status === 'rejected' ? item.status : 'pending',
+    status: item.status === 'approved' || item.status === 'rejected' || item.status === 'received' ? item.status : 'pending',
     processedByFamilyUserId: item.processedByFamilyUserId ?? null,
     processedAt: item.processedAt ?? null,
+    receivedAt: item.receivedAt ?? null,
     createdAt: item.createdAt ?? new Date(0).toISOString(),
   };
 }
@@ -196,6 +198,12 @@ export async function processGiftRequest(
     body: JSON.stringify({ action }),
   });
 
+  return normalizeReceivedGiftRequest(item);
+}
+
+export async function confirmGiftReceipt(notificationId: number) {
+  getCurrentChildUserIdOrThrow();
+  const item = await request<ReceivedGiftRequestApiItem>(`/api/v1/shop/gift-requests/${notificationId}/receipt`, { method: 'PATCH' });
   return normalizeReceivedGiftRequest(item);
 }
 

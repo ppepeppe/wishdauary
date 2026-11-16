@@ -9,7 +9,7 @@ test('a goal waits only for this childs pending redemption of the same product',
   assert.equal(getPendingGoalRequest([pending], 4, 7), pending);
   assert.equal(getPendingGoalRequest([pending], 5, 7), undefined);
   assert.equal(getPendingGoalRequest([pending], 4, 8), undefined);
-  for (const status of ['approved', 'rejected']) {
+  for (const status of ['approved', 'rejected', 'received']) {
     assert.equal(getPendingGoalRequest([{ ...pending, status }], 4, 7), undefined);
   }
   assert.equal(getPendingGoalRequest([pending], undefined, 7), undefined);

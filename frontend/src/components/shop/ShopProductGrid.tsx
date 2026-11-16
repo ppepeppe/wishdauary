@@ -21,6 +21,7 @@ interface ShopProductGridProps {
 const REQUEST_STATUS_META: Record<string, { label: string; className: 'requestPending' | 'requestApproved' | 'requestRejected' }> = {
   pending: { label: '답변 기다리는 중', className: 'requestPending' },
   approved: { label: '승인됨', className: 'requestApproved' },
+  received: { label: '수령 완료', className: 'requestApproved' },
   rejected: { label: '거절됨', className: 'requestRejected' },
 };
 

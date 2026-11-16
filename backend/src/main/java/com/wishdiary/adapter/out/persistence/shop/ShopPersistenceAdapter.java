@@ -123,7 +123,8 @@ public class ShopPersistenceAdapter implements LoadShopProductPort, SaveShopProd
                 notification.getProcessedByFamilyUserId(),
                 notification.getProcessedAt(),
                 notification.getCreatedAt()
-        ).withImageData(notification.getPhoto() == null ? null : notification.getPhoto().bytes());
+        ).withImageData(notification.getPhoto() == null ? null : notification.getPhoto().bytes())
+                .withReceivedAt(notification.getReceivedAt());
     }
 
     private GiftRequestNotification toDomain(GiftRequestNotificationJpaEntity entity) {
@@ -143,7 +144,8 @@ public class ShopPersistenceAdapter implements LoadShopProductPort, SaveShopProd
                 entity.getStatus() == null ? GiftRequestStatus.PENDING : entity.getStatus(),
                 entity.getProcessedByFamilyUserId(),
                 entity.getProcessedAt(),
-                entity.getCreatedAt()
+                entity.getCreatedAt(),
+                entity.getReceivedAt()
         ).withPhoto(entity.getImageData() == null ? null : new ShopPhoto(entity.getImageData()));
     }
 }
