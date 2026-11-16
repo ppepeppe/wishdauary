@@ -19,7 +19,7 @@ export interface FamilySignupRequest {
   loginId: string;
   password: string;
   nickname: string;
-  familyRelation: FamilyRelation;
+  familyRelation?: FamilyRelation;
   relationLabel: string;
 }
 

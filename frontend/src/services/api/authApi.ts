@@ -7,6 +7,7 @@ import type {
   SignupResponse,
 } from '../../types/auth';
 import { request } from './apiClient';
+import { getFamilyRelation } from '../../constants/signup';
 
 function toFamilyRelationValue(relation: FamilyRelation) {
   if (relation === 'other') {
@@ -34,8 +35,8 @@ export async function signupFamily(payload: FamilySignupRequest) {
       loginId: payload.loginId,
       password: payload.password,
       nickname: payload.nickname,
-      familyRelation: toFamilyRelationValue(payload.familyRelation),
-      relationLabel: payload.relationLabel,
+      familyRelation: toFamilyRelationValue(payload.familyRelation ?? getFamilyRelation(payload.relationLabel)),
+      relationLabel: payload.relationLabel.trim(),
     }),
   });
 }

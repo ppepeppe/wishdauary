@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { FAMILY_RELATION_OPTIONS, getDefaultRelationLabel } from '../../constants/signup';
-import type { FamilyRelation, FamilySignupRequest } from '../../types/auth';
+import type { FamilySignupRequest } from '../../types/auth';
 import Button from '../common/Button';
 import styles from './SignupForm.module.css';
 
@@ -13,8 +12,7 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
-  const [familyRelation, setFamilyRelation] = useState<FamilyRelation>('mother');
-  const [relationLabel, setRelationLabel] = useState(getDefaultRelationLabel('mother'));
+  const [relationLabel, setRelationLabel] = useState('');
 
   const trimmedLoginId = loginId.trim();
   const trimmedPassword = password.trim();
@@ -25,11 +23,6 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
     !trimmedPassword ||
     !trimmedNickname ||
     !trimmedRelationLabel;
-
-  function handleRelationChange(nextRelation: FamilyRelation) {
-    setFamilyRelation(nextRelation);
-    setRelationLabel(getDefaultRelationLabel(nextRelation));
-  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -42,7 +35,6 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
       loginId: trimmedLoginId,
       password: trimmedPassword,
       nickname: trimmedNickname,
-      familyRelation,
       relationLabel: trimmedRelationLabel,
     });
   }
@@ -90,34 +82,18 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
         />
       </label>
 
-      <div className={styles.field}>
-        <span>아이와의 관계</span>
-        <div className={styles.optionGrid}>
-          {FAMILY_RELATION_OPTIONS.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              className={`${styles.optionCard} ${familyRelation === option.value ? styles.optionCardSelected : ''}`}
-              disabled={isSubmitting}
-              onClick={() => handleRelationChange(option.value)}
-            >
-              <span className={styles.optionTitle}>{option.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
       <label className={styles.field}>
-        <span>표시 이름</span>
+        <span>아이와의 관계</span>
         <input
           className={styles.input}
           type="text"
           value={relationLabel}
+          maxLength={100}
           required
           disabled={isSubmitting}
           onChange={(event) => setRelationLabel(event.target.value)}
         />
-        <p className={styles.helpText}>기본값은 자동으로 들어가고, 필요하면 더 편한 호칭으로 바꿀 수 있어요.</p>
+        <p className={styles.helpText}>엄마, 고모, 큰아빠처럼 아이가 부르는 호칭을 적어 주세요.</p>
       </label>
 
       <Button type="submit" fullWidth disabled={isSubmitting}>
