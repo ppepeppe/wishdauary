@@ -20,7 +20,7 @@ export async function signupChild(payload: ChildSignupRequest) {
   return request<SignupResponse>('/api/v1/auth/signup/child', {
     method: 'POST',
     body: JSON.stringify({
-      email: payload.email,
+      loginId: payload.loginId,
       password: payload.password,
       nickname: payload.nickname,
     }),
@@ -31,7 +31,7 @@ export async function signupFamily(payload: FamilySignupRequest) {
   return request<SignupResponse>('/api/v1/auth/signup/family', {
     method: 'POST',
     body: JSON.stringify({
-      email: payload.email,
+      loginId: payload.loginId,
       password: payload.password,
       nickname: payload.nickname,
       familyRelation: toFamilyRelationValue(payload.familyRelation),
@@ -44,7 +44,7 @@ export async function login(payload: LoginRequest) {
   return request<LoginResponse>('/api/v1/auth/login', {
     method: 'POST',
     body: JSON.stringify({
-      email: payload.email,
+      loginId: payload.loginId,
       password: payload.password,
     }),
   });

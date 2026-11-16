@@ -6,7 +6,7 @@ import com.wishdiary.domain.user.AppRole;
 
 public record LoadedUser(
         Long id,
-        String email,
+        String loginId,
         String nickname,
         AppRole appRole,
         Long groupMemberId,

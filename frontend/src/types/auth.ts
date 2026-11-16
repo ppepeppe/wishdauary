@@ -10,13 +10,13 @@ export type FamilyRelation =
   | 'other';
 
 export interface ChildSignupRequest {
-  email: string;
+  loginId: string;
   password: string;
   nickname: string;
 }
 
 export interface FamilySignupRequest {
-  email: string;
+  loginId: string;
   password: string;
   nickname: string;
   familyRelation: FamilyRelation;
@@ -37,7 +37,7 @@ export interface SignupResponse {
 }
 
 export interface LoginRequest {
-  email: string;
+  loginId: string;
   password: string;
 }
 

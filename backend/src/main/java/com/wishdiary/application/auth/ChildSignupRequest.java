@@ -1,11 +1,16 @@
 package com.wishdiary.application.auth;
 
-import jakarta.validation.constraints.Email;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public record ChildSignupRequest(
-        @Email @NotBlank String email,
+        @JsonAlias("email") @NotBlank @Size(max = 255) @Pattern(regexp = "(?U)\\S+") String loginId,
         @NotBlank String password,
         @NotBlank String nickname
 ) {
+    public ChildSignupRequest {
+        loginId = loginId == null ? null : loginId.strip();
+    }
 }

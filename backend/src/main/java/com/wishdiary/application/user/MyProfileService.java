@@ -40,7 +40,7 @@ public class MyProfileService implements GetMyProfileUseCase, UpdateMyProfileUse
     private MyProfileResponse toResponse(User user) {
         return new MyProfileResponse(
                 user.id(),
-                user.email(),
+                user.loginId(),
                 user.nickname(),
                 user.appRole().name().toLowerCase(),
                 user.avatar().preset(),

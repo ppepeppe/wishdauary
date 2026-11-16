@@ -2,7 +2,7 @@ package com.wishdiary.domain.user;
 
 public record User(
         Long id,
-        String email,
+        String loginId,
         String nickname,
         AppRole appRole,
         ProfileAvatar avatar,
@@ -13,18 +13,18 @@ public record User(
         userRole = userRole == null ? UserRole.USER : userRole;
     }
 
-    public User(Long id, String email, String nickname, AppRole appRole, ProfileAvatar avatar) {
-        this(id, email, nickname, appRole, avatar, UserRole.USER);
+    public User(Long id, String loginId, String nickname, AppRole appRole, ProfileAvatar avatar) {
+        this(id, loginId, nickname, appRole, avatar, UserRole.USER);
     }
 
-    public User(Long id, String email, String nickname, AppRole appRole) {
-        this(id, email, nickname, appRole, ProfileAvatar.defaultAvatar());
+    public User(Long id, String loginId, String nickname, AppRole appRole) {
+        this(id, loginId, nickname, appRole, ProfileAvatar.defaultAvatar());
     }
 
     public User changeProfile(String nickname, ProfileAvatar avatar) {
         return new User(
                 id,
-                email,
+                loginId,
                 requireNickname(nickname),
                 appRole,
                 avatar == null ? ProfileAvatar.defaultAvatar() : avatar,

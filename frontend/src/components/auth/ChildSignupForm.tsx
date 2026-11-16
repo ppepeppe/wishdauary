@@ -9,14 +9,14 @@ interface ChildSignupFormProps {
 }
 
 function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
-  const [email, setEmail] = useState('');
+  const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
 
-  const trimmedEmail = email.trim();
+  const trimmedLoginId = loginId.trim();
   const trimmedPassword = password.trim();
   const trimmedNickname = nickname.trim();
-  const isSubmitInvalid = !trimmedEmail || !trimmedPassword || !trimmedNickname;
+  const isSubmitInvalid = !trimmedLoginId || !trimmedPassword || !trimmedNickname;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,7 +26,7 @@ function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
     }
 
     await onSubmit({
-      email: trimmedEmail,
+      loginId: trimmedLoginId,
       password: trimmedPassword,
       nickname: trimmedNickname,
     });
@@ -35,14 +35,18 @@ function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <label className={styles.field}>
-        <span>이메일</span>
+        <span>아이디</span>
         <input
           className={styles.input}
-          type="email"
-          value={email}
+          type="text"
+          value={loginId}
+          autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
+          maxLength={255}
           required
           disabled={isSubmitting}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(event) => setLoginId(event.target.value)}
         />
       </label>
 
@@ -51,6 +55,7 @@ function ChildSignupForm({ onSubmit, isSubmitting }: ChildSignupFormProps) {
         <input
           className={styles.input}
           type="password"
+          autoComplete="new-password"
           value={password}
           required
           disabled={isSubmitting}

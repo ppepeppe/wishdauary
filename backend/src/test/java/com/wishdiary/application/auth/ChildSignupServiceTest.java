@@ -11,7 +11,7 @@ import com.wishdiary.domain.group.Group;
 import com.wishdiary.domain.group.GroupMember;
 import com.wishdiary.domain.group.GroupMemberRole;
 import com.wishdiary.domain.user.AppRole;
-import com.wishdiary.domain.user.DuplicateUserEmailException;
+import com.wishdiary.domain.user.DuplicateLoginIdException;
 import com.wishdiary.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class ChildSignupServiceTest {
 
     @Test
     void signupCreatesChildUserGroupAndMembership() {
-        when(signupPersistencePort.existsUserByEmail("child@test.com")).thenReturn(false);
+        when(signupPersistencePort.existsUserByLoginId("child@test.com")).thenReturn(false);
         when(passwordEncoderPort.encode("password")).thenReturn("encoded");
         when(signupPersistencePort.saveUser(any(User.class), any(String.class)))
                 .thenReturn(new User(1L, "child@test.com", "미아", AppRole.CHILD));
@@ -76,11 +76,11 @@ class ChildSignupServiceTest {
     }
 
     @Test
-    void signupFailsWhenEmailAlreadyExists() {
-        when(signupPersistencePort.existsUserByEmail("child@test.com")).thenReturn(true);
+    void signupFailsWhenLoginIdAlreadyExists() {
+        when(signupPersistencePort.existsUserByLoginId("child@test.com")).thenReturn(true);
 
         assertThrows(
-                DuplicateUserEmailException.class,
+                DuplicateLoginIdException.class,
                 () -> childSignupService.signup(new ChildSignupRequest("child@test.com", "password", "미아"))
         );
 

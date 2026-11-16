@@ -34,7 +34,7 @@ function ChildSignupPage() {
   return (
     <PageSection
       title="아이 가입"
-      description="이메일과 닉네임으로 시작해요. 가족은 가입 후 연결할 수 있어요."
+      description="아이디와 닉네임으로 시작해요. 가족은 가입 후 연결할 수 있어요."
     >
       {isSubmitting ? <StatusMessage kind="loading" message="계정을 만들고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}

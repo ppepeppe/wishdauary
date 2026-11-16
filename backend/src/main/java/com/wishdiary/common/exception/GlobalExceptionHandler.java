@@ -14,6 +14,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(com.wishdiary.domain.user.DuplicateLoginIdException.class)
+    public ResponseEntity<CommonResponse<Void>> handleDuplicateLoginId(RuntimeException exception) {
+        return ResponseEntity.status(409).body(CommonResponse.fail("DUPLICATE_LOGIN_ID", exception.getMessage()));
+    }
+
     @ExceptionHandler(com.wishdiary.application.shop.InvalidShopPhotoException.class)
     public ResponseEntity<CommonResponse<Void>> handleInvalidPhoto(RuntimeException exception) {
         return ResponseEntity.badRequest().body(CommonResponse.fail("INVALID_SHOP_PHOTO", exception.getMessage()));
@@ -77,7 +82,7 @@ public class GlobalExceptionHandler {
 
     private String getValidationMessage(FieldError error) {
         String field = switch (error.getField()) {
-            case "email" -> "이메일";
+            case "loginId", "email" -> "아이디";
             case "password" -> "비밀번호";
             case "nickname" -> "닉네임";
             case "inviteCode" -> "초대 코드";
@@ -104,6 +109,7 @@ public class GlobalExceptionHandler {
             case "NotBlank", "NotNull" -> "입력해 주세요.";
             case "Email" -> "올바른 주소를 입력해 주세요.";
             case "Size" -> "길이를 확인해 주세요.";
+            case "Pattern" -> "공백 없이 입력해 주세요.";
             case "Min", "Positive" -> "값을 확인해 주세요.";
             default -> "다시 확인해 주세요.";
         };

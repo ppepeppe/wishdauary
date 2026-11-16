@@ -66,6 +66,7 @@ export async function fetchHomeSummary() {
 
 interface MyProfileApiResponse {
   userId?: number;
+  loginId?: string | null;
   email?: string | null;
   nickname?: string | null;
   appRole?: string | null;
@@ -78,7 +79,7 @@ interface MyProfileApiResponse {
 function normalizeMyProfile(data: MyProfileApiResponse): MyProfile {
   return {
     userId: data.userId ?? 0,
-    email: data.email?.trim() || '',
+    loginId: data.loginId?.trim() || data.email?.trim() || '',
     nickname: data.nickname?.trim() || '',
     appRole: data.appRole?.trim() || '',
     userRole: data.userRole === 'admin' ? 'admin' : 'user',

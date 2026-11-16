@@ -6,7 +6,7 @@ import com.wishdiary.domain.user.User;
 
 public interface SignupPersistencePort {
 
-    boolean existsUserByEmail(String email);
+    boolean existsUserByLoginId(String loginId);
 
     User saveUser(User user, String encodedPassword);
 

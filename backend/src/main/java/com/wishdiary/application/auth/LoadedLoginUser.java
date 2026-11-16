@@ -4,7 +4,7 @@ import com.wishdiary.domain.user.AppRole;
 
 public record LoadedLoginUser(
         Long userId,
-        String email,
+        String loginId,
         String nickname,
         AppRole appRole,
         String passwordHash,

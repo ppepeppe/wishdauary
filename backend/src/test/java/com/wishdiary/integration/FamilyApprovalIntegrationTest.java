@@ -37,6 +37,7 @@ class FamilyApprovalIntegrationTest {
         assertEquals(1, found.size());
         assertEquals(id(child), found.get(0).get("userId").asLong());
         assertFalse(found.get(0).has("email"));
+        assertFalse(found.get(0).has("loginId"));
         call(get(BASE + "/children").param("query", "아"), family, null, 400);
     }
 

@@ -44,15 +44,15 @@ class AuthAndShopFlowIntegrationTest {
 
         ResponseEntity<Map> duplicate = restTemplate.postForEntity("/api/v1/auth/signup/child", signup, Map.class);
         assertEquals(HttpStatus.CONFLICT, duplicate.getStatusCode());
-        assertEquals("이미 가입된 이메일이에요.", duplicate.getBody().get("message"));
+        assertEquals("이미 사용 중인 아이디예요.", duplicate.getBody().get("message"));
 
         ResponseEntity<Map> invalid = restTemplate.postForEntity(
                 "/api/v1/auth/signup/child",
-                Map.of("email", "not-an-email", "password", "password", "nickname", "아이"),
+                Map.of("loginId", "two words", "password", "password", "nickname", "아이"),
                 Map.class
         );
         assertEquals(HttpStatus.BAD_REQUEST, invalid.getStatusCode());
-        assertEquals("이메일: 올바른 주소를 입력해 주세요.", invalid.getBody().get("message"));
+        assertEquals("아이디: 공백 없이 입력해 주세요.", invalid.getBody().get("message"));
     }
 
     @Test

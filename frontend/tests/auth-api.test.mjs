@@ -115,12 +115,12 @@ test('network failure and non-JSON server failure provide readable errors', asyn
   await assert.rejects(request('/api/test'), /서버 오류/);
 });
 
-test('duplicate email and upstream English errors are shown in Korean', async () => {
+test('legacy duplicate ID and upstream English errors are shown in Korean', async () => {
   globalThis.fetch = async () => Response.json({
     code: 'DUPLICATE_USER_EMAIL',
     message: 'User email already exists. email=test@example.com',
   }, { status: 409 });
-  await assert.rejects(request('/api/test'), /이미 가입된 이메일이에요/);
+  await assert.rejects(request('/api/test'), /이미 사용 중인 아이디예요/);
 
   globalThis.fetch = async () => Response.json({ error: 'Bad Request' }, { status: 400 });
   await assert.rejects(request('/api/test'), /요청 형식을 다시 확인해 주세요/);

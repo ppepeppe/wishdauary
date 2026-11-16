@@ -11,7 +11,7 @@ test('family signup sends identity and relationship without an invitation code',
     sent = JSON.parse(options.body);
     return Response.json({ userId: 2, appRole: 'family', accessToken: 'token' });
   };
-  await signupFamily({ email: 'family@test.com', password: 'password', nickname: '엄마', familyRelation: 'mother', relationLabel: '엄마' });
-  assert.deepEqual(sent, { email: 'family@test.com', password: 'password', nickname: '엄마', familyRelation: 'MOTHER', relationLabel: '엄마' });
+  await signupFamily({ loginId: 'family_123', password: 'password', nickname: '엄마', familyRelation: 'mother', relationLabel: '엄마' });
+  assert.deepEqual(sent, { loginId: 'family_123', password: 'password', nickname: '엄마', familyRelation: 'MOTHER', relationLabel: '엄마' });
   assert.equal('inviteCode' in sent, false);
 });

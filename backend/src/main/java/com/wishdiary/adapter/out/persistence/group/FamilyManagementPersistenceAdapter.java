@@ -73,7 +73,7 @@ public class FamilyManagementPersistenceAdapter implements FamilyGroupManagement
     private LoadedUser toLoadedUser(UserJpaEntity user, GroupMemberJpaEntity groupMember) {
         return new LoadedUser(
                 user.getId(),
-                user.getEmail(),
+                user.getLoginId(),
                 user.getNickname(),
                 user.getAppRole(),
                 groupMember.getId(),

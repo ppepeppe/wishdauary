@@ -28,7 +28,7 @@ class UserProfileTest {
         assertEquals("mint", updated.avatar().preset());
         assertNull(updated.avatar().imageDataUrl());
         assertEquals(AppRole.CHILD, updated.appRole());
-        assertEquals("child@test.com", updated.email());
+        assertEquals("child@test.com", updated.loginId());
     }
 
     @Test

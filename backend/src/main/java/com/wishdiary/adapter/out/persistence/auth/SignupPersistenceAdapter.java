@@ -30,20 +30,20 @@ public class SignupPersistenceAdapter implements SignupPersistencePort {
     }
 
     @Override
-    public boolean existsUserByEmail(String email) {
-        return userJpaRepository.existsByEmail(email);
+    public boolean existsUserByLoginId(String loginId) {
+        return userJpaRepository.existsByLoginId(loginId);
     }
 
     @Override
     public User saveUser(User user, String encodedPassword) {
         UserJpaEntity savedEntity = userJpaRepository.save(new UserJpaEntity(
                 user.id(),
-                user.email(),
+                user.loginId(),
                 user.nickname(),
                 user.appRole(),
                 encodedPassword
         ));
-        return new User(savedEntity.getId(), savedEntity.getEmail(), savedEntity.getNickname(), savedEntity.getAppRole());
+        return new User(savedEntity.getId(), savedEntity.getLoginId(), savedEntity.getNickname(), savedEntity.getAppRole());
     }
 
     @Override

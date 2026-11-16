@@ -41,7 +41,7 @@ class LoginServiceTest {
 
     @Test
     void loginReturnsResponseWithAccessToken() {
-        when(loginPersistencePort.loadByEmail("child@test.com")).thenReturn(loadedLoginUser());
+        when(loginPersistencePort.loadByLoginId("child@test.com")).thenReturn(loadedLoginUser());
         when(passwordEncoderPort.matches("password", "encoded")).thenReturn(true);
         when(authTokenIssuerPort.issue(any(AuthTokenIssueRequest.class))).thenReturn("access-token");
 
@@ -54,7 +54,7 @@ class LoginServiceTest {
 
     @Test
     void loginFailsWhenPasswordDoesNotMatch() {
-        when(loginPersistencePort.loadByEmail("child@test.com")).thenReturn(loadedLoginUser());
+        when(loginPersistencePort.loadByLoginId("child@test.com")).thenReturn(loadedLoginUser());
         when(passwordEncoderPort.matches("wrong-password", "encoded")).thenReturn(false);
 
         assertThrows(

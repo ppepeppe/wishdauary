@@ -9,20 +9,20 @@ interface LoginFormProps {
 }
 
 function LoginForm({ onSubmit, isSubmitting }: LoginFormProps) {
-  const [email, setEmail] = useState('');
+  const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
-  const trimmedEmail = email.trim();
+  const trimmedLoginId = loginId.trim();
   const trimmedPassword = password.trim();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!trimmedEmail || !trimmedPassword) {
+    if (!trimmedLoginId || !trimmedPassword) {
       return;
     }
 
     await onSubmit({
-      email: trimmedEmail,
+      loginId: trimmedLoginId,
       password: trimmedPassword,
     });
   }
@@ -30,14 +30,18 @@ function LoginForm({ onSubmit, isSubmitting }: LoginFormProps) {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <label className={styles.field}>
-        <span>이메일</span>
+        <span>아이디</span>
         <input
           className={styles.input}
-          type="email"
-          value={email}
+          type="text"
+          value={loginId}
+          autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
+          maxLength={255}
           required
           disabled={isSubmitting}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(event) => setLoginId(event.target.value)}
         />
       </label>
 
@@ -46,6 +50,7 @@ function LoginForm({ onSubmit, isSubmitting }: LoginFormProps) {
         <input
           className={styles.input}
           type="password"
+          autoComplete="current-password"
           value={password}
           required
           disabled={isSubmitting}

@@ -19,7 +19,7 @@ export interface HomeSummary {
 
 export interface MyProfile {
   userId: number;
-  email: string;
+  loginId: string;
   nickname: string;
   appRole: string;
   userRole: UserRole;

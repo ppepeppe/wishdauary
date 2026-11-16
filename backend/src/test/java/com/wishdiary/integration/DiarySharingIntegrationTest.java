@@ -176,6 +176,7 @@ class DiarySharingIntegrationTest {
             assertNotEquals(owner.userId().longValue(), user.get("userId").asLong());
             if (user.get("userId").asLong() == other.userId()) found = true;
             assertFalse(user.has("email"));
+            assertFalse(user.has("loginId"));
             assertFalse(user.has("accessToken"));
             assertFalse(user.has("groupId"));
         }

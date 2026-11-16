@@ -29,8 +29,8 @@ async function extractErrorMessage(response: Response) {
   try {
     const data = (await response.json()) as { code?: string; message?: string; error?: string };
 
-    if (data.code === 'DUPLICATE_USER_EMAIL') {
-      return '이미 가입된 이메일이에요.';
+    if (data.code === 'DUPLICATE_LOGIN_ID' || data.code === 'DUPLICATE_USER_EMAIL') {
+      return '이미 사용 중인 아이디예요.';
     }
 
     if (typeof data.message === 'string' && /^[가-힣]/.test(data.message)) {

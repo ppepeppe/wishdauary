@@ -19,8 +19,9 @@ public class UserJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    // Keep the existing column and unique constraint so deployed accounts remain intact.
+    @Column(name = "email", nullable = false, unique = true)
+    private String loginId;
 
     @Column(nullable = false)
     private String nickname;
@@ -48,9 +49,9 @@ public class UserJpaEntity {
     protected UserJpaEntity() {
     }
 
-    public UserJpaEntity(Long id, String email, String nickname, AppRole appRole, String passwordHash) {
+    public UserJpaEntity(Long id, String loginId, String nickname, AppRole appRole, String passwordHash) {
         this.id = id;
-        this.email = email;
+        this.loginId = loginId;
         this.nickname = nickname;
         this.appRole = appRole;
         this.passwordHash = passwordHash;
@@ -61,8 +62,8 @@ public class UserJpaEntity {
         return id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLoginId() {
+        return loginId;
     }
 
     public String getNickname() {

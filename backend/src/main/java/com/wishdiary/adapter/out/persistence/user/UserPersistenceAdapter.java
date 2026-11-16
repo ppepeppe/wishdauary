@@ -119,7 +119,7 @@ public class UserPersistenceAdapter implements LoadUserPort, LoadUserAccountPort
     private User toUser(UserJpaEntity user) {
         return new User(
                 user.getId(),
-                user.getEmail(),
+                user.getLoginId(),
                 user.getNickname(),
                 user.getAppRole(),
                 ProfileAvatar.of(user.getAvatarPreset(), user.getAvatarImage(), user.getAvatarCharacter()),
@@ -130,7 +130,7 @@ public class UserPersistenceAdapter implements LoadUserPort, LoadUserAccountPort
     private LoadedUser toLoadedUser(UserJpaEntity user, GroupMemberJpaEntity groupMember) {
         return new LoadedUser(
                 user.getId(),
-                user.getEmail(),
+                user.getLoginId(),
                 user.getNickname(),
                 user.getAppRole(),
                 groupMember.getId(),

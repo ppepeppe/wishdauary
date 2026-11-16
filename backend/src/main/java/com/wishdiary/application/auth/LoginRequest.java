@@ -1,10 +1,14 @@
 package com.wishdiary.application.auth;
 
-import jakarta.validation.constraints.Email;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record LoginRequest(
-        @Email @NotBlank String email,
+        @JsonAlias("email") @NotBlank @Size(max = 255) String loginId,
         @NotBlank String password
 ) {
+    public LoginRequest {
+        loginId = loginId == null ? null : loginId.strip();
+    }
 }

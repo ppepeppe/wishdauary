@@ -19,7 +19,7 @@ function MyPage() {
   const [avatarPreset, setAvatarPreset] = useState('peach');
   const [avatarCharacter, setAvatarCharacter] = useState('my-melody');
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
-  const [email, setEmail] = useState('');
+  const [loginId, setLoginId] = useState('');
   const [userRole, setUserRole] = useState<UserRole>('user');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -41,7 +41,7 @@ function MyPage() {
         setAvatarPreset(profile.avatarPreset || 'peach');
         setAvatarCharacter(profile.avatarCharacter);
         setAvatarImage(profile.avatarImage);
-        setEmail(profile.email);
+        setLoginId(profile.loginId);
         setUserRole(profile.userRole);
         patchAuthSession({ nickname: profile.nickname });
       } catch (caughtError) {
@@ -126,7 +126,7 @@ function MyPage() {
         <ProfileAvatar preset={avatarPreset} character={avatarCharacter} imageUrl={avatarImage} size="lg" alt="" />
         <div>
           <p className={styles.previewName}>{nickname.trim() || '이름 없음'}</p>
-          {email ? <p className={styles.previewEmail}>{email}</p> : null}
+          {loginId ? <p className={styles.previewEmail}>{loginId}</p> : null}
           {!isLoading ? <span className={styles.roleBadge}>{userRole === 'admin' ? '관리자' : '일반 사용자'}</span> : null}
         </div>
       </div>

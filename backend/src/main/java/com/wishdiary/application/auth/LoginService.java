@@ -25,7 +25,7 @@ public class LoginService implements LoginUseCase {
     @Override
     @Transactional(readOnly = true)
     public LoginResponse login(LoginRequest request) {
-        LoadedLoginUser user = loginPersistencePort.loadByEmail(request.email());
+        LoadedLoginUser user = loginPersistencePort.loadByLoginId(request.loginId());
         validatePassword(request.password(), user.passwordHash());
 
         LoginResponse response = loginResponseMapper.map(user);

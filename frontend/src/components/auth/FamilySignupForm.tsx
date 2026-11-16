@@ -10,18 +10,18 @@ interface FamilySignupFormProps {
 }
 
 function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
-  const [email, setEmail] = useState('');
+  const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [familyRelation, setFamilyRelation] = useState<FamilyRelation>('mother');
   const [relationLabel, setRelationLabel] = useState(getDefaultRelationLabel('mother'));
 
-  const trimmedEmail = email.trim();
+  const trimmedLoginId = loginId.trim();
   const trimmedPassword = password.trim();
   const trimmedNickname = nickname.trim();
   const trimmedRelationLabel = relationLabel.trim();
   const isSubmitInvalid =
-    !trimmedEmail ||
+    !trimmedLoginId ||
     !trimmedPassword ||
     !trimmedNickname ||
     !trimmedRelationLabel;
@@ -39,7 +39,7 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
     }
 
     await onSubmit({
-      email: trimmedEmail,
+      loginId: trimmedLoginId,
       password: trimmedPassword,
       nickname: trimmedNickname,
       familyRelation,
@@ -50,14 +50,18 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <label className={styles.field}>
-        <span>이메일</span>
+        <span>아이디</span>
         <input
           className={styles.input}
-          type="email"
-          value={email}
+          type="text"
+          value={loginId}
+          autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
+          maxLength={255}
           required
           disabled={isSubmitting}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(event) => setLoginId(event.target.value)}
         />
       </label>
 
@@ -66,6 +70,7 @@ function FamilySignupForm({ onSubmit, isSubmitting }: FamilySignupFormProps) {
         <input
           className={styles.input}
           type="password"
+          autoComplete="new-password"
           value={password}
           required
           disabled={isSubmitting}

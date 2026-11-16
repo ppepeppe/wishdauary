@@ -29,16 +29,16 @@ public class LoginPersistenceAdapter implements LoginPersistencePort {
     }
 
     @Override
-    public LoadedLoginUser loadByEmail(String email) {
-        UserJpaEntity user = userJpaRepository.findByEmail(email)
-                .orElseThrow(() -> new LoginUserNotFoundException(email));
+    public LoadedLoginUser loadByLoginId(String loginId) {
+        UserJpaEntity user = userJpaRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new LoginUserNotFoundException(loginId));
         GroupMemberJpaEntity groupMember = groupMemberJpaRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new UserGroupMembershipNotFoundException(user.getId()));
         GroupJpaEntity group = groupJpaRepository.findById(groupMember.getGroupId())
                 .orElseThrow(() -> new GroupNotFoundException(groupMember.getGroupId()));
         return new LoadedLoginUser(
                 user.getId(),
-                user.getEmail(),
+                user.getLoginId(),
                 user.getNickname(),
                 user.getAppRole(),
                 user.getPasswordHash(),
