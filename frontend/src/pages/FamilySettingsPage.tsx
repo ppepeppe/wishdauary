@@ -10,6 +10,7 @@ import { useGiftRequests } from '../hooks/useGiftRequests';
 import { fetchChildrenWishGoals } from '../services/api/wishGoalApi';
 import { formatWon } from '../utils/currency';
 import { getProductUrlHost } from '../utils/productUrl';
+import { getPendingGoalRequest } from '../utils/giftRequest';
 import styles from './FamilySettingsPage.module.css';
 
 function formatDate(value: string) {
@@ -29,14 +30,18 @@ function FamilySettingsPage() {
   const [priceInputs, setPriceInputs] = useState<Record<number, string>>({});
   const [purchasePriceInputs, setPurchasePriceInputs] = useState<Record<number, string>>({});
   const [actionError, setActionError] = useState<string | null>(null);
-  const { data: goals } = useAsyncData(fetchChildrenWishGoals, true);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { data: goals, refetch: refetchGoals } = useAsyncData(fetchChildrenWishGoals, true);
   const childrenGoals = goals ?? [];
 
   async function handleProcess(notificationId: number, action: 'APPROVE' | 'REJECT') {
     try {
       setProcessingId(notificationId);
       setActionError(null);
+      setSuccessMessage(null);
       await processRequest(notificationId, action);
+      await refetchGoals();
+      setSuccessMessage(action === 'APPROVE' ? '선물 요청을 승인했어요. 아이에게 선물을 전달해 주세요.' : '요청을 거절하고 아이에게 클로버를 돌려줬어요.');
     } catch (caughtError) {
       setActionError(caughtError instanceof Error ? caughtError.message : '선물 요청을 처리하지 못했어요.');
     } finally {
@@ -60,7 +65,9 @@ function FamilySettingsPage() {
     try {
       setPricingId(productId);
       setActionError(null);
+      setSuccessMessage(null);
       await priceProduct(productId, cloverPrice, purchasePriceWon);
+      setSuccessMessage('필요한 클로버를 저장했어요. 아이의 ‘갖고 싶은 선물’에 표시돼요.');
     } catch (caughtError) {
       setActionError(caughtError instanceof Error ? caughtError.message : '가격을 저장하지 못했어요.');
     } finally {
@@ -81,6 +88,7 @@ function FamilySettingsPage() {
       {isLoading ? <StatusMessage kind="loading" message="받은 요청을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="선물 요청을 불러오지 못했어요. 잠시 후 다시 확인해 주세요." /> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
+      {successMessage ? <StatusMessage kind="success" message={successMessage} /> : null}
       {data && pendingGiftRequestCount > 0 ? (
         <StatusMessage kind="success" message={`확인할 선물 요청이 ${pendingGiftRequestCount}개 있어요.`} />
       ) : null}
@@ -89,7 +97,8 @@ function FamilySettingsPage() {
         <div className={styles.goalSection}>
           <CardCarousel title="아이가 모으고 있는 목표" itemLabel="목표">
             {childrenGoals.map((childGoal) => {
-              const ratio =
+              const pending = getPendingGoalRequest(giftRequests, childGoal.goal.productId, childGoal.childUserId);
+              const ratio = pending ? 100 :
                 childGoal.goal.targetCloverPrice > 0
                   ? Math.min(100, (childGoal.goal.currentCloverBalance / childGoal.goal.targetCloverPrice) * 100)
                   : 0;
@@ -102,14 +111,14 @@ function FamilySettingsPage() {
                       <p>{childGoal.childNickname}의 목표</p>
                     </div>
                     <span className={styles.goalBadge}>
-                      {childGoal.goal.remainingClovers === 0
+                      {pending ? '선물 요청 중' : childGoal.goal.remainingClovers === 0
                         ? '달성!'
                         : `${childGoal.goal.remainingClovers} 클로버 남음`}
                     </span>
                   </div>
                   <div className={styles.goalNumbers}>
-                    <span>{childGoal.goal.currentCloverBalance} 클로버</span>
-                    <span>{childGoal.goal.targetCloverPrice} 클로버</span>
+                    <span>{pending ? '클로버로 요청했어요' : `${childGoal.goal.currentCloverBalance} 클로버`}</span>
+                    <span>{pending?.cloverPrice ?? childGoal.goal.targetCloverPrice} 클로버</span>
                   </div>
                   <div className={styles.goalTrack}>
                     <div className={styles.goalFill} style={{ width: `${ratio}%` }} />
@@ -130,6 +139,7 @@ function FamilySettingsPage() {
                     {product.imageUrl ? <ProductArtwork title={product.title} imageUrl={product.imageUrl} className={styles.photo} /> : null}
                     <div>
                     <h3>{product.title}</h3>
+                    <p>{data?.children.find((child) => child.userId === product.childUserId)?.nickname ?? `아이 #${product.childUserId}`}의 부탁</p>
                     <p>{product.description}</p>
                     </div>
                   </div>
@@ -240,7 +250,7 @@ function FamilySettingsPage() {
         </CardCarousel>
       ) : null}
       {data && giftRequests.length === 0 && productPricingRequests.length === 0 ? (
-        <StatusMessage kind="empty" message="아직 도착한 선물 요청이 없어요. 아이에게 연결을 요청하고 승인을 받으면 선물을 부탁받을 수 있어요." />
+        <StatusMessage kind="empty" message="지금은 확인할 선물 요청이 없어요. 클로버를 정한 선물은 상점 관리에서 확인할 수 있어요." />
       ) : null}
     </PageSection>
   );

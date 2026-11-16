@@ -53,8 +53,8 @@ public class ShopPersistenceAdapter implements LoadShopProductPort, SaveShopProd
     }
 
     @Override
-    public Optional<GiftRequestNotification> loadGiftRequestById(Long requestId) {
-        return giftRequestNotificationJpaRepository.findById(requestId).map(this::toDomain);
+    public Optional<GiftRequestNotification> loadGiftRequestForUpdate(Long requestId) {
+        return giftRequestNotificationJpaRepository.findForUpdate(requestId).map(this::toDomain);
     }
 
     @Override

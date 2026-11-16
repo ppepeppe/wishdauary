@@ -1,8 +1,19 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { getGiftRecipient, getGiftRequestBlockReason } from '../src/utils/giftRequest.ts';
+import { getGiftRecipient, getGiftRequestBlockReason, getPendingGoalRequest } from '../src/utils/giftRequest.ts';
 
 const recipients = [{ userId: 1, nickname: '엄마' }, { userId: 2, nickname: '아빠' }];
+
+test('a goal waits only for this childs pending redemption of the same product', () => {
+  const pending = { productId: 4, requesterChildUserId: 7, status: 'pending', cloverPrice: 2 };
+  assert.equal(getPendingGoalRequest([pending], 4, 7), pending);
+  assert.equal(getPendingGoalRequest([pending], 5, 7), undefined);
+  assert.equal(getPendingGoalRequest([pending], 4, 8), undefined);
+  for (const status of ['approved', 'rejected']) {
+    assert.equal(getPendingGoalRequest([{ ...pending, status }], 4, 7), undefined);
+  }
+  assert.equal(getPendingGoalRequest([pending], undefined, 7), undefined);
+});
 
 test('a personal wish keeps the family member who received and priced it as the default', () => {
   assert.equal(getGiftRecipient(recipients, { receiverFamilyUserId: 2 }).userId, 2);

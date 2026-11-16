@@ -7,4 +7,6 @@ public interface SaveWishGoalPort {
     WishGoal save(WishGoal wishGoal);
 
     void deleteByChildUserId(Long childUserId);
+
+    void completeMatchingGoal(Long childUserId, Long productId);
 }

@@ -133,6 +133,7 @@ function ShopGiftRequestPage() {
               <p>마지막 확인</p>
               <strong>{selectedRecipient ? `${selectedRecipient.relationLabel}에게 보내기` : '가족을 먼저 골라주세요'}</strong>
             </div>
+            <p className={styles.disabledReason}>요청을 보내면 클로버 {product.cloverPrice}개를 사용해요. 가족이 거절하면 그대로 돌려받아요.</p>
             <HoverHint hint={submitDisabledReason}>
               <button type="button" className={styles.submitButton} disabled={!canSubmit} onClick={() => void handleSubmit()}>
                 {pendingProductId === product.productId

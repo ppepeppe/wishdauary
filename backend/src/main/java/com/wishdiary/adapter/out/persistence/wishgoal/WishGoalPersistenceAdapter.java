@@ -30,6 +30,11 @@ public class WishGoalPersistenceAdapter implements LoadWishGoalPort, SaveWishGoa
         wishGoalJpaRepository.deleteByChildUserId(childUserId);
     }
 
+    @Override
+    public void completeMatchingGoal(Long childUserId, Long productId) {
+        wishGoalJpaRepository.deleteMatchingGoal(childUserId, productId);
+    }
+
     private WishGoalJpaEntity toEntity(WishGoal wishGoal) {
         return new WishGoalJpaEntity(
                 wishGoal.getId(),

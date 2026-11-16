@@ -56,6 +56,12 @@ class ShopServiceTest {
     private FamilyConnectionPort familyConnections;
 
     @Mock
+    private com.wishdiary.application.sharing.SharingGroupPort groups;
+
+    @Mock
+    private com.wishdiary.application.wishgoal.SaveWishGoalPort goals;
+
+    @Mock
     private LoadCloverBalancePort loadCloverBalancePort;
 
     @Mock
@@ -77,7 +83,9 @@ class ShopServiceTest {
                 new ShopProductResponseMapper(),
                 new GiftRequestResponseMapper(),
                 new GiftRequestNotificationResponseMapper(),
-                data -> null
+                data -> null,
+                groups,
+                goals
         );
     }
 
@@ -214,7 +222,7 @@ class ShopServiceTest {
         GiftRequestNotification notification = pendingGiftRequest();
 
         when(loadUserPort.loadById(2L)).thenReturn(familyUser(2L, FamilyRelation.MOTHER, "엄마"));
-        when(loadGiftRequestNotificationPort.loadGiftRequestById(100L)).thenReturn(Optional.of(notification));
+        when(loadGiftRequestNotificationPort.loadGiftRequestForUpdate(100L)).thenReturn(Optional.of(notification));
         when(saveGiftRequestNotificationPort.save(any(GiftRequestNotification.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         GiftRequestNotificationResponse response = shopService.process(
@@ -233,7 +241,7 @@ class ShopServiceTest {
         GiftRequestNotification notification = pendingGiftRequest();
 
         when(loadUserPort.loadById(2L)).thenReturn(familyUser(2L, FamilyRelation.MOTHER, "엄마"));
-        when(loadGiftRequestNotificationPort.loadGiftRequestById(100L)).thenReturn(Optional.of(notification));
+        when(loadGiftRequestNotificationPort.loadGiftRequestForUpdate(100L)).thenReturn(Optional.of(notification));
         when(saveGiftRequestNotificationPort.save(any(GiftRequestNotification.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         GiftRequestNotificationResponse response = shopService.process(

@@ -1,4 +1,9 @@
-import type { ShopFamilyRecipient, ShopProduct } from '../types/shop';
+import type { ReceivedGiftRequest, ShopFamilyRecipient, ShopProduct } from '../types/shop';
+
+export function getPendingGoalRequest(requests: ReceivedGiftRequest[], productId?: number, childUserId?: number) {
+  return requests.find((request) => request.productId === productId
+    && request.requesterChildUserId === childUserId && request.status === 'pending');
+}
 
 export function getGiftRecipient(
   recipients: ShopFamilyRecipient[],

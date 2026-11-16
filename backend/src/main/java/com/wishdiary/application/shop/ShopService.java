@@ -4,6 +4,8 @@ import com.wishdiary.application.clover.LoadCloverBalancePort;
 import com.wishdiary.application.clover.RecordCloverLedgerPort;
 import com.wishdiary.application.user.LoadUserPort;
 import com.wishdiary.application.group.FamilyConnectionPort;
+import com.wishdiary.application.sharing.SharingGroupPort;
+import com.wishdiary.application.wishgoal.SaveWishGoalPort;
 import com.wishdiary.application.user.LoadedUser;
 import com.wishdiary.domain.clover.CloverLedger;
 import com.wishdiary.domain.clover.CloverReason;
@@ -33,6 +35,8 @@ public class ShopService implements ManageWishProductsUseCase, GetShopProductsUs
     private final LoadGiftRequestNotificationPort loadGiftRequestNotificationPort;
     private final LoadUserPort loadUserPort;
     private final FamilyConnectionPort familyConnections;
+    private final SharingGroupPort groups;
+    private final SaveWishGoalPort goals;
     private final LoadCloverBalancePort loadCloverBalancePort;
     private final RecordCloverLedgerPort recordCloverLedgerPort;
     private final ShopProductResponseMapper shopProductResponseMapper;
@@ -51,9 +55,13 @@ public class ShopService implements ManageWishProductsUseCase, GetShopProductsUs
             ShopProductResponseMapper shopProductResponseMapper,
             GiftRequestResponseMapper giftRequestResponseMapper,
             GiftRequestNotificationResponseMapper giftRequestNotificationResponseMapper,
-            DecodeShopPhotoPort photos
+            DecodeShopPhotoPort photos,
+            SharingGroupPort groups,
+            SaveWishGoalPort goals
     ) {
         this.photos = photos;
+        this.groups = groups;
+        this.goals = goals;
         this.loadShopProductPort = loadShopProductPort;
         this.saveShopProductPort = saveShopProductPort;
         this.saveGiftRequestNotificationPort = saveGiftRequestNotificationPort;
@@ -116,6 +124,7 @@ public class ShopService implements ManageWishProductsUseCase, GetShopProductsUs
     public GiftRequestResponse request(Long childUserId, RequestGiftRequest request) {
         LoadedUser childUser = loadUserPort.loadById(childUserId);
         validateChildUser(childUser);
+        groups.lockOwner(childUserId);
 
         ShopProduct product = loadShopProductPort.loadById(request.productId())
                 .filter(candidate -> candidate.isAvailableTo(childUserId))
@@ -186,7 +195,7 @@ public class ShopService implements ManageWishProductsUseCase, GetShopProductsUs
             throw new GiftRequestReceiverNotAllowedException();
         }
 
-        GiftRequestNotification notification = loadGiftRequestNotificationPort.loadGiftRequestById(requestId)
+        GiftRequestNotification notification = loadGiftRequestNotificationPort.loadGiftRequestForUpdate(requestId)
                 .orElseThrow(() -> new GiftRequestNotFoundException(requestId));
         if (!familyUserId.equals(notification.getReceiverFamilyUserId())) {
             throw new GiftRequestReceiverNotAllowedException();
@@ -198,6 +207,9 @@ public class ShopService implements ManageWishProductsUseCase, GetShopProductsUs
         };
         GiftRequestNotification saved = saveGiftRequestNotificationPort.save(processed);
         refundCloverIfRejected(saved);
+        if (saved.getStatus() == GiftRequestStatus.APPROVED) {
+            goals.completeMatchingGoal(saved.getRequesterChildUserId(), saved.getProductId());
+        }
         return giftRequestNotificationResponseMapper.toResponse(saved);
     }
 

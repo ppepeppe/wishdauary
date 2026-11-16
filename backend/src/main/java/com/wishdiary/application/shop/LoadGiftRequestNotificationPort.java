@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface LoadGiftRequestNotificationPort {
 
-    Optional<GiftRequestNotification> loadGiftRequestById(Long requestId);
+    Optional<GiftRequestNotification> loadGiftRequestForUpdate(Long requestId);
 
     List<GiftRequestNotification> loadAllByReceiverFamilyUserId(Long familyUserId);
 

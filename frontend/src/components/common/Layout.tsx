@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { getAuthSession } from '../../services/session/authSession';
 import { fetchProductPricingRequests, fetchReceivedGiftRequests, fetchSentGiftRequests } from '../../services/api/shopApi';
 import NavIcon, { type NavIconName } from './NavIcon';
+import { GIFT_REQUESTS_CHANGED_EVENT } from '../../constants/events';
 import styles from './Layout.module.css';
 
 const childNavItems: { to: string; label: string; icon: NavIconName; end: boolean; isPrimary?: boolean }[] = [
@@ -31,8 +32,10 @@ function Layout() {
 
   useEffect(() => {
     let ignore = false;
+    let version = 0;
 
     async function loadGiftBadgeCount() {
+      const current = ++version;
       if (!authSession) {
         setGiftBadgeCount(0);
         return;
@@ -41,18 +44,18 @@ function Layout() {
       try {
         if (authSession.appRole === 'family') {
           const [requests, pricing] = await Promise.all([fetchReceivedGiftRequests(), fetchProductPricingRequests()]);
-          if (!ignore) {
+          if (!ignore && current === version) {
             setGiftBadgeCount(requests.filter((request) => request.status === 'pending').length + pricing.length);
           }
           return;
         }
 
         const requests = await fetchSentGiftRequests();
-        if (!ignore) {
+        if (!ignore && current === version) {
           setGiftBadgeCount(requests.filter((request) => request.status === 'approved' || request.status === 'rejected').length);
         }
       } catch {
-        if (!ignore) {
+        if (!ignore && current === version) {
           setGiftBadgeCount(0);
         }
       }
@@ -61,10 +64,12 @@ function Layout() {
     void loadGiftBadgeCount();
     const refresh = () => void loadGiftBadgeCount();
     window.addEventListener('focus', refresh);
+    window.addEventListener(GIFT_REQUESTS_CHANGED_EVENT, refresh);
 
     return () => {
       ignore = true;
       window.removeEventListener('focus', refresh);
+      window.removeEventListener(GIFT_REQUESTS_CHANGED_EVENT, refresh);
     };
   }, [authSession?.appRole, authSession?.userId, location.pathname]);
 

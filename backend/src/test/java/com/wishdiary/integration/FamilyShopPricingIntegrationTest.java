@@ -94,6 +94,84 @@ class FamilyShopPricingIntegrationTest {
     }
 
     @Test
+    void childEarnsCloversForAPricedWishThenRedeemsItWithoutBeingChargedAgainOnApproval() throws Exception {
+        JsonNode child = signup("child"), family = signup("family");
+        connect(child, family);
+        long productId = call(post("/api/v1/shop/wish-requests"), child, Map.of("title", "모으는 선물", "description", "갖고 싶어요",
+                "receiverFamilyUserId", id(family)), 201).get("productId").asLong();
+        price(family, productId, 2, 200);
+        assertEquals(2, call(put("/api/v1/wish-goals/me"), child, Map.of("productId", productId), 200).get("remainingClovers").asInt());
+        earnClover(child);
+        redeem(child, family, productId, 400);
+        assertBalance(child, 1);
+        assertEquals(0, call(get("/api/v1/shop/gift-requests/sent"), child, null, 200).size());
+        earnClover(child);
+        assertEquals(0, call(get("/api/v1/wish-goals/me"), child, null, 200).get("remainingClovers").asInt());
+        JsonNode gift = redeem(child, family, productId, 201);
+        assertEquals(2, gift.get("cloverPrice").asInt());
+        assertBalance(child, 0);
+        price(family, productId, 5, 200);
+        long giftId = gift.get("notificationId").asLong();
+        JsonNode approved = call(patch("/api/v1/shop/gift-requests/" + giftId), family, Map.of("action", "APPROVE"), 200);
+        assertEquals("approved", approved.get("status").asText());
+        assertEquals(2, approved.get("cloverPrice").asInt());
+        assertTrue(call(get("/api/v1/wish-goals/me"), child, null, 200).isNull());
+        assertBalance(child, 0);
+        call(patch("/api/v1/shop/gift-requests/" + giftId), family, Map.of("action", "REJECT"), 409);
+        assertBalance(child, 0);
+        assertEquals("approved", call(get("/api/v1/shop/gift-requests/sent"), child, null, 200).get(0).get("status").asText());
+    }
+
+    @Test
+    void rejectedRedemptionsRefundOnceAndCanBeRequestedAgain() throws Exception {
+        JsonNode child = signup("child"), family = signup("family");
+        connect(child, family);
+        long productId = customProduct(child);
+        price(family, productId, 1, 200);
+        call(put("/api/v1/wish-goals/me"), child, Map.of("productId", productId), 200);
+        earnClover(child);
+        long giftId = redeem(child, family, productId, 201).get("notificationId").asLong();
+        assertBalance(child, 0);
+        call(patch("/api/v1/shop/gift-requests/" + giftId), family, Map.of("action", "REJECT"), 200);
+        assertBalance(child, 1);
+        assertEquals(productId, call(get("/api/v1/wish-goals/me"), child, null, 200).get("productId").asLong());
+        call(patch("/api/v1/shop/gift-requests/" + giftId), family, Map.of("action", "REJECT"), 409);
+        assertBalance(child, 1);
+        JsonNode retry = redeem(child, family, productId, 201);
+        assertNotEquals(giftId, retry.get("notificationId").asLong());
+        assertBalance(child, 0);
+        assertEquals(1, database.queryForObject("select count(*) from clover_ledgers where user_id=? and reason='GIFT_REQUEST_REFUND'", Integer.class, id(child)));
+    }
+
+    @Test
+    void approvingAnOlderRequestDoesNotClearADifferentGoalChosenLater() throws Exception {
+        JsonNode child = signup("child"), family = signup("family");
+        connect(child, family);
+        long requested = customProduct(child), nextGoal = customProduct(child);
+        price(family, requested, 1, 200);
+        price(family, nextGoal, 2, 200);
+        earnClover(child);
+        long giftId = redeem(child, family, requested, 201).get("notificationId").asLong();
+        call(put("/api/v1/wish-goals/me"), child, Map.of("productId", nextGoal), 200);
+        call(patch("/api/v1/shop/gift-requests/" + giftId), family, Map.of("action", "APPROVE"), 200);
+        assertEquals(nextGoal, call(get("/api/v1/wish-goals/me"), child, null, 200).get("productId").asLong());
+    }
+
+    private void earnClover(JsonNode child) throws Exception {
+        call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", "private",
+                "writtenDate", LocalDate.now().toString()), 201);
+    }
+
+    private JsonNode redeem(JsonNode child, JsonNode family, long productId, int expected) throws Exception {
+        return call(post("/api/v1/shop/gift-requests"), child, Map.of("productId", productId,
+                "receiverFamilyUserId", id(family), "message", "모은 클로버로 부탁해요"), expected);
+    }
+
+    private void assertBalance(JsonNode child, int expected) throws Exception {
+        assertEquals(expected, call(get("/api/v1/clovers/balance"), child, null, 200).get("balance").asInt());
+    }
+
+    @Test
     void siblingsShareTheCatalogButTheirWishProductsStaySeparate() throws Exception {
         JsonNode first = signup("child"), second = signup("child"), family = signup("family");
         connect(first, family);

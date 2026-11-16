@@ -21,7 +21,7 @@ function formatDate(value: string) {
 }
 
 const STATUS_META: Record<string, { label: string; className: 'statusPending' | 'statusApproved' | 'statusRejected' }> = {
-  approved: { label: '가족이 좋아했어요', className: 'statusApproved' },
+  approved: { label: '선물 요청 승인됨', className: 'statusApproved' },
   rejected: { label: '클로버가 돌아왔어요', className: 'statusRejected' },
   pending: { label: '기다리는 중', className: 'statusPending' },
 };
@@ -114,6 +114,7 @@ function ShopSentRequestsPage() {
                     <p className={styles.message}>{request.message}</p>
                   </details>
                   <p className={styles.date}>{formatDate(request.createdAt)}</p>
+                  {request.status === 'approved' ? <p className={styles.date}>가족이 요청을 승인했어요. 선물은 가족에게 받아 주세요.</p> : null}
                 </article>
               );
             })}

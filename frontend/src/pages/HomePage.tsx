@@ -11,6 +11,9 @@ import { formatKoreanDate, getTodayDateInKorea } from '../constants/date';
 import { EMOTIONS } from '../constants/emotion';
 import { useHomeData } from '../hooks/useHomeData';
 import { useWishGoal } from '../hooks/useWishGoal';
+import { useAsyncData } from '../hooks/useAsyncData';
+import { fetchSentGiftRequests } from '../services/api/shopApi';
+import { getPendingGoalRequest } from '../utils/giftRequest';
 import { fetchMyProfile } from '../services/api/userApi';
 import { getAuthSession } from '../services/session/authSession';
 import type { DiaryEmotion } from '../types/diary';
@@ -29,6 +32,7 @@ function HomePage() {
   const locationState = (location.state ?? null) as HomePageLocationState | null;
   const { data, isLoading, error, refetch } = useHomeData();
   const { goal } = useWishGoal();
+  const { data: giftRequests } = useAsyncData(fetchSentGiftRequests, true);
   const [showSavedMessage, setShowSavedMessage] = useState(Boolean(locationState?.showDiarySavedMessage));
   const [selectedEmotion, setSelectedEmotion] = useState<DiaryEmotion>('happy');
   const [profile, setProfile] = useState<MyProfile | null>(null);
@@ -73,8 +77,9 @@ function HomePage() {
   }, [showSavedMessage]);
 
   const nickname = profile?.nickname?.trim() || authSession?.nickname?.trim() || '친구';
-  const goalTarget = goal?.targetCloverPrice ?? 0;
-  const currentGoal = goal ? Math.min(goalTarget, goal.currentCloverBalance) : 0;
+  const pendingGoalRequest = getPendingGoalRequest(giftRequests ?? [], goal?.productId, authSession?.userId);
+  const goalTarget = pendingGoalRequest?.cloverPrice ?? goal?.targetCloverPrice ?? 0;
+  const currentGoal = pendingGoalRequest ? goalTarget : goal ? Math.min(goalTarget, goal.currentCloverBalance) : 0;
   const progressRatio = goalTarget > 0 ? Math.min(100, (currentGoal / goalTarget) * 100) : 0;
   const goalRemaining = goal?.remainingClovers ?? 0;
 
@@ -217,7 +222,7 @@ function HomePage() {
                 <p className={styles.goalName}>{goal.productTitle}</p>
               </div>
               <span className={styles.goalBadge}>
-                {goalRemaining === 0 ? '달성!' : `${goalRemaining} 클로버 남음`}
+                {pendingGoalRequest ? '선물 요청 중' : goalRemaining === 0 ? '달성!' : `${goalRemaining} 클로버 남음`}
               </span>
             </div>
 
@@ -236,14 +241,14 @@ function HomePage() {
                   <div className={styles.progressFill} style={{ width: `${progressRatio}%` }} />
                 </div>
                 <p className={styles.goalHelper}>
-                  {goalRemaining === 0
+                  {pendingGoalRequest ? '클로버로 부탁을 보냈어. 가족의 답변을 기다려 보자!' : goalRemaining === 0
                     ? '이제 가족에게 부탁할 수 있어!'
                     : `${goalRemaining} 클로버만 더 모으면 돼!`}
                 </p>
               </div>
             </div>
-            <Link to={`/shop/products/${goal.productId}`} className={styles.goalDetailLink}>
-              목표 선물 보러 가기
+            <Link to={pendingGoalRequest ? '/shop/requests' : `/shop/products/${goal.productId}`} className={styles.goalDetailLink}>
+              {pendingGoalRequest ? '선물 요청 내역 보기' : '목표 선물 보러 가기'}
             </Link>
           </>
         ) : (
