@@ -87,6 +87,7 @@ function HomePage() {
   const goalRemaining = goal?.remainingClovers ?? 0;
 
   function handleWriteNow() {
+    if (data?.hasTodayDiary) { navigate(data.todayDiaryId ? `/diaries/${data.todayDiaryId}` : '/diaries'); return; }
     navigate('/diaries/write', {
       state: {
         preselectedEmotion: selectedEmotion,
@@ -165,7 +166,7 @@ function HomePage() {
         </div>
 
         <Button type="button" className={styles.writeButton} fullWidth size="lg" onClick={handleWriteNow}>
-          일기 쓰기
+          {data?.hasTodayDiary ? '오늘 일기 보기·수정' : '일기 쓰기'}
           <NavIcon name="arrowRight" />
         </Button>
 

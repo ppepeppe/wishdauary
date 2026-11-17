@@ -29,6 +29,7 @@ public class CreateDiaryService implements CreateDiaryUseCase {
     private final CreateDiaryResponseMapper createDiaryResponseMapper;
     private final DecodeDiaryPhotoPort photoDecoder;
     private final DiaryPhotoPort photos;
+    private final LoadDiaryQueryPort queries;
 
     public CreateDiaryService(
             DiaryRepository diaryRepository,
@@ -39,7 +40,8 @@ public class CreateDiaryService implements CreateDiaryUseCase {
             CreateDiaryResponseMapper createDiaryResponseMapper,
             DiaryAudiencePolicy audiencePolicy,
             DecodeDiaryPhotoPort photoDecoder,
-            DiaryPhotoPort photos
+            DiaryPhotoPort photos,
+            LoadDiaryQueryPort queries
     ) {
         this.diaryRepository = diaryRepository;
         this.recordCloverLedgerPort = recordCloverLedgerPort;
@@ -50,6 +52,7 @@ public class CreateDiaryService implements CreateDiaryUseCase {
         this.createDiaryResponseMapper = createDiaryResponseMapper;
         this.photoDecoder = photoDecoder;
         this.photos = photos;
+        this.queries = queries;
     }
 
     @Override
@@ -59,6 +62,9 @@ public class CreateDiaryService implements CreateDiaryUseCase {
         createDiaryValidator.validateAuthorCanCreate(author);
         var photo = photoDecoder.decode(request.imageData());
         updateUserStreakPort.lockUser(authorId);
+        if (queries.existsByAuthorIdAndWrittenDate(authorId, request.writtenDate())) {
+            throw new com.wishdiary.domain.diary.DiaryAlreadyWrittenTodayException();
+        }
 
         Diary diary = createDiary(author, request);
         audiencePolicy.validateSelection(diary);

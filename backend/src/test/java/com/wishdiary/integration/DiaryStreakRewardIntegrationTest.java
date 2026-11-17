@@ -29,16 +29,16 @@ class DiaryStreakRewardIntegrationTest {
     private final LocalDate start = LocalDate.now().minusDays(30);
 
     @Test
-    void milestonesPayOneTwoAndThreeWhileMultipleEntriesCountAsOneDay() throws Exception {
+    void milestonesPayOneTwoAndThreeAndRejectDuplicateEntries() throws Exception {
         JsonNode child = signup();
         for (int day = 0; day < 8; day++) {
             create(child, start.plusDays(day));
-            create(child, start.plusDays(day));
+            assertEquals(409, createStatus(child, start.plusDays(day)));
         }
         assertBonus(child, "STREAK_3", 1, 1);
         assertBonus(child, "STREAK_5", 1, 2);
         assertBonus(child, "STREAK_7", 1, 3);
-        assertEquals(22, balance(child)); // 16 entries + 1 + 2 + 3
+        assertEquals(14, balance(child)); // 8 entries + 1 + 2 + 3
         assertEquals(8, streak(child));
     }
 
@@ -59,17 +59,17 @@ class DiaryStreakRewardIntegrationTest {
         JsonNode child = signup();
         writeDays(child, start, 3);
         create(child, start.minusDays(1));
-        create(child, start.plusDays(1));
-        create(child, start.plusDays(2));
+        assertEquals(409, createStatus(child, start.plusDays(1)));
+        assertEquals(409, createStatus(child, start.plusDays(2)));
         assertEquals(3, streak(child));
         assertBonus(child, "STREAK_3", 1, 1);
-        assertEquals(7, balance(child));
+        assertEquals(5, balance(child));
         String latest = database.queryForObject("select last_written_date from user_stats where user_id=?", String.class, id(child));
         assertEquals(start.plusDays(2).toString(), latest);
     }
 
     @Test
-    void concurrentFifthDayEntriesAllSaveButIssueTheBonusOnlyOnce() throws Exception {
+    void concurrentFifthDayEntriesSaveExactlyOneDiaryAndOneBonus() throws Exception {
         JsonNode child = signup();
         writeDays(child, start, 4);
         CyclicBarrier barrier = new CyclicBarrier(8);
@@ -79,12 +79,17 @@ class DiaryStreakRewardIntegrationTest {
                 barrier.await(10, TimeUnit.SECONDS);
                 return createStatus(child, start.plusDays(4));
             }));
-            for (var result : results) assertEquals(201, result.get(20, TimeUnit.SECONDS));
+            int saved = 0, conflicts = 0;
+            for (var result : results) {
+                int status = result.get(20, TimeUnit.SECONDS);
+                if (status == 201) saved++; else if (status == 409) conflicts++; else fail("Unexpected status: " + status);
+            }
+            assertEquals(1, saved); assertEquals(7, conflicts);
         }
         assertEquals(5, streak(child));
         assertBonus(child, "STREAK_3", 1, 1);
         assertBonus(child, "STREAK_5", 1, 2);
-        assertEquals(15, balance(child));
+        assertEquals(8, balance(child));
     }
 
     @Test

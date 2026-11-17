@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
 import DiaryForm from '../components/diary/DiaryForm';
@@ -23,7 +23,7 @@ function DiaryWritePage() {
   const [error, setError] = useState<string | null>(null);
   const [writtenDate, setWrittenDate] = useState(getTodayDateInKorea);
   const loadDiaryStatus = useCallback(() => fetchDiaryStatus(writtenDate), [writtenDate]);
-  const { data: dateStatus, isLoading: isStatusLoading, error: statusError } = useAsyncData(loadDiaryStatus);
+  const { data: dateStatus, isLoading: isStatusLoading, error: statusError, refetch: refreshStatus } = useAsyncData(loadDiaryStatus);
   const selectedDateLabel = writtenDate === getTodayDateInKorea() ? '오늘' : formatKoreanDate(writtenDate, false);
 
   async function handleSubmit(payload: Parameters<typeof createDiary>[0]) {
@@ -39,7 +39,7 @@ function DiaryWritePage() {
         },
       });
     } catch (caughtError) {
-      console.error(caughtError);
+      await refreshStatus();
       setError(caughtError instanceof Error ? caughtError.message : DEFAULT_SAVE_ERROR_MESSAGE);
     } finally {
       setIsSubmitting(false);
@@ -52,12 +52,13 @@ function DiaryWritePage() {
         <p className={styles.rewardHint}>일기 저장 시 클로버 1개</p>
         {isStatusLoading ? <StatusMessage kind="loading" message="선택한 날짜의 작성 상태를 확인하고 있어요." /> : null}
         {statusError ? <StatusMessage kind="error" message={statusError} /> : null}
-        {dateStatus?.exists ? <p className={styles.existingCount}>{selectedDateLabel} 일기 {dateStatus.count}개 작성</p> : null}
+        {dateStatus?.exists ? <p className={styles.existingCount}>{selectedDateLabel} 일기는 이미 작성했어요. <Link to={`/diaries/${dateStatus.diaryId}`}>기존 일기 보기·수정 →</Link></p> : null}
       </div>
       {error ? <StatusMessage kind="error" message={error} /> : null}
       <DiaryForm
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        saveBlocked={isStatusLoading || Boolean(statusError) || Boolean(dateStatus?.exists)}
         initialEmotion={locationState?.preselectedEmotion ?? null}
         writtenDate={writtenDate}
         onWrittenDateChange={setWrittenDate}

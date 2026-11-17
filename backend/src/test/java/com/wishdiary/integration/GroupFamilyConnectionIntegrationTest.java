@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 @Transactional
 class GroupFamilyConnectionIntegrationTest {
+    private int fixtureDay;
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
 
@@ -137,7 +138,7 @@ class GroupFamilyConnectionIntegrationTest {
 
     private long write(JsonNode child, String scope, List<Long> groups) throws Exception {
         return call(post("/api/v1/diaries"), child, Map.of("content", "오늘의 기록", "visibilityScope", scope,
-                "sharingGroupIds", groups, "writtenDate", LocalDate.now().toString()), 201).get("diaryId").asLong();
+                "sharingGroupIds", groups, "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()), 201).get("diaryId").asLong();
     }
 
     private JsonNode signup(String role, String nickname) throws Exception {

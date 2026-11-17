@@ -45,6 +45,8 @@ class CreateDiaryServiceTest {
 
     private CreateDiaryService createDiaryService;
 
+    @Mock private LoadDiaryQueryPort queries;
+
     @BeforeEach
     void setUp() {
         CreateDiaryValidator createDiaryValidator = new CreateDiaryValidator();
@@ -58,7 +60,7 @@ class CreateDiaryServiceTest {
                 createDiaryResponseMapper,
                 new DiaryAudiencePolicy(org.mockito.Mockito.mock(com.wishdiary.application.sharing.SharingGroupPort.class), org.mockito.Mockito.mock(com.wishdiary.application.group.FamilyConnectionPort.class)),
                 org.mockito.Mockito.mock(DecodeDiaryPhotoPort.class),
-                org.mockito.Mockito.mock(DiaryPhotoPort.class)
+                org.mockito.Mockito.mock(DiaryPhotoPort.class), queries
         );
     }
 
@@ -77,45 +79,14 @@ class CreateDiaryServiceTest {
     }
 
     @Test
-    void createAllowsMultipleDiariesOnSameWrittenDate() {
-        CreateDiaryRequest request = new CreateDiaryRequest(
-                "today diary",
-                "happy",
-                "private",
-                LocalDate.of(2026, 4, 11)
-        );
-
-        Diary firstSavedDiary = Diary.reconstitute(
-                10L,
-                1L,
-                "today diary",
-                DiaryEmotion.HAPPY,
-                DiaryVisibilityScope.PRIVATE,
-                LocalDate.of(2026, 4, 11),
-                java.time.LocalDateTime.of(2026, 4, 11, 9, 0)
-        );
-        Diary secondSavedDiary = Diary.reconstitute(
-                11L,
-                1L,
-                "today diary",
-                DiaryEmotion.HAPPY,
-                DiaryVisibilityScope.PRIVATE,
-                LocalDate.of(2026, 4, 11),
-                java.time.LocalDateTime.of(2026, 4, 11, 10, 0)
-        );
-
+    void createRejectsAnExistingDateBeforeSavingOrAwardingClovers() {
+        var date = LocalDate.of(2026, 4, 11);
+        var request = new CreateDiaryRequest("today diary", "happy", "private", date);
         when(loadUserPort.loadById(1L)).thenReturn(new LoadedUser(1L, null, null, AppRole.CHILD, 11L, 100L, GroupMemberRole.CHILD, null, null));
-        when(diaryRepository.save(any(Diary.class))).thenReturn(firstSavedDiary, secondSavedDiary);
-        when(recordCloverLedgerPort.record(any(CloverLedger.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(updateUserStreakPort.loadUserStreak(1L)).thenReturn(java.util.Optional.empty());
-        when(updateUserStreakPort.saveUserStreak(any(UserStreakStats.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        CreateDiaryResponse firstResponse = createDiaryService.create(1L, request);
-        CreateDiaryResponse secondResponse = createDiaryService.create(1L, request);
-
-        assertEquals(10L, firstResponse.diaryId());
-        assertEquals(11L, secondResponse.diaryId());
-        verify(diaryRepository, org.mockito.Mockito.times(2)).save(any(Diary.class));
+        when(queries.existsByAuthorIdAndWrittenDate(1L, date)).thenReturn(true);
+        assertThrows(com.wishdiary.domain.diary.DiaryAlreadyWrittenTodayException.class, () -> createDiaryService.create(1L, request));
+        verify(diaryRepository, never()).save(any());
+        verify(recordCloverLedgerPort, never()).record(any());
     }
 
     @Test

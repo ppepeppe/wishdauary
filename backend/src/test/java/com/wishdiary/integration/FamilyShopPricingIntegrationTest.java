@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 @Transactional
 class FamilyShopPricingIntegrationTest {
+    private int fixtureDay;
     @Autowired org.springframework.jdbc.core.JdbcTemplate database;
     @Autowired jakarta.persistence.EntityManager entities;
     @Autowired MockMvc mvc;
@@ -74,7 +75,7 @@ class FamilyShopPricingIntegrationTest {
         JsonNode child = signup("child"), family = signup("family");
         connect(child, family);
         call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", "family",
-                "writtenDate", LocalDate.now().toString()), 201);
+                "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()), 201);
         long product = customProduct(child);
         price(family, product, 1, 200);
         JsonNode gift = call(post("/api/v1/shop/gift-requests"), child,
@@ -84,7 +85,7 @@ class FamilyShopPricingIntegrationTest {
         JsonNode rejected = call(patch("/api/v1/shop/gift-requests/" + gift.get("notificationId").asLong()),
                 family, Map.of("action", "REJECT"), 200);
         assertEquals(1, rejected.get("cloverPrice").asInt());
-        JsonNode summary = call(get("/api/v1/users/home-summary").param("date", LocalDate.now().toString()), child, null, 200);
+        JsonNode summary = call(get("/api/v1/users/home-summary").param("date", LocalDate.now().minusDays(2L * fixtureDay++).toString()), child, null, 200);
         assertEquals(1, summary.get("cloverBalance").asDouble());
     }
 
@@ -159,7 +160,7 @@ class FamilyShopPricingIntegrationTest {
 
     private void earnClover(JsonNode child) throws Exception {
         call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", "private",
-                "writtenDate", LocalDate.now().toString()), 201);
+                "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()), 201);
     }
 
     private JsonNode redeem(JsonNode child, JsonNode family, long productId, int expected) throws Exception {
@@ -222,7 +223,7 @@ class FamilyShopPricingIntegrationTest {
 
     private JsonNode sendGift(JsonNode child, JsonNode family) throws Exception {
         call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", "family",
-                "writtenDate", LocalDate.now().toString()), 201);
+                "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()), 201);
         long product = customProduct(child);
         price(family, product, 1, 200);
         return call(post("/api/v1/shop/gift-requests"), child,
@@ -304,7 +305,7 @@ class FamilyShopPricingIntegrationTest {
         entities.flush(); entities.clear();
         assertEquals(imageUrl, find(call(get("/api/v1/shop/products"), child, null, 200), productId).get("imageUrl").asText());
         call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", "family",
-                "writtenDate", LocalDate.now().toString()), 201);
+                "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()), 201);
         long requestId = call(post("/api/v1/shop/gift-requests"), child, Map.of("productId", productId,
                 "receiverFamilyUserId", id(mother), "message", "부탁해요"), 201).get("notificationId").asLong();
         entities.flush(); entities.clear();

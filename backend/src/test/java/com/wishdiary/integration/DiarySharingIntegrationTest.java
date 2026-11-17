@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class DiarySharingIntegrationTest {
+    private int fixtureDay;
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
     @Autowired ChildSignupUseCase signup;
@@ -224,7 +225,7 @@ class DiarySharingIntegrationTest {
     }
 
     private Map<String, Object> diaryBody(String scope, List<Long> groupIds) {
-        return Map.of("content", "마음 기록", "visibilityScope", scope, "sharingGroupIds", groupIds, "writtenDate", LocalDate.now().toString());
+        return Map.of("content", "마음 기록", "visibilityScope", scope, "sharingGroupIds", groupIds, "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString());
     }
 
     private void assertFeedContains(SignupResponse viewer, long diaryId, boolean expected) throws Exception {

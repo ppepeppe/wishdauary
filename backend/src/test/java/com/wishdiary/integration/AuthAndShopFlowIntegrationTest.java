@@ -26,6 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class AuthAndShopFlowIntegrationTest {
+    private int fixtureDay;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -278,7 +279,7 @@ class AuthAndShopFlowIntegrationTest {
                         "content", content,
                         "emotion", "happy",
                         "visibilityScope", "family",
-                        "writtenDate", LocalDate.now().toString()
+                        "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()
                 )
         );
         assertNotNull(data(response).get("diaryId"));

@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 @Transactional
 class FamilyApprovalIntegrationTest {
+    private int fixtureDay;
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
     private static final String BASE = "/api/v1/family-connections";
@@ -87,7 +88,7 @@ class FamilyApprovalIntegrationTest {
         call(post("/api/v1/reactions/comments"), family, Map.of("diaryId", diary, "content", "응원해요"), 200);
         assertEquals(1, call(get("/api/v1/reactions/feed"), child, null, 200).size());
         call(post("/api/v1/reactions/comments"), family, Map.of("diaryId", privateDiary, "content", "볼 수 없어요"), 403);
-        call(post("/api/v1/diaries"), family, Map.of("content", "어른 일기", "visibilityScope", "public", "writtenDate", LocalDate.now().toString()), 403);
+        call(post("/api/v1/diaries"), family, Map.of("content", "어른 일기", "visibilityScope", "public", "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()), 403);
         JsonNode uploaded = call(post("/api/v1/shop/family-products"), family, product(child), 201);
         assertEquals("family", uploaded.get("source").asText());
         assertTrue(call(get("/api/v1/shop/products"), child, null, 200).findValues("title").stream().anyMatch(value -> value.asText().equals("가족 선물")));
@@ -136,7 +137,7 @@ class FamilyApprovalIntegrationTest {
         return call(patch(BASE + "/requests/" + id), user, Map.of("action", action), status);
     }
     private long write(JsonNode child, String scope) throws Exception {
-        return call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", scope, "writtenDate", LocalDate.now().toString()), 201).get("diaryId").asLong();
+        return call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", scope, "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()), 201).get("diaryId").asLong();
     }
     private JsonNode signup(String role, String nickname) throws Exception {
         var body = new java.util.HashMap<String,Object>(Map.of("email", UUID.randomUUID()+"@test.com", "password", "password", "nickname", nickname));
