@@ -80,7 +80,7 @@ class ShopServiceTest {
                 familyConnections,
                 loadCloverBalancePort,
                 recordCloverLedgerPort,
-                new ShopProductResponseMapper(),
+                new ShopProductResponseMapper(loadUserPort),
                 new GiftRequestResponseMapper(),
                 new GiftRequestNotificationResponseMapper(),
                 data -> null,

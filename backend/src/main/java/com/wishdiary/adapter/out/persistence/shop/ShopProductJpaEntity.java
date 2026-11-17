@@ -19,6 +19,12 @@ public class ShopProductJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private boolean deleted;
+
+    @Column
+    private Long createdByUserId;
+
     @Column
     private Long childUserId;
 
@@ -86,6 +92,10 @@ public class ShopProductJpaEntity {
         this.imageData = data;
         return this;
     }
+
+    public ShopProductJpaEntity withCreator(Long userId) { this.createdByUserId = userId; return this; }
+
+    public Long getCreatedByUserId() { return createdByUserId; }
 
     public byte[] getImageData() { return imageData; }
 

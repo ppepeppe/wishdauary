@@ -20,6 +20,8 @@ interface ShopProductApiItem {
   cloverPrice?: number;
   purchasePriceWon?: number | null;
   source?: string;
+  postedByName?: string | null;
+  pricedByName?: string | null;
   childUserId?: number | null;
   receiverFamilyUserId?: number | null;
   createdAt?: string;
@@ -63,6 +65,8 @@ function normalizeProduct(item: ShopProductApiItem): ShopProduct {
     cloverPrice: Math.max(0, item.cloverPrice ?? 0),
     purchasePriceWon: item.purchasePriceWon ?? null,
     source: item.source ?? 'custom',
+    postedByName: item.postedByName?.trim() || null,
+    pricedByName: item.pricedByName?.trim() || null,
     childUserId: item.childUserId ?? null,
     receiverFamilyUserId: item.receiverFamilyUserId ?? null,
     createdAt: item.createdAt,

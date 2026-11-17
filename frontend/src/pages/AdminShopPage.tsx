@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
-import ProductArtwork from '../components/shop/ProductArtwork';
+import CatalogProductManager from '../components/shop/CatalogProductManager';
 import ShopPhotoPicker from '../components/shop/ShopPhotoPicker';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { createCatalogProduct, fetchCatalogProducts } from '../services/api/adminShopApi';
-import { formatWon } from '../utils/currency';
 import { isSupportedProductUrl, normalizeProductUrl } from '../utils/productUrl';
 import styles from './AdminShopPage.module.css';
 
@@ -50,7 +49,7 @@ export default function AdminShopPage() {
 
   return <PageSection title="공통 상점 상품 관리">
     <div className={styles.container}>
-      <Link to="/me" className={styles.backLink}>← 마이페이지</Link>
+      <Link to="/family-shop" className={styles.backLink}>← 상점 관리</Link>
       {isLoading ? <StatusMessage kind="loading" message="공통 상점 상품을 불러오고 있어요." /> : null}
       {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => void refetch()}>다시 불러오기</Button></div> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
@@ -77,13 +76,7 @@ export default function AdminShopPage() {
       </form> : null}
       {products?.length === 0 ? <StatusMessage kind="empty" message="첫 공통 상품을 등록해 보세요." /> : null}
       <div className={styles.products} aria-label="공통 상품 목록" role="region">
-        {products?.map((product) => <article key={product.productId} className={styles.product}>
-          <ProductArtwork title={product.title} imageUrl={product.imageUrl} className={styles.photo} />
-          <h3>{product.title}</h3><strong>{product.cloverPrice} 클로버</strong>
-          {formatWon(product.purchasePriceWon) ? <span className={styles.purchasePrice}>{formatWon(product.purchasePriceWon)}</span> : null}
-          <p>{product.description}</p>
-          {product.productUrl ? <a href={product.productUrl} target="_blank" rel="noreferrer">쇼핑몰 보기 ↗</a> : null}
-        </article>)}
+        {products?.map((product) => <CatalogProductManager key={product.productId} product={product} onUpdated={async () => { await refetch(); }} />)}
       </div>
     </div>
   </PageSection>;

@@ -14,9 +14,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s-2) var(--s-3);
+  gap: var(--s-2);
   flex-wrap: wrap;
-  padding: var(--s-3) var(--s-4);
+  padding: var(--s-2) var(--s-3);
   border: 1px solid var(--shop-card-border);
   border-radius: var(--radius-group);
   background: var(--brand-tint);
@@ -26,10 +26,10 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: var(--s-3);
+  gap: var(--s-2);
 }
 
-.balanceInfo > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-1) var(--s-3); min-width: 0; }
+.balanceInfo > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-1) var(--s-2); min-width: 0; }
 
 .balanceIcon {
   display: grid;
@@ -67,13 +67,13 @@
 .historyToggle {
   display: flex;
   align-items: center;
-  gap: var(--s-3);
+  gap: var(--s-1);
   min-height: 44px;
-  border: 1px solid var(--shop-card-border);
+  border: 0;
   border-radius: var(--radius-control);
-  padding: var(--s-2) var(--s-3);
+  padding: var(--s-2) var(--s-1);
   color: var(--ink-muted);
-  background: rgba(255, 255, 255, 0.65);
+  background: transparent;
   font-size: var(--text-xs);
 }
 

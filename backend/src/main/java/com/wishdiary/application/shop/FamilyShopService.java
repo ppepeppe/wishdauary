@@ -53,7 +53,7 @@ public class FamilyShopService implements ManageFamilyShopUseCase {
         }
         return mapper.toResponse(saveProducts.save(ShopProduct.createFamily(request.childUserId(), request.title().trim(),
                 request.description().trim(), request.imageUrl(), request.productUrl(), request.cloverPrice(), request.purchasePriceWon())
-                .withPhoto(photos.decode(request.imageData()))));
+                .withPhoto(photos.decode(request.imageData())).withCreator(familyId)));
     }
     private void requireFamily(Long familyId) {
         if (!users.loadById(familyId).isFamily()) throw new FamilyConnectionAccessDeniedException();

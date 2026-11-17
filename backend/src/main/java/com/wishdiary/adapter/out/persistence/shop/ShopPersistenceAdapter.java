@@ -30,7 +30,7 @@ public class ShopPersistenceAdapter implements LoadShopProductPort, SaveShopProd
 
     @Override
     public List<ShopProduct> loadAll() {
-        return shopProductJpaRepository.findAll()
+        return shopProductJpaRepository.findAllByDeletedFalse()
                 .stream()
                 .sorted(Comparator.comparing(ShopProductJpaEntity::getId))
                 .map(this::toDomain)
@@ -39,7 +39,12 @@ public class ShopPersistenceAdapter implements LoadShopProductPort, SaveShopProd
 
     @Override
     public Optional<ShopProduct> loadById(Long productId) {
-        return shopProductJpaRepository.findById(productId).map(this::toDomain);
+        return shopProductJpaRepository.findByIdAndDeletedFalse(productId).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<ShopProduct> loadForUpdate(Long productId) {
+        return shopProductJpaRepository.findActiveForUpdate(productId).map(this::toDomain);
     }
 
     @Override
@@ -86,7 +91,7 @@ public class ShopPersistenceAdapter implements LoadShopProductPort, SaveShopProd
                 product.getSource(),
                 product.getCreatedAt(),
                 product.getReceiverFamilyUserId()
-        ).withImageData(product.getPhoto() == null ? null : product.getPhoto().bytes());
+        ).withImageData(product.getPhoto() == null ? null : product.getPhoto().bytes()).withCreator(product.getCreatedByUserId());
     }
 
     private ShopProduct toDomain(ShopProductJpaEntity entity) {
@@ -102,7 +107,7 @@ public class ShopPersistenceAdapter implements LoadShopProductPort, SaveShopProd
                 entity.getSource(),
                 entity.getCreatedAt(),
                 entity.getReceiverFamilyUserId()
-        ).withPhoto(entity.getImageData() == null ? null : new ShopPhoto(entity.getImageData()));
+        ).withPhoto(entity.getImageData() == null ? null : new ShopPhoto(entity.getImageData())).withCreator(entity.getCreatedByUserId());
     }
 
     private GiftRequestNotificationJpaEntity toEntity(GiftRequestNotification notification) {

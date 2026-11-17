@@ -3,7 +3,7 @@
 .heading { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); flex-wrap: wrap; }
 .heading h2, .form h2 { margin: 0; font-size: var(--text-md); }
 .heading small { color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }
-.form, .product {
+.form {
   min-width: 0;
   padding: var(--card-padding);
   border: 1px solid var(--card-border);
@@ -17,17 +17,5 @@
 .form textarea { min-height: 100px; resize: vertical; }
 .prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
 .actions { display: flex; gap: var(--s-3); flex-wrap: wrap; }
-.products { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-4); }
-.product { display: grid; align-content: start; gap: var(--s-2); padding: var(--s-3); }
-.product h3, .product p { margin: 0; overflow-wrap: anywhere; }
-.product h3 { font-size: var(--text-sm); }
-.product strong, .product a { color: var(--brand-ink); font-size: var(--text-sm); }
-.product p, .purchasePrice { color: var(--ink-muted); font-size: var(--text-xs); }
-.product a { display: inline-flex; align-items: center; min-height: 44px; }
-.photo { width: 100%; aspect-ratio: 1; border-radius: var(--r-md); }
-.product .photo img { object-fit: contain; }
-@media (max-width: 370px) {
-  .products { gap: var(--s-3); }
-  .product { padding: var(--s-3); }
-  .prices { grid-template-columns: 1fr; }
-}
+.products { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
+@media (max-width: 370px) { .prices { grid-template-columns: 1fr; } }

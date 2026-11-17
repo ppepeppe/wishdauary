@@ -2,6 +2,7 @@ import CardCarousel from '../components/common/CardCarousel';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
+import PageNavigation from '../components/common/PageNavigation';
 import StatusMessage from '../components/common/StatusMessage';
 import Button from '../components/common/Button';
 import ShopPhotoPicker from '../components/shop/ShopPhotoPicker';
@@ -70,6 +71,7 @@ function FamilyShopPage() {
 
   return (
     <PageSection title="상점 관리" actions={data && data.children.length > 0 ? <Button onClick={() => { setShowForm(true); setMessage(null); }}>+ 선물 등록</Button> : null}>
+      <PageNavigation><Link to="/admin/shop">공통 상점 상품 관리 →</Link><Link to="/family-settings">받은 선물 요청 →</Link></PageNavigation>
       <div className={styles.container}>
         {isLoading ? <StatusMessage kind="loading" message="상점을 불러오고 있어요." /> : null}
         {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => void refetch()}>다시 불러오기</Button></div> : null}

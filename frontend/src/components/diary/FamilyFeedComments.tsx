@@ -57,10 +57,11 @@ function FamilyFeedComments({
       <form className={styles.form} onSubmit={handleSubmit}>
         <textarea
           className={styles.input}
-          rows={3}
+          rows={2}
+          aria-label="댓글 내용"
           value={content}
           disabled={isSubmitting}
-          placeholder="따뜻한 한마디를 남겨보세요."
+          placeholder="댓글 남기기"
           onChange={(event) => setContent(event.target.value)}
         />
         <HoverHint

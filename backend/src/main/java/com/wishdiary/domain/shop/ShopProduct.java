@@ -18,6 +18,7 @@ public class ShopProduct {
     private final LocalDateTime createdAt;
     private final Long receiverFamilyUserId;
     private final ShopPhoto photo;
+    private final Long createdByUserId;
 
     private ShopProduct(
             Long id,
@@ -44,6 +45,14 @@ public class ShopProduct {
     private ShopProduct(Long id, Long childUserId, String title, String description, String imageUrl,
             String productUrl, int cloverPrice, Integer purchasePriceWon, ShopProductSource source,
             LocalDateTime createdAt, Long receiverFamilyUserId, ShopPhoto photo) {
+        this(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon,
+                source, createdAt, receiverFamilyUserId, photo, null);
+    }
+
+    private ShopProduct(Long id, Long childUserId, String title, String description, String imageUrl,
+            String productUrl, int cloverPrice, Integer purchasePriceWon, ShopProductSource source,
+            LocalDateTime createdAt, Long receiverFamilyUserId, ShopPhoto photo, Long createdByUserId) {
+        this.createdByUserId = createdByUserId;
         this.photo = photo;
         this.id = id;
         this.childUserId = childUserId;
@@ -134,7 +143,7 @@ public class ShopProduct {
     }
 
     public ShopProduct price(int cloverPrice, Integer purchasePriceWon) {
-        return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon, source, createdAt, receiverFamilyUserId, photo);
+        return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon, source, createdAt, receiverFamilyUserId, photo, createdByUserId);
     }
 
     public static ShopProduct createWish(Long childId, Long receiverId, String title, String description,
@@ -151,8 +160,15 @@ public class ShopProduct {
 
     public ShopProduct withPhoto(ShopPhoto photo) {
         return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice,
-                purchasePriceWon, source, createdAt, receiverFamilyUserId, photo);
+                purchasePriceWon, source, createdAt, receiverFamilyUserId, photo, createdByUserId);
     }
+
+    public ShopProduct withCreator(Long userId) {
+        return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice,
+                purchasePriceWon, source, createdAt, receiverFamilyUserId, photo, userId);
+    }
+
+    public Long getCreatedByUserId() { return createdByUserId; }
 
     public ShopPhoto getPhoto() { return photo; }
 

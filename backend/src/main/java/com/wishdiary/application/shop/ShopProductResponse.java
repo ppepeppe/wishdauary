@@ -13,6 +13,8 @@ public record ShopProductResponse(
         String source,
         Long childUserId,
         LocalDateTime createdAt,
-        Long receiverFamilyUserId
+        Long receiverFamilyUserId,
+        String postedByName,
+        String pricedByName
 ) {
 }

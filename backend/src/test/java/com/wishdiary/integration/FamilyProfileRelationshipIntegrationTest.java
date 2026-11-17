@@ -59,7 +59,7 @@ class FamilyProfileRelationshipIntegrationTest {
         JsonNode profile = call(get("/api/v1/users/me"), family, null, 200);
         assertEquals("큰고모", profile.get("relationLabel").asText());
         assertEquals("OTHER_FAMILY", database.queryForObject("select family_relation from group_members where user_id = ?", String.class, family.get("userId").asLong()));
-        assertEquals("user", profile.get("userRole").asText());
+        assertEquals("admin", profile.get("userRole").asText());
         assertEquals("family", profile.get("appRole").asText());
     }
 

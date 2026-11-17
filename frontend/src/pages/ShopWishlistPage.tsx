@@ -100,7 +100,7 @@ function ShopWishlistPage() {
               </LinkButton>
             </div>
             {myProducts.length > 0 ? (
-              <ShopProductGrid products={myProducts} cloverBalance={data.cloverBalance} hasRecipients={data.recipients.length > 0} showPurchasePrice={false} />
+              <ShopProductGrid products={myProducts} cloverBalance={data.cloverBalance} hasRecipients={data.recipients.length > 0} showPurchasePrice={false} layout="grid" />
             ) : (
               <EmptyState title="아직 등록된 선물이 없어요" description="가족이 클로버를 정한 선물이 여기에 표시됩니다.">
                 <LinkButton to="/shop/requests" variant="neutral">요청 내역 보기</LinkButton>

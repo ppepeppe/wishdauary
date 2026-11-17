@@ -1,0 +1,19 @@
+.product { min-width: 0; padding: var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--card-shadow); }
+.summary { display: flex; align-items: flex-start; gap: var(--s-4); min-width: 0; }
+.photo { width: 80px; height: 80px; flex: 0 0 80px; border-radius: var(--radius-media); }
+.photo img { object-fit: contain; }
+.copy { min-width: 0; display: grid; gap: var(--s-2); }
+.copy h3 { margin: 0; color: var(--ink-strong); font-size: var(--text-sm); font-weight: 600; overflow-wrap: anywhere; }
+.copy strong { display: flex; align-items: center; gap: var(--s-1); color: var(--brand-ink); font-size: var(--text-sm); }
+.copy strong svg { width: 16px; height: 16px; }
+.copy p, .copy small { margin: 0; color: var(--ink-muted); font-size: var(--text-2xs); overflow-wrap: anywhere; }
+.copy p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.actions { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: var(--s-2); margin-top: var(--s-3); }
+.actions > a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink-muted); font-size: var(--text-2xs); }
+.editor { margin-top: var(--s-4); padding-top: var(--s-4); border-top: 1px solid var(--line); }
+.editor fieldset { display: grid; gap: var(--s-4); margin: 0; padding: 0; border: 0; min-width: 0; }
+.editor label { display: grid; gap: var(--s-2); font-size: var(--text-xs); }
+.editor input { width: 100%; min-width: 0; min-height: 44px; padding: var(--s-3); background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); border-radius: var(--radius-control); font: inherit; font-size: var(--text-base); }
+.editor p { margin: var(--s-2) 0 0; color: var(--ink-muted); font-size: var(--text-xs); }
+.editor strong { font-size: var(--text-sm); }
+.editorActions { display: flex; justify-content: flex-end; gap: var(--s-2); }

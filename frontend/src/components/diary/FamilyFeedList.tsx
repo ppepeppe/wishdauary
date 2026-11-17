@@ -7,6 +7,7 @@ import type { DiaryComment, DiaryEntry } from '../../types/diary';
 import { getActorDisplayName } from '../../utils/actorDisplay';
 import FamilyFeedComments from './FamilyFeedComments';
 import EmotionIcon from './EmotionIcon';
+import NavIcon from '../common/NavIcon';
 import styles from './FamilyFeedList.module.css';
 
 interface FamilyFeedListProps {
@@ -80,7 +81,8 @@ function FamilyFeedList({
                     {getActorDisplayName(diary.actorRelationLabel, diary.actorNickname)}
                   </span>
                 ) : null}
-                <strong>{formatDate(getDiaryDisplayDate(diary))}</strong>
+                <div className={styles.meta}><time dateTime={getDiaryDisplayDate(diary)}>{formatDate(getDiaryDisplayDate(diary))}</time>
+                  <span>{getVisibilityScopeLabel(diary.visibilityScope)}</span></div>
               </div>
               {emotion ? (
                 <span className={styles.emotionBadge}>
@@ -92,37 +94,24 @@ function FamilyFeedList({
               ) : null}
             </div>
 
-            <div className={styles.previewBox}>
-              <small>{getVisibilityScopeLabel(diary.visibilityScope)}</small>
+            <Link to={`/diaries/${diary.id}`} className={styles.previewLink} aria-label={`${diary.actorNickname || '아이'}의 일기 읽기`}>
               <p className={styles.preview}>{diary.contentPreview}</p>
-              <Link to={`/diaries/${diary.id}`}>이야기 읽기 →</Link>
+              <span className={styles.readLink}>일기 읽기 <NavIcon name="arrowRight" /></span>
+            </Link>
+
+            <div className={styles.actions}>
+              <button type="button" className={`${styles.reactionButton} ${hearted ? styles.heartButtonActive : ''}`}
+                disabled={pending} aria-pressed={hearted} aria-label={`하트 ${heartCount}개, ${hearted ? '하트 취소' : '하트 보내기'}`}
+                onClick={() => void onToggleHeart(diary.id)}>
+                <NavIcon name="feed" /><span>하트 {heartCount}</span>
+              </button>
+              <button type="button" className={styles.reactionButton} aria-expanded={commentsExpanded}
+                aria-controls={`diary-comments-${diary.id}`} onClick={() => void handleToggleComments(diary.id)}>
+                <NavIcon name="comment" /><span>댓글 {diary.commentCount ?? 0}</span>
+              </button>
             </div>
 
-            <div className={styles.footer}>
-              <div className={styles.summary}>
-                <span className={styles.countLabel}>하트 {heartCount}</span>
-                <span className={styles.countLabel}>댓글 {diary.commentCount ?? 0}</span>
-              </div>
-              <div className={styles.actions}>
-                <button
-                  type="button"
-                  className={`${styles.heartButton} ${hearted ? styles.heartButtonActive : ''}`}
-                  disabled={pending}
-                  onClick={() => void onToggleHeart(diary.id)}
-                >
-                  <span aria-hidden="true">{hearted ? '♥' : '♡'}</span>
-                  {pending ? '반영 중...' : '하트 보내기'}
-                </button>
-                <button
-                  type="button"
-                  className={styles.commentButton}
-                  onClick={() => void handleToggleComments(diary.id)}
-                >
-                  {commentsExpanded ? '댓글 닫기' : '댓글 보기'}
-                </button>
-              </div>
-            </div>
-
+            <div id={`diary-comments-${diary.id}`} hidden={!commentsExpanded}>
             {commentsExpanded ? (
               <FamilyFeedComments
                 diaryId={diary.id}
@@ -133,6 +122,7 @@ function FamilyFeedList({
                 onSubmitComment={onSubmitComment}
               />
             ) : null}
+            </div>
           </article>
         );
       })}

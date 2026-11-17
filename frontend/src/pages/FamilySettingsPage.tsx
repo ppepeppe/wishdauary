@@ -153,7 +153,7 @@ function FamilySettingsPage() {
                     <span>클로버</span>
                     <input
                       inputMode="numeric"
-                      placeholder="예: 12"
+                      type="number" min="1" max="2147483647" step="1"
                       value={priceInputs[product.productId] ?? ''}
                       onChange={(event) =>
                         setPriceInputs((current) => ({ ...current, [product.productId]: event.target.value }))
@@ -164,7 +164,7 @@ function FamilySettingsPage() {
                     <span>실제 구매가</span>
                     <input
                       inputMode="numeric"
-                      placeholder="예: 12900"
+                      type="number" min="0" max="2147483647" step="1"
                       value={purchasePriceInputs[product.productId] ?? ''}
                       onChange={(event) =>
                         setPurchasePriceInputs((current) => ({ ...current, [product.productId]: event.target.value }))
@@ -210,7 +210,7 @@ function FamilySettingsPage() {
                   </a>
                 </div>
               ) : null}
-              <p className={styles.requestMessage}>{request.message}</p>
+              {request.message ? <p className={styles.requestMessage}>{request.message}</p> : null}
               <div className={styles.requestFooter}>
                 <span className={request.status === 'pending' ? styles.statusPending : styles.statusDone}>
                   {request.status === 'pending' ? '대기 중' : request.status === 'approved' ? '승인됨' : request.status === 'received' ? '수령 완료' : '거절됨'}

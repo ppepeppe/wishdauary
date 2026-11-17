@@ -4,7 +4,7 @@ import { beforeEach, test } from 'node:test';
 const storage = new Map();
 globalThis.localStorage = { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value), removeItem: key => storage.delete(key) };
 globalThis.window = { location: { origin: 'http://localhost:5187' } };
-const { fetchCatalogProducts, createCatalogProduct } = await import('../src/services/api/adminShopApi.ts');
+const { fetchCatalogProducts, createCatalogProduct, updateCatalogPrice, deleteCatalogProduct } = await import('../src/services/api/adminShopApi.ts');
 const { fetchMyProfile } = await import('../src/services/api/userApi.ts');
 beforeEach(() => storage.set('wishdiary.auth.session', JSON.stringify({ userId: 1, groupId: 1, appRole: 'family', accessToken: 'fixture' })));
 
@@ -41,4 +41,19 @@ test('profile exposes the database role and older or unknown roles default to re
     assert.equal(profile.appRole, 'family');
     assert.equal(profile.userRole, expected);
   }
+});
+
+test('price-only updates preserve product metadata and deletion addresses the selected product', async () => {
+  const calls = [];
+  globalThis.fetch = async (url, init) => {
+    calls.push({ path: new URL(url).pathname, method: init.method, body: init.body });
+    assert.equal(new Headers(init.headers).get('Authorization'), 'Bearer fixture');
+    return Response.json({ success: true, code: 'SUCCESS', message: 'ok', data: init.method === 'PATCH' ? { productId: 12, cloverPrice: 15 } : null });
+  };
+  assert.equal((await updateCatalogPrice(12, 15)).cloverPrice, 15);
+  await deleteCatalogProduct(12);
+  assert.deepEqual(calls, [
+    { path: '/api/v1/admin/shop/products/12', method: 'PATCH', body: JSON.stringify({ cloverPrice: 15 }) },
+    { path: '/api/v1/admin/shop/products/12', method: 'DELETE', body: undefined },
+  ]);
 });

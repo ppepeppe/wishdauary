@@ -23,3 +23,15 @@ export function createCatalogProduct(payload: CreateCatalogProductPayload) {
     body: JSON.stringify(payload),
   });
 }
+
+export function updateCatalogPrice(productId: number, cloverPrice: number) {
+  getCurrentUserIdOrThrow();
+  return request<ShopProduct>(`/api/v1/admin/shop/products/${productId}`, {
+    method: 'PATCH', body: JSON.stringify({ cloverPrice }),
+  });
+}
+
+export function deleteCatalogProduct(productId: number) {
+  getCurrentUserIdOrThrow();
+  return request<void>(`/api/v1/admin/shop/products/${productId}`, { method: 'DELETE' });
+}

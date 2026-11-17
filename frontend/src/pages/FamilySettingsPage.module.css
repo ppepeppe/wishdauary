@@ -158,13 +158,13 @@
 }
 
 .requestMessage {
-  padding: var(--s-3) var(--s-4);
+  padding: 0 0 0 var(--s-3);
   color: var(--ink);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
-  background: var(--card-inner-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-group);
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--brand-tint-strong);
 }
 
 .priceForm {
@@ -221,11 +221,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--s-3);
-  padding: var(--s-3) var(--s-3);
+  padding: 0;
   min-width: 0;
-  background: var(--card-inner-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-group);
 }
 
 .productLinkPanel span {
@@ -349,7 +346,6 @@
     text-align: left;
   }
 
-  .priceForm {
-    grid-template-columns: 1fr;
-  }
+  .priceForm { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .priceForm > button { grid-column: 1 / -1; }
 }

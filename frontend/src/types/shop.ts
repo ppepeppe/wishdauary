@@ -7,6 +7,8 @@ export interface ShopProduct {
   cloverPrice: number;
   purchasePriceWon?: number | null;
   source: string;
+  postedByName?: string | null;
+  pricedByName?: string | null;
   childUserId?: number | null;
   receiverFamilyUserId?: number | null;
   createdAt?: string;

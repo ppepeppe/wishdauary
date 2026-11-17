@@ -3,6 +3,7 @@ package com.wishdiary.adapter.in.web.shop;
 import com.wishdiary.adapter.in.web.auth.Authenticated;
 import com.wishdiary.application.auth.AuthenticatedSession;
 import com.wishdiary.application.shop.CreateCatalogProductRequest;
+import com.wishdiary.application.shop.UpdateCatalogPriceRequest;
 import com.wishdiary.application.shop.ManageCatalogProductsUseCase;
 import com.wishdiary.application.shop.ShopProductResponse;
 import com.wishdiary.common.response.CommonResponse;
@@ -28,6 +29,18 @@ public class AdminShopController {
     @ResponseStatus(HttpStatus.CREATED)
     public CommonResponse<ShopProductResponse> create(@Authenticated AuthenticatedSession session,
             @Valid @RequestBody CreateCatalogProductRequest request) {
-        return CommonResponse.success("Catalog product created.", catalog.create(request));
+        return CommonResponse.success("Catalog product created.", catalog.create(session.userId(), request));
+    }
+
+    @PatchMapping("/{productId}")
+    public CommonResponse<ShopProductResponse> updatePrice(@Authenticated AuthenticatedSession session,
+            @PathVariable Long productId, @Valid @RequestBody UpdateCatalogPriceRequest request) {
+        return CommonResponse.success("Catalog price updated.", catalog.updatePrice(productId, request));
+    }
+
+    @DeleteMapping("/{productId}")
+    public CommonResponse<Void> delete(@Authenticated AuthenticatedSession session, @PathVariable Long productId) {
+        catalog.delete(productId);
+        return CommonResponse.success("Catalog product deleted.", null);
     }
 }

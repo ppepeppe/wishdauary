@@ -12,11 +12,13 @@
 .input {
   width: 100%;
   border: 1px solid var(--line-strong);
-  border-radius: var(--r-lg);
+  border-radius: var(--radius-control);
   padding: var(--s-3) var(--s-4);
   resize: vertical;
   background: var(--surface);
   color: var(--ink-strong);
+  font: inherit;
+  font-size: var(--text-base);
 }
 
 .submitWrap {
@@ -26,7 +28,7 @@
 .submitButton {
   min-height: var(--control-height);
   border: none;
-  border-radius: var(--r-pill);
+  border-radius: var(--radius-control);
   padding: 0 var(--s-5);
   background: var(--brand);
   color: var(--brand-on);
@@ -41,7 +43,6 @@
 .submitButton:hover:not(:disabled) {
   background: var(--brand-hover);
   box-shadow: var(--shadow-brand);
-  transform: translateY(-1px);
 }
 
 .submitButton:disabled {

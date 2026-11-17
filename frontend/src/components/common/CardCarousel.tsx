@@ -102,13 +102,13 @@ function CardCarousel({ title, label = title ?? '목록', itemLabel = '항목', 
     <section className={styles.section} aria-label={label} aria-roledescription="캐러셀">
       <div className={`${styles.heading} ${!title && !multiple ? styles.quietHeading : ''}`}>
         {title ? <h2>{title}</h2> : null}
-        <div className={styles.controls}>
-          {multiple ? <button type="button" onClick={() => moveTo(activeIndex - 1)} disabled={activeIndex === 0}
-            aria-label={`${label} 이전 ${itemLabel}`} aria-controls={trackId}><span aria-hidden="true">←</span></button> : null}
+        {multiple ? <div className={styles.controls}>
+          <button type="button" onClick={() => moveTo(activeIndex - 1)} disabled={activeIndex === 0}
+            aria-label={`${label} 이전 ${itemLabel}`} aria-controls={trackId}><span aria-hidden="true">←</span></button>
           <span className={styles.position} role="status" aria-live="polite" aria-atomic="true">{activeIndex + 1} / {slides.length}</span>
-          {multiple ? <button type="button" onClick={() => moveTo(activeIndex + 1)} disabled={activeIndex >= slides.length - 1}
-            aria-label={`${label} 다음 ${itemLabel}`} aria-controls={trackId}><span aria-hidden="true">→</span></button> : null}
-        </div>
+          <button type="button" onClick={() => moveTo(activeIndex + 1)} disabled={activeIndex >= slides.length - 1}
+            aria-label={`${label} 다음 ${itemLabel}`} aria-controls={trackId}><span aria-hidden="true">→</span></button>
+        </div> : null}
       </div>
       <div id={trackId} ref={track} style={{ height: trackHeight }} className={`${styles.track} ${multiple ? '' : styles.single}`}
         tabIndex={multiple ? 0 : undefined} role="group" aria-label={`${label} 카드`} onScroll={updatePosition} onKeyDown={handleKeyDown} onFocusCapture={handleFocus}>

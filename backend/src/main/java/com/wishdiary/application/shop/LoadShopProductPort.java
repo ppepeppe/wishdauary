@@ -10,4 +10,6 @@ public interface LoadShopProductPort {
 
     Optional<ShopProduct> loadById(Long productId);
 
+    Optional<ShopProduct> loadForUpdate(Long productId);
+
 }

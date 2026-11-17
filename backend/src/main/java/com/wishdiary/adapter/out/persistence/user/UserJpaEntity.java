@@ -58,6 +58,11 @@ public class UserJpaEntity {
         this.avatarPreset = "peach";
     }
 
+    public UserJpaEntity withRole(UserRole role) {
+        this.userRole = role;
+        return this;
+    }
+
     public Long getId() {
         return id;
     }

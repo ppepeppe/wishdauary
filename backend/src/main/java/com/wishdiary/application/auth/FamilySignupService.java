@@ -5,6 +5,8 @@ import com.wishdiary.domain.group.GroupMember;
 import com.wishdiary.domain.group.GroupMemberRole;
 import com.wishdiary.domain.user.AppRole;
 import com.wishdiary.domain.user.User;
+import com.wishdiary.domain.user.UserRole;
+import com.wishdiary.domain.user.ProfileAvatar;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +44,7 @@ public class FamilySignupService implements FamilySignupUseCase {
 
         String encodedPassword = passwordEncoderPort.encode(request.password());
         User user = signupPersistencePort.saveUser(
-                new User(null, request.loginId(), request.nickname(), AppRole.FAMILY),
+                new User(null, request.loginId(), request.nickname(), AppRole.FAMILY, ProfileAvatar.defaultAvatar(), UserRole.ADMIN),
                 encodedPassword
         );
         GroupMember groupMember = signupPersistencePort.saveGroupMember(

@@ -42,8 +42,8 @@ public class SignupPersistenceAdapter implements SignupPersistencePort {
                 user.nickname(),
                 user.appRole(),
                 encodedPassword
-        ));
-        return new User(savedEntity.getId(), savedEntity.getLoginId(), savedEntity.getNickname(), savedEntity.getAppRole());
+        ).withRole(user.userRole()));
+        return new User(savedEntity.getId(), savedEntity.getLoginId(), savedEntity.getNickname(), savedEntity.getAppRole(), user.avatar(), savedEntity.getUserRole());
     }
 
     @Override

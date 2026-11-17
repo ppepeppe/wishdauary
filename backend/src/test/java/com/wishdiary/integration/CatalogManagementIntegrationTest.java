@@ -33,12 +33,12 @@ class CatalogManagementIntegrationTest {
     @Autowired jakarta.persistence.EntityManager entities;
 
     @Test
-    void userRoleDefaultsIndependentlyOfChildOrFamilyAndCannotBeChangedThroughProfile() throws Exception {
+    void adultsReceiveAdminWhileChildrenCannotChooseTheirRoleThroughSignupOrProfile() throws Exception {
         for (String appRole : new String[]{"child", "family"}) {
             JsonNode user = signup(appRole);
             long id = user.get("userId").asLong();
-            assertEquals("USER", database.queryForObject("select user_role from users where id = ?", String.class, id));
-            assertEquals("user", call(get("/api/v1/users/me"), user, null, 200).get("userRole").asText());
+            assertEquals(appRole.equals("family") ? "ADMIN" : "USER", database.queryForObject("select user_role from users where id = ?", String.class, id));
+            assertEquals(appRole.equals("family") ? "admin" : "user", call(get("/api/v1/users/me"), user, null, 200).get("userRole").asText());
             database.update("update users set user_role = 'ADMIN' where id = ?", id);
             entities.clear();
             assertEquals("admin", call(get("/api/v1/users/me"), user, null, 200).get("userRole").asText());
@@ -95,6 +95,85 @@ class CatalogManagementIntegrationTest {
             call(post("/api/v1/admin/shop/products"), user, body, 400);
         }
         assertEquals(before, database.queryForObject("select count(*) from shop_products", Integer.class));
+    }
+
+    @Test
+    void catalogPriceChangesPreservePhotosAndDeletionHidesProductsWithoutLosingRequests() throws Exception {
+        JsonNode family = signup("family"), child = signup("child");
+        JsonNode link = call(post("/api/v1/family-connections/requests"), family,
+                Map.of("childUserId", child.get("userId").asLong()), 201);
+        call(patch("/api/v1/family-connections/requests/" + link.get("requestId").asLong()), child,
+                Map.of("action", "APPROVE"), 200);
+        JsonNode original = call(post("/api/v1/admin/shop/products"), family, productBody(), 201);
+        long id = original.get("productId").asLong();
+        String endpoint = "/api/v1/admin/shop/products/" + id;
+        JsonNode updated = call(patch(endpoint), family, Map.of("cloverPrice", 1), 200);
+        assertEquals(1, updated.get("cloverPrice").asInt());
+        for (String field : new String[]{"imageUrl", "title", "description", "productUrl", "purchasePriceWon"}) {
+            assertEquals(original.get(field), updated.get(field));
+        }
+        call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", "private",
+                "writtenDate", java.time.LocalDate.now().toString()), 201);
+        call(put("/api/v1/wish-goals/me"), child, Map.of("productId", id), 200);
+        JsonNode gift = call(post("/api/v1/shop/gift-requests"), child,
+                Map.of("productId", id, "receiverFamilyUserId", family.get("userId").asLong(), "message", "부탁해요"), 201);
+        call(patch(endpoint), family, Map.of("cloverPrice", 10), 200);
+        call(delete(endpoint), family, null, 200);
+        assertFalse(contains(call(get("/api/v1/shop/products"), child, null, 200), id));
+        assertFalse(contains(call(get("/api/v1/admin/shop/products"), family, null, 200), id));
+        call(post("/api/v1/shop/gift-requests"), child,
+                Map.of("productId", id, "receiverFamilyUserId", family.get("userId").asLong(), "message", "다시 부탁해요"), 404);
+        call(patch(endpoint), family, Map.of("cloverPrice", 2), 404);
+        assertTrue(call(get("/api/v1/wish-goals/me"), child, null, 200).isNull());
+        assertEquals(1, database.queryForObject("select clover_price from gift_request_notifications where id = ?",
+                Integer.class, gift.get("notificationId").asLong()));
+        assertEquals(0, database.queryForObject("select count(*) from clover_ledgers where user_id = ? and reason = 'GIFT_REQUEST_REFUND'",
+                Integer.class, child.get("userId").asLong()));
+        call(patch("/api/v1/shop/gift-requests/" + gift.get("notificationId").asLong()), family,
+                Map.of("action", "REJECT"), 200);
+        assertEquals(1, database.queryForObject("select sum(amount) from clover_ledgers where user_id = ?",
+                Integer.class, child.get("userId").asLong()));
+    }
+
+    @Test
+    void catalogManagementRejectsInvalidPricesAndPrivateProducts() throws Exception {
+        JsonNode family = signup("family"), child = signup("child");
+        long id = call(post("/api/v1/admin/shop/products"), family, productBody(), 201).get("productId").asLong();
+        String endpoint = "/api/v1/admin/shop/products/" + id;
+        for (Object price : new Object[]{0, -1, 1.5, 2147483648L}) {
+            call(patch(endpoint), family, Map.of("cloverPrice", price), 400);
+        }
+        call(patch(endpoint), family, Map.of(), 400);
+        call(patch(endpoint), null, Map.of("cloverPrice", 3), 401);
+        call(delete(endpoint), null, null, 401);
+        database.update("insert into shop_products (child_user_id,title,description,clover_price,source,created_at) values (?, '개인 선물','개인 상품',1,'CUSTOM',current_timestamp)", child.get("userId").asLong());
+        long privateId = database.queryForObject("select max(id) from shop_products", Long.class);
+        call(patch("/api/v1/admin/shop/products/" + privateId), family, Map.of("cloverPrice", 2), 404);
+        call(delete("/api/v1/admin/shop/products/" + privateId), family, null, 404);
+    }
+
+    @Test
+    void personalGiftAttributionSurvivesPriceChangesWithoutGuessingLegacyCreators() throws Exception {
+        JsonNode family = signup("family"), child = signup("child");
+        long familyId = family.get("userId").asLong(), childId = child.get("userId").asLong();
+        JsonNode link = call(post("/api/v1/family-connections/requests"), family, Map.of("childUserId", childId), 201);
+        call(patch("/api/v1/family-connections/requests/" + link.get("requestId").asLong()), child, Map.of("action", "APPROVE"), 200);
+        JsonNode uploaded = call(post("/api/v1/shop/family-products"), family,
+                Map.of("childUserId", childId, "title", "가족이 고른 선물", "description", "함께 골라요", "cloverPrice", 3), 201);
+        assertEquals("하루 (엄마)", uploaded.get("postedByName").asText());
+        long productId = uploaded.get("productId").asLong();
+        call(patch("/api/v1/shop/products/" + productId + "/price"), family, Map.of("cloverPrice", 8), 200);
+        entities.flush(); entities.clear();
+        assertEquals(familyId, database.queryForObject("select created_by_user_id from shop_products where id = ?", Long.class, productId));
+        JsonNode wish = call(post("/api/v1/shop/wish-requests"), child,
+                Map.of("receiverFamilyUserId", familyId, "title", "아이의 부탁", "description", "갖고 싶어요"), 201);
+        assertEquals("하루", wish.get("postedByName").asText());
+        assertEquals("하루 (엄마)", wish.get("pricedByName").asText());
+        database.update("update shop_products set created_by_user_id = null where id = ?", productId);
+        entities.clear();
+        for (JsonNode item : call(get("/api/v1/shop/products"), child, null, 200)) {
+            if (item.get("productId").asLong() == productId) assertTrue(item.get("postedByName").isNull());
+        }
     }
 
     private boolean contains(JsonNode products, long id) {
