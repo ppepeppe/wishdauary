@@ -200,7 +200,7 @@ function DiaryDetailPage() {
                   onChange={(event) => setContent(event.target.value)}
                 />
               </label>
-              <PhotoPicker label="일기 사진" description="일기와 같은 공개 범위 · 최대 1장"
+              <PhotoPicker label="일기 사진" variant="compact"
                 value={imageData} onChange={setImageData} onBusyChange={setPhotoBusy} disabled={isSaving} />
               <fieldset className={styles.field}>
                 <legend>오늘 기분</legend>

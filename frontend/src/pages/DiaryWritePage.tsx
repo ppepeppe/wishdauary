@@ -49,9 +49,7 @@ function DiaryWritePage() {
   return (
     <PageSection title="일기 작성">
       <div className={styles.container}>
-        <div className={styles.rewardCard}>
-          <p className={styles.rewardTitle}>일기 저장 시 클로버 1개</p>
-        </div>
+        <p className={styles.rewardHint}>일기 저장 시 클로버 1개</p>
         {isStatusLoading ? <StatusMessage kind="loading" message="선택한 날짜의 작성 상태를 확인하고 있어요." /> : null}
         {statusError ? <StatusMessage kind="error" message={statusError} /> : null}
         {dateStatus?.exists ? <p className={styles.existingCount}>{selectedDateLabel} 일기 {dateStatus.count}개 작성</p> : null}
