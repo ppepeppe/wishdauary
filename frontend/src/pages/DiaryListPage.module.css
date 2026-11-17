@@ -1,2 +1,12 @@
 .content, .entries { display: grid; gap: var(--s-4); min-width: 0; align-content: start; }
 @media (min-width: 1024px) { .content { grid-template-columns: minmax(0, .95fr) minmax(0, 1.15fr); gap: var(--s-6); align-items: start; } }
+
+.dateNavigation { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); min-width: 0; }
+.dateNavigation button { min-width: 44px; min-height: 44px; border: 0; border-radius: var(--radius-control); background: var(--brand-tint); color: var(--brand-ink); font-size: var(--text-lg); }
+.dateNavigation button:disabled { opacity: .4; }
+.dateNavigation label { min-width: 0; }
+.dateNavigation input { max-width: 100%; min-width: 0; min-height: 44px; border: 0; background: transparent; color: var(--ink-strong); font: inherit; font-size: var(--text-base); }
+.dateLabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+.calendarPicker { min-width: 0; }
+.calendarPicker summary { min-height: 44px; line-height: 44px; color: var(--brand-ink); cursor: pointer; font-size: var(--text-sm); }

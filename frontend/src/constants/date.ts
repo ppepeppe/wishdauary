@@ -28,3 +28,9 @@ export function formatKoreanDate(value: string, includeYear = true) {
     weekday: 'short',
   }).format(new Date(`${dateKey}T00:00:00+09:00`));
 }
+
+export function shiftDiaryDate(value: string, offset: number) {
+  const date = new Date(`${value}T12:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + offset);
+  return date.toISOString().slice(0, 10);
+}

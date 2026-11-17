@@ -13,6 +13,7 @@ import styles from './DiaryList.module.css';
 interface DiaryListProps {
   diaries: DiaryEntry[];
   showVisibilityScope?: boolean;
+  layout?: 'carousel' | 'list';
 }
 
 function formatDate(value: string) {
@@ -48,7 +49,7 @@ function getCommentItemKey(comment: DiaryComment) {
   return `${comment.id}-${comment.createdAt ?? comment.content}`;
 }
 
-function DiaryList({ diaries, showVisibilityScope = true }: DiaryListProps) {
+function DiaryList({ diaries, showVisibilityScope = true, layout = 'carousel' }: DiaryListProps) {
   const [expandedDiaryIds, setExpandedDiaryIds] = useState<number[]>([]);
   const [commentsByDiaryId, setCommentsByDiaryId] = useState<Record<number, DiaryComment[]>>({});
   const [loadingDiaryIds, setLoadingDiaryIds] = useState<number[]>([]);
@@ -90,9 +91,7 @@ function DiaryList({ diaries, showVisibilityScope = true }: DiaryListProps) {
     }
   }
 
-  return (
-    <CardCarousel title="일기 목록" itemLabel="일기">
-      {diaries.map((diary) => {
+  const cards = diaries.map((diary) => {
         const emotion = getEmotionMeta(diary.emotion);
         const commentCount = diary.commentCount ?? 0;
         const comments = commentsByDiaryId[diary.id] ?? [];
@@ -156,9 +155,8 @@ function DiaryList({ diaries, showVisibilityScope = true }: DiaryListProps) {
             ) : null}
           </article>
         );
-      })}
-    </CardCarousel>
-  );
+      });
+  return layout === 'list' ? <div className={styles.list}>{cards}</div> : <CardCarousel title="일기 목록" itemLabel="일기">{cards}</CardCarousel>;
 }
 
 export default DiaryList;

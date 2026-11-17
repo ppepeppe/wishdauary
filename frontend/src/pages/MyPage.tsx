@@ -141,6 +141,7 @@ function MyPage() {
 
       {authSession ? (
         <nav className={styles.managementNav} aria-label="내 활동 관리">
+          {!isFamily ? <Link to="/me/clovers" className={styles.managementLink}><span><strong>클로버 적립 내역</strong></span><span aria-hidden="true">→</span></Link> : null}
           {userRole === 'admin' ? <Link to="/admin/shop" className={styles.managementLink}>
             <span><strong>공통 상점 상품 관리</strong></span>
             <span aria-hidden="true">→</span>

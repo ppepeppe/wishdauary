@@ -1,0 +1,6 @@
+.section { display: grid; gap: var(--s-3); margin-block: var(--s-5); min-width: 0; }
+.section h2 { margin: 0; font-size: var(--text-base); }
+.card { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-3); padding: var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--surface); }
+.card > div:first-child { min-width: 0; overflow-wrap: anywhere; }
+.card p, .hint { margin: var(--s-1) 0 0; color: var(--ink-muted); font-size: var(--text-xs); }
+.actions { display: flex; gap: var(--s-2); margin-left: auto; }

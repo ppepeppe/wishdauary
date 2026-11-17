@@ -1,6 +1,3 @@
-import CardCarousel from '../components/common/CardCarousel';
-import { useState } from 'react';
-import { useAsyncData } from '../hooks/useAsyncData';
 import PageSection from '../components/common/PageSection';
 import EmptyState from '../components/common/EmptyState';
 import LinkButton from '../components/common/LinkButton';
@@ -9,31 +6,12 @@ import CloverIcon from '../components/common/CloverIcon';
 import ShopProductGrid from '../components/shop/ShopProductGrid';
 import ShopNavigation from '../components/shop/ShopNavigation';
 import { useShop } from '../hooks/useShop';
-import { fetchCloverHistory } from '../services/api/cloverApi';
 import { getAuthSession } from '../services/session/authSession';
 import { getChildWishProducts } from '../utils/shopNavigation';
 import styles from './ShopPage.module.css';
 
-const CLOVER_REASON_LABELS: Record<string, string> = {
-  FAMILY_AWARD: '가족의 칭찬',
-  ENGLISH_STUDY: '한 줄 영어',
-  DIARY_WRITE: '일기 쓰기',
-  STREAK_3: '3일 연속 보너스',
-  STREAK_5: '5일 연속 보너스',
-  STREAK_7: '7일 연속 보너스',
-  GIFT_REQUEST: '선물 부탁하기',
-  GIFT_REQUEST_REFUND: '클로버 돌려받기',
-};
-
-function formatHistoryDate(value: string) {
-  return new Intl.DateTimeFormat('ko-KR', { month: 'long', day: 'numeric' }).format(new Date(value));
-}
-
 function ShopWishlistPage() {
   const { data, isLoading, error, refetch } = useShop();
-  const { data: historyData } = useAsyncData(fetchCloverHistory, true);
-  const history = historyData ?? [];
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const myProducts = getChildWishProducts(data?.products ?? [], getAuthSession()?.userId);
 
@@ -58,42 +36,9 @@ function ShopWishlistPage() {
                 <strong className={styles.balanceValue}>{data.cloverBalance}<small>개</small></strong>
               </div>
             </div>
-            {history.length > 0 ? (
-              <button
-                type="button"
-                className={styles.historyToggle}
-                aria-expanded={isHistoryOpen}
-                aria-controls="clover-history"
-                onClick={() => setIsHistoryOpen((current) => !current)}
-              >
-                적립 내역 <span aria-hidden="true">{isHistoryOpen ? '−' : '+'}</span>
-              </button>
-            ) : null}
+
           </section>
 
-          {history.length > 0 && isHistoryOpen ? (
-            <section id="clover-history" className={styles.historyPanel} aria-label="클로버 적립 내역">
-              <CardCarousel title="적립 내역" itemLabel="기록">
-                {history.slice(0, 10).map((entry) => (
-                  <article key={entry.ledgerId} className={styles.historyItem}>
-                    <span className={styles.historyReason}>
-                      {CLOVER_REASON_LABELS[entry.reason] ?? entry.reason}
-                    </span>
-                    <span className={styles.historyDate}>{formatHistoryDate(entry.createdAt)}</span>
-                    {entry.note || entry.givenByName ? <p className={styles.historyNote}>{[entry.givenByName, entry.note].filter(Boolean).join(' · ')}</p> : null}
-                    <strong className={entry.amount >= 0 ? styles.historyGain : styles.historySpend}>
-                      {entry.amount >= 0 ? `+${entry.amount}` : entry.amount} 클로버
-                    </strong>
-                  </article>
-                ))}
-              </CardCarousel>
-              <details className={styles.rewardGuide}>
-                <summary>연속 기록 보너스 기준</summary>
-                <p>3일 +1 · 5일 +2 · 7일 +3 클로버</p>
-                <p>같은 날짜는 한 번만 계산하며, 기록이 끊기면 1일부터 다시 시작합니다.</p>
-              </details>
-            </section>
-          ) : null}
 
           <section className={styles.productSection}>
             <div className={styles.sectionTitleRow}>

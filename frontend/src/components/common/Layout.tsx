@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { getAuthSession } from '../../services/session/authSession';
 import { fetchProductPricingRequests, fetchReceivedGiftRequests, fetchSentGiftRequests } from '../../services/api/shopApi';
 import NavIcon, { type NavIconName } from './NavIcon';
+import { fetchFamilyConnectionRequests } from '../../services/api/familyConnectionApi';
 import { fetchEnglishReviews } from '../../services/api/rewardApi';
 import { GIFT_REQUESTS_CHANGED_EVENT } from '../../constants/events';
 import styles from './Layout.module.css';
@@ -30,6 +31,7 @@ function Layout() {
   const isPublicPage = !authSession;
   const isLandingPage = isPublicPage && location.pathname === '/';
   const [giftBadgeCount, setGiftBadgeCount] = useState(0);
+  const [connectionBadgeCount, setConnectionBadgeCount] = useState(0);
 
   useEffect(() => {
     let ignore = false;
@@ -38,7 +40,7 @@ function Layout() {
     async function loadGiftBadgeCount() {
       const current = ++version;
       if (!authSession) {
-        setGiftBadgeCount(0);
+        setGiftBadgeCount(0); setConnectionBadgeCount(0);
         return;
       }
 
@@ -51,13 +53,14 @@ function Layout() {
           return;
         }
 
-        const requests = await fetchSentGiftRequests();
+        const [requests, connections] = await Promise.all([fetchSentGiftRequests(), fetchFamilyConnectionRequests()]);
         if (!ignore && current === version) {
           setGiftBadgeCount(requests.filter((request) => request.status === 'approved' || request.status === 'rejected').length);
+          setConnectionBadgeCount(connections.filter(request => request.status === 'pending').length);
         }
       } catch {
         if (!ignore && current === version) {
-          setGiftBadgeCount(0);
+          setGiftBadgeCount(0); setConnectionBadgeCount(0);
         }
       }
     }
@@ -102,6 +105,7 @@ function Layout() {
               >
                 <span className={styles.bottomNavIcon} aria-hidden="true">
                   <NavIcon name={item.icon} />
+                  {item.to === '/feed' && connectionBadgeCount > 0 ? <span className={styles.bottomNavBadge}>{connectionBadgeCount}</span> : null}
                   {(item.to === '/shop' || item.to === '/family-settings') && giftBadgeCount > 0 ? (
                     <span className={styles.bottomNavBadge}>{giftBadgeCount}</span>
                   ) : null}

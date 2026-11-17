@@ -35,3 +35,10 @@ test('explicit past diary dates remain unchanged', async () => {
   };
   assert.deepEqual(await fetchDiaryStatus('2025-12-31'), { exists: true, count: 1 });
 });
+
+test('date navigation crosses month and leap-year boundaries without timezone shifts', async () => {
+  const {shiftDiaryDate} = await import('../src/constants/date.ts');
+  assert.equal(shiftDiaryDate('2026-03-01',-1),'2026-02-28');
+  assert.equal(shiftDiaryDate('2024-03-01',-1),'2024-02-29');
+  assert.equal(shiftDiaryDate('2026-12-31',1),'2027-01-01');
+});

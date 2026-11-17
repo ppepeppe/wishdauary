@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getDateKey, getTodayDateInKorea } from '../../constants/date';
 import type { DiaryEntry } from '../../types/diary';
 import styles from './DiaryCalendar.module.css';
@@ -27,6 +27,10 @@ function DiaryCalendar({ diaries, selectedDate, onSelectDate }: DiaryCalendarPro
     const today = new Date(`${todayDate}T00:00:00`);
     return new Date(today.getFullYear(), today.getMonth(), 1);
   });
+
+  useEffect(() => {
+    if (selectedDate) setVisibleMonth(new Date(`${selectedDate.slice(0, 7)}-01T12:00:00`));
+  }, [selectedDate]);
 
   const diaryCountByDate = useMemo(() => {
     const countMap = new Map<string, number>();
@@ -58,7 +62,7 @@ function DiaryCalendar({ diaries, selectedDate, onSelectDate }: DiaryCalendarPro
 
   function moveMonth(offset: number) {
     setVisibleMonth((current) => new Date(current.getFullYear(), current.getMonth() + offset, 1));
-    onSelectDate(null);
+
   }
 
   return (
@@ -77,13 +81,7 @@ function DiaryCalendar({ diaries, selectedDate, onSelectDate }: DiaryCalendarPro
         >
           ›
         </button>
-        <button
-          type="button"
-          className={selectedDate ? styles.allButton : styles.allButtonActive}
-          onClick={() => onSelectDate(null)}
-        >
-          전체
-        </button>
+
       </div>
 
       <div className={styles.weekdays} aria-hidden="true">
@@ -105,8 +103,9 @@ function DiaryCalendar({ diaries, selectedDate, onSelectDate }: DiaryCalendarPro
               key={date}
               type="button"
               className={isSelected ? styles.daySelected : isToday ? styles.dayToday : styles.day}
-              disabled={diaryCount === 0}
+              disabled={date > todayDate}
               onClick={() => onSelectDate(date)}
+              aria-pressed={isSelected}
               aria-label={`${date}, 일기 ${diaryCount}개`}
             >
               <span>{Number(date.slice(-2))}</span>

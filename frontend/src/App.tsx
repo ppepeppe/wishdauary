@@ -29,6 +29,7 @@ import FamilyShopPage from './pages/FamilyShopPage';
 import SignupRolePage from './pages/SignupRolePage';
 import AdminShopPage from './pages/AdminShopPage';
 import AdminEnglishPage from './pages/AdminEnglishPage';
+import CloverHistoryPage from './pages/CloverHistoryPage';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
 
         <Route element={<RequireAppRole allowedRole="child" />}>
           <Route path="/home" element={<HomePage />} />
+          <Route path="/me/clovers" element={<CloverHistoryPage />} />
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/shop" element={<ShopCatalogPage />} />
           <Route path="/shop/catalog" element={<Navigate to="/shop" replace />} />

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import FamilyConnectionFeed from '../components/family/FamilyConnectionFeed';
 import StatusMessage from '../components/common/StatusMessage';
 import PageSection from '../components/common/PageSection';
 import ReactionFeedList from '../components/diary/ReactionFeedList';
@@ -10,6 +11,7 @@ function FeedPage() {
   return (
     <PageSection title="소식">
       <p><Link to="/shared-feed">공개·그룹 피드 보기 →</Link></p>
+      <FamilyConnectionFeed />
       {isLoading ? <StatusMessage kind="loading" message="소식을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="소식을 불러오지 못했어요. 잠시 후 다시 시도해 주세요." /> : null}
       {data && data.length > 0 ? <ReactionFeedList items={data} /> : null}
