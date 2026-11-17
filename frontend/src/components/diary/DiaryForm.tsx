@@ -51,8 +51,8 @@ function DiaryForm({
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <label className={styles.field}>
-        <span>기록 날짜</span>
+      <label className={styles.dateField}>
+        <span>날짜</span>
         <input
           className={styles.dateInput}
           type="date"
