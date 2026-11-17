@@ -1,10 +1,10 @@
 import CardCarousel from '../components/common/CardCarousel';
 import { useState } from 'react';
 import { useAsyncData } from '../hooks/useAsyncData';
-import { Link } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
+import EmptyState from '../components/common/EmptyState';
+import LinkButton from '../components/common/LinkButton';
 import StatusMessage from '../components/common/StatusMessage';
-import NavIcon from '../components/common/NavIcon';
 import CloverIcon from '../components/common/CloverIcon';
 import ShopProductGrid from '../components/shop/ShopProductGrid';
 import ShopNavigation from '../components/shop/ShopNavigation';
@@ -35,10 +35,7 @@ function ShopWishlistPage() {
   const myProducts = getChildWishProducts(data?.products ?? [], getAuthSession()?.userId);
 
   return (
-    <PageSection
-      title="선물"
-      description="가족이 클로버를 정해 준 선물이에요. 클로버를 모아서 부탁해 봐요."
-    >
+    <PageSection title="선물">
       <ShopNavigation />
       {isLoading ? <StatusMessage kind="loading" message="선물을 불러오는 중이에요." /> : null}
       {error ? (
@@ -92,20 +89,16 @@ function ShopWishlistPage() {
           <section className={styles.productSection}>
             <div className={styles.sectionTitleRow}>
               <h2 className={styles.sectionTitle}>내가 갖고 싶은 선물 <span className={styles.sectionCount}>{myProducts.length}</span></h2>
-              <Link to="/shop/products/new" className={styles.newProductCta}>
+              <LinkButton to="/shop/products/new" size="sm">
                 <span aria-hidden="true">+</span> 선물 요청
-              </Link>
+              </LinkButton>
             </div>
             {myProducts.length > 0 ? (
               <ShopProductGrid products={myProducts} cloverBalance={data.cloverBalance} hasRecipients={data.recipients.length > 0} showPurchasePrice={false} />
             ) : (
-              <div className={styles.emptyState}>
-                <span className={styles.emptyIcon} aria-hidden="true"><NavIcon name="gift" /></span>
-                <h3>아직 클로버가 정해진 선물이 없어요</h3>
-                <p>가족에게 원하는 선물을 요청해 보세요. 가족이 클로버를 정하면 여기에 보여요.</p>
-                <Link to="/shop/products/new">원하는 선물 요청하기 <span aria-hidden="true">→</span></Link>
-                <Link to="/shop/requests">확인 중인 요청 보기 →</Link>
-              </div>
+              <EmptyState title="아직 등록된 선물이 없어요" description="가족이 클로버를 정한 선물이 여기에 표시됩니다.">
+                <LinkButton to="/shop/requests" variant="neutral">요청 내역 보기</LinkButton>
+              </EmptyState>
             )}
           </section>
         </div>

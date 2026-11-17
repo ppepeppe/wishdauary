@@ -2,12 +2,12 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
   color: var(--brand-ink);
   font-size: var(--text-sm);
   font-weight: 600;
-  padding: 14px 16px;
+  padding: var(--s-4) var(--s-4);
   border: 1px solid var(--card-border);
   border-radius: var(--card-radius);
   background: var(--card-bg);

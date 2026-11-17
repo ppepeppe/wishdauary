@@ -20,7 +20,7 @@
   left: 50%;
   width: max-content;
   max-width: min(280px, calc(100vw - 40px));
-  padding: 9px 12px;
+  padding: var(--s-2) var(--s-3);
   border-radius: var(--r-md);
   color: var(--ink-inverse);
   background: var(--surface-inverse);

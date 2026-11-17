@@ -69,7 +69,7 @@ function FamilyShopPage() {
   }
 
   return (
-    <PageSection title="상점 관리" description="아이가 올린 상품의 클로버를 정하고 수정해요. 가족이 직접 선물을 등록할 수도 있어요.">
+    <PageSection title="상점 관리" actions={data && data.children.length > 0 ? <Button onClick={() => { setShowForm(true); setMessage(null); }}>+ 선물 등록</Button> : null}>
       <div className={styles.container}>
         {isLoading ? <StatusMessage kind="loading" message="상점을 불러오고 있어요." /> : null}
         {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => void refetch()}>다시 불러오기</Button></div> : null}
@@ -79,7 +79,6 @@ function FamilyShopPage() {
           <p>아이의 연결 승인을 받은 뒤 선물을 등록할 수 있어요.</p><Link to="/family-connections">아이 찾고 연결 요청하기 →</Link>
         </div> : null}
         {data && data.children.length > 0 ? <>
-          <div className={styles.heading}><h2>상품과 클로버 관리</h2><Button onClick={() => { setShowForm(true); setMessage(null); }}>+ 선물 등록</Button></div>
           {showForm ? <form className={styles.form} onSubmit={(event) => void save(event)}>
             <h2>선물 등록하기</h2>
             <fieldset disabled={busy}>
@@ -97,14 +96,14 @@ function FamilyShopPage() {
           </form> : null}
           <section className={styles.productSection} aria-labelledby="child-products-title">
             <h2 id="child-products-title">아이가 올린 상품 <small>{childProducts.length}</small></h2>
-            <p className={styles.hint}>클로버를 정하면 아이가 모아서 선물을 요청할 수 있어요. 저장한 뒤에도 수정할 수 있어요.</p>
+            <p className={styles.hint}>클로버를 정한 선물은 아이의 목록에 표시됩니다.</p>
             {childProducts.length === 0 ? <p className={styles.hint}>아이가 갖고 싶은 상품을 올리면 여기에 보여요.</p> : <CardCarousel label="아이가 올린 상품" itemLabel="상품">{childProducts.map((product) => (
               <FamilyShopProductRow key={product.productId} product={product} childName={data.children.find((child) => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />
             ))}</CardCarousel>}
           </section>
           <section className={styles.productSection} aria-labelledby="family-products-title">
             <h2 id="family-products-title">가족이 등록한 선물 <small>{familyProducts.length}</small></h2>
-            {familyProducts.length === 0 ? <p className={styles.hint}>아직 등록한 선물이 없어요. 아이에게 제안할 선물을 올려보세요.</p> : <CardCarousel label="가족이 등록한 선물" itemLabel="상품">{familyProducts.map((product) => (
+            {familyProducts.length === 0 ? <p className={styles.hint}>등록한 선물이 없어요.</p> : <CardCarousel label="가족이 등록한 선물" itemLabel="상품">{familyProducts.map((product) => (
               <FamilyShopProductRow key={product.productId} product={product} childName={data.children.find((child) => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />
             ))}</CardCarousel>}
           </section>

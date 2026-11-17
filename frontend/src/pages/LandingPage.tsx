@@ -30,7 +30,7 @@ function LandingPage() {
           <aside className={styles.joinPanel}>
             <span className={styles.joinIcon}><NavIcon name="family" /></span>
             <h2>아이의 이야기를 함께 읽어요</h2>
-            <p>가족 계정으로 가입한 뒤 그룹으로 연결하고<br />일기에 댓글과 하트를 남겨보세요.</p>
+            <p>아이의 승인 후 일기와 선물을 함께합니다.</p>
             <Link to="/signup/family">가족 계정으로 가입하기 <span aria-hidden="true">›</span></Link>
             <span className={styles.loginHint}>이미 계정이 있다면 <Link to="/login">로그인</Link></span>
           </aside>
@@ -43,7 +43,7 @@ function LandingPage() {
         </nav>
 
         <section id="diary-preview" className={styles.section}>
-          <div className={styles.sectionHeading}><div><h2>이렇게 기록해요</h2><p>아이의 실제 기록은 가입 후 본인과 공개한 가족에게만 보여요.</p></div><Link to="/signup/child">나도 쓰기 <span aria-hidden="true">›</span></Link></div>
+          <div className={styles.sectionHeading}><div><h2>이렇게 기록해요</h2><p>공개 범위는 일기마다 선택할 수 있습니다.</p></div><Link to="/signup/child">나도 쓰기 <span aria-hidden="true">›</span></Link></div>
           <div className={styles.diaryGrid}>
             <article className={styles.diaryCard}><h3>1. 오늘의 기분 고르기</h3><p>지금 마음과 가까운 표정을 골라요.</p></article>
             <article className={styles.diaryCard}><h3>2. 내 이야기 남기기</h3><p>길게 쓰지 않아도 괜찮아요. 떠오르는 일을 편하게 적어요.</p></article>
@@ -54,7 +54,7 @@ function LandingPage() {
         <section id="wish-preview" className={styles.section}>
           <div className={styles.sectionHeading}><div><h2>기록하며 모으는 선물</h2><p>갖고 싶은 선물을 목표로 정하고 클로버를 모아요.</p></div><Link to="/login">로그인하고 보기 <span aria-hidden="true">›</span></Link></div>
           <div className={styles.wishGrid}>
-            <div className={styles.cloverGuide}><span className={styles.cloverLabel}>나만의 선물 목록</span><h3>갖고 싶은 선물을<br />직접 적어두기</h3><p>이름과 설명을 적으면 선물 놀이터에 저장돼요. 사진과 쇼핑몰 링크는 선택할 수 있어요.</p><Link to="/signup/child">시작하기 <span aria-hidden="true">›</span></Link></div>
+            <div className={styles.cloverGuide}><span className={styles.cloverLabel}>나만의 선물 목록</span><h3>갖고 싶은 선물<br />가족에게 요청하기</h3><p>가족에게 선물을 요청하고, 가족이 정한 클로버를 모으세요.</p><Link to="/signup/child">시작하기 <span aria-hidden="true">›</span></Link></div>
             <div className={styles.cloverGuide}><span className={styles.cloverLabel}>클로버 이용 안내</span><h3>매일 쓰는 일기가<br />선물에 한 걸음 더</h3><p>일기를 쓰면 클로버가 쌓여요.<br />목표를 채우면 가족에게 선물을 요청해요.</p><a href="#guide">자세히 알아보기 <span aria-hidden="true">›</span></a></div>
           </div>
         </section>

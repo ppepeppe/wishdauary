@@ -6,7 +6,7 @@ interface StatusMessageProps {
 }
 
 function StatusMessage({ kind, message }: StatusMessageProps) {
-  return <p className={`${styles.message} ${styles[kind]}`}>{message}</p>;
+  return <p role={kind === 'error' ? 'alert' : kind === 'empty' ? undefined : 'status'} className={`${styles.message} ${styles[kind]}`}>{message}</p>;
 }
 
 export default StatusMessage;

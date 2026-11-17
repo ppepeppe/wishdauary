@@ -47,26 +47,14 @@ function DiaryWritePage() {
   }
 
   return (
-    <PageSection
-      title="일기 작성"
-      description="날짜를 고르고 그날의 마음을 편하게 남겨보세요."
-    >
+    <PageSection title="일기 작성">
       <div className={styles.container}>
         <div className={styles.rewardCard}>
-          <p className={styles.rewardEyebrow}>기록 보상</p>
-          <p className={styles.rewardTitle}>일기를 저장하면 클로버 1개</p>
-          <p className={styles.rewardDescription}>
-            선택한 날짜에 기록이 저장돼요. 미래 날짜는 선택할 수 없어요.
-          </p>
+          <p className={styles.rewardTitle}>일기 저장 시 클로버 1개</p>
         </div>
         {isStatusLoading ? <StatusMessage kind="loading" message="선택한 날짜의 작성 상태를 확인하고 있어요." /> : null}
         {statusError ? <StatusMessage kind="error" message={statusError} /> : null}
-        {dateStatus?.exists ? (
-          <StatusMessage
-            kind="success"
-            message={`${selectedDateLabel} 기록이 ${dateStatus.count}개 있어요. 하나 더 남겨도 좋아요.`}
-          />
-        ) : null}
+        {dateStatus?.exists ? <p className={styles.existingCount}>{selectedDateLabel} 일기 {dateStatus.count}개 작성</p> : null}
       </div>
       {error ? <StatusMessage kind="error" message={error} /> : null}
       <DiaryForm

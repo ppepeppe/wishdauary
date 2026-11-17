@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useAsyncData } from '../hooks/useAsyncData';
 import HoverHint from '../components/common/HoverHint';
 import PageSection from '../components/common/PageSection';
+import PageNavigation from '../components/common/PageNavigation';
 import StatusMessage from '../components/common/StatusMessage';
 import { useGiftRequests } from '../hooks/useGiftRequests';
 import { fetchChildrenWishGoals } from '../services/api/wishGoalApi';
@@ -80,18 +81,12 @@ function FamilySettingsPage() {
   const pendingGiftRequestCount = giftRequests.filter((request) => request.status === 'pending').length;
 
   return (
-    <PageSection
-      title="받은 선물 요청"
-      description="아이가 모은 클로버로 보낸 선물 요청을 확인할 수 있어요."
-    >
-      <p><Link to="/family-shop">상품 등록·클로버 수정하기 →</Link> · <Link to="/family-connections">아이와 연결하기 →</Link></p>
+    <PageSection title="받은 선물 요청">
+      <PageNavigation><Link to="/family-shop">상점 관리 →</Link><Link to="/family-connections">아이 연결 →</Link></PageNavigation>
       {isLoading ? <StatusMessage kind="loading" message="받은 요청을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="선물 요청을 불러오지 못했어요. 잠시 후 다시 확인해 주세요." /> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
       {successMessage ? <StatusMessage kind="success" message={successMessage} /> : null}
-      {data && pendingGiftRequestCount > 0 ? (
-        <StatusMessage kind="success" message={`확인할 선물 요청이 ${pendingGiftRequestCount}개 있어요.`} />
-      ) : null}
 
       {childrenGoals.length > 0 ? (
         <div className={styles.goalSection}>
@@ -191,7 +186,7 @@ function FamilySettingsPage() {
       ) : null}
 
       {giftRequests.length > 0 ? (
-        <CardCarousel title="받은 선물 요청" itemLabel="요청">
+        <CardCarousel title={`선물 요청 · 대기 ${pendingGiftRequestCount}개`} itemLabel="요청">
           {giftRequests.map((request) => (
             <article key={request.notificationId} className={styles.requestCard}>
               <div className={styles.requestHeader}>

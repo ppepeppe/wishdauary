@@ -11,7 +11,7 @@ interface PhotoPickerProps {
   description?: string;
 }
 
-function PhotoPicker({ value, onChange, onBusyChange, disabled = false, label = '선물 사진', description = '갖고 싶은 선물을 사진으로 보여주세요.' }: PhotoPickerProps) {
+function PhotoPicker({ value, onChange, onBusyChange, disabled = false, label = '선물 사진', description = '최대 1장' }: PhotoPickerProps) {
   const input = useRef<HTMLInputElement>(null);
   const selection = useRef(0);
   const [busy, setBusy] = useState(false);
@@ -47,7 +47,7 @@ function PhotoPicker({ value, onChange, onBusyChange, disabled = false, label = 
             <button type="button" disabled={disabled || busy} onClick={() => input.current?.click()}>{value ? '사진 바꾸기' : '사진 선택하기'}</button>
             {value ? <button type="button" disabled={disabled || busy} onClick={() => { onChange(null); setError(null); }}>사진 삭제</button> : null}
           </div>
-          <small>20MB 이하 · 사진은 자동으로 크기를 줄여요.</small>
+          <small>20MB 이하</small>
         </div>
       </div>
       {error ? <p className={styles.error} role="alert">{error}</p> : null}

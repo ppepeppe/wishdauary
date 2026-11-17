@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import PageSection from '../components/common/PageSection';
+import PageNavigation from '../components/common/PageNavigation';
+import EmptyState from '../components/common/EmptyState';
+import LinkButton from '../components/common/LinkButton';
 import StatusMessage from '../components/common/StatusMessage';
 import DiaryCalendar from '../components/diary/DiaryCalendar';
 import DiaryList from '../components/diary/DiaryList';
@@ -20,11 +23,8 @@ function DiaryListPage() {
   }, [data, selectedDate]);
 
   return (
-    <PageSection
-      title="내 일기"
-      description="날짜를 골라 그날의 이야기를 다시 읽어봐요."
-    >
-      <div className={styles.toolbar}><Link to="/sharing-groups">그룹 관리 <span aria-hidden="true">›</span></Link><Link to="/shared-feed">공개·그룹 피드 <span aria-hidden="true">›</span></Link></div>
+    <PageSection title="내 일기">
+      <PageNavigation><Link to="/sharing-groups">그룹 관리 →</Link><Link to="/shared-feed">공개·그룹 피드 →</Link></PageNavigation>
       {isLoading ? <StatusMessage kind="loading" message="일기를 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="일기를 불러오지 못했어요. 잠시 후 다시 시도해 주세요." /> : null}
       {data && data.length > 0 ? (
@@ -39,7 +39,9 @@ function DiaryListPage() {
         </div>
       ) : null}
       {data && data.length === 0 ? (
-        <div className={styles.empty}><StatusMessage kind="empty" message="아직 쓴 일기가 없어요. 오늘의 이야기부터 남겨볼까요?" /><Link to="/diaries/write">첫 일기 쓰기 <span aria-hidden="true">→</span></Link></div>
+        <EmptyState title="아직 쓴 일기가 없어요">
+          <LinkButton to="/diaries/write">첫 일기 쓰기</LinkButton>
+        </EmptyState>
       ) : null}
     </PageSection>
   );

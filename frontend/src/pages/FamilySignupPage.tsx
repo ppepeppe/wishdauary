@@ -33,17 +33,17 @@ function FamilySignupPage() {
 
   return (
     <PageSection
+      variant="form"
       title="가족 가입"
-      description="가입 후 아이의 닉네임을 검색해 연결을 요청해요. 아이가 승인하면 가족으로 연결돼요."
+      description="아이의 승인 후 가족으로 연결됩니다."
     >
-      {isSubmitting ? <StatusMessage kind="loading" message="계정을 만들고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       <FamilySignupForm
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
       <p>
-        이미 계정이 있다면 <Link to="/login">로그인</Link>으로 바로 들어갈 수 있어요.
+        이미 가입했나요? <Link to="/login">로그인</Link>
       </p>
     </PageSection>
   );

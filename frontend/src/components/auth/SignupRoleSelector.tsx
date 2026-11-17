@@ -4,12 +4,12 @@ import styles from './SignupRoleSelector.module.css';
 const roleOptions = [
   {
     title: '아이로 시작하기',
-    description: '오늘 마음을 가볍게 남기고, 가족 반응을 편하게 받아볼 수 있어요.',
+    description: '일기 작성 · 클로버 모으기 · 선물 요청',
     to: '/signup/child',
   },
   {
     title: '가족으로 시작하기',
-    description: '아이의 이야기를 따뜻하게 보고, 관계에 맞는 이름으로 반응할 수 있어요.',
+    description: '아이 일기 보기 · 댓글 · 선물 관리',
     to: '/signup/family',
   },
 ];
@@ -21,7 +21,7 @@ function SignupRoleSelector() {
         <Link key={option.to} to={option.to} className={styles.card}>
           <strong className={styles.title}>{option.title}</strong>
           <p className={styles.description}>{option.description}</p>
-          <span className={styles.linkText}>이 역할로 계속하기</span>
+          <span className={styles.linkText}>가입하기 →</span>
         </Link>
       ))}
     </div>

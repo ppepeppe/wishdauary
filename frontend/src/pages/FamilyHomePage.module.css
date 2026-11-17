@@ -1,55 +1,56 @@
-.container { display: grid; min-width: 0; gap: 26px; }
-.header, .heading, .meta, .requestRow, .shopLink { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.container { display: grid; min-width: 0; gap: var(--section-gap); }
+.header, .heading, .meta, .requestRow, .shopLink { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
 .header { padding: 0; }
-.wordmark { color: var(--ink-strong); font-size: 15px; font-weight: 750; letter-spacing: -.04em; }
-.wordmark span { display: inline-block; margin-left: 6px; padding: 3px 7px; border-radius: 6px; color: var(--brand-ink); background: var(--brand-tint); font-size: 10px; font-weight: 600; letter-spacing: 0; }
+.wordmark { color: var(--ink-strong); font-size: var(--text-base); font-weight: 700; letter-spacing: -.04em; }
+.wordmark span { display: inline-block; margin-left: var(--s-2); padding: var(--s-1) var(--s-2); border-radius: var(--radius-control); color: var(--brand-ink); background: var(--brand-tint); font-size: var(--text-2xs); font-weight: 600; letter-spacing: 0; }
 .profileLink { display: grid; place-items: center; width: 44px; height: 44px; color: var(--ink-muted); border-radius: 50%; background: var(--surface); border: 1px solid var(--card-border); }
 .greeting { padding: 0; min-width: 0; }
-.greeting p { margin: 0 0 10px; color: var(--ink-muted); font-size: 12px; }
-.greeting h1 { margin: 0 0 8px; color: var(--ink-strong); font-size: 25px; line-height: 1.4; font-weight: 750; letter-spacing: -.04em; }
+.greeting p { margin: 0 0 var(--s-3); color: var(--ink-muted); font-size: var(--text-2xs); }
+.greeting h1 { margin: 0 0 var(--s-2); color: var(--ink-strong); font-size: var(--text-xl); line-height: 1.4; font-weight: 700; letter-spacing: -.04em; }
 .greetingName { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.greeting > span, .helper { color: var(--ink-muted); font-size: 12px; line-height: 1.8; }
-.requestOverview { display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid var(--brand-tint-strong); border-radius: 16px; background: var(--brand-tint); }
-.overviewIcon { display: grid; place-items: center; width: 38px; height: 38px; flex-shrink: 0; border-radius: 12px; color: var(--brand-ink); background: var(--surface); }
-.requestOverview > span:nth-child(2) { display: grid; flex: 1; gap: 4px; min-width: 0; }
-.requestOverview strong { color: var(--ink-strong); font-size: 13px; font-weight: 650; }
-.requestOverview small { color: var(--ink-muted); font-size: 11px; line-height: 1.5; }
+.greeting > span, .helper { color: var(--ink-muted); font-size: var(--text-2xs); line-height: 1.8; }
+.requestOverview { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-4); border: 1px solid var(--brand-tint-strong); border-radius: var(--radius-card); background: var(--brand-tint); }
+.overviewIcon { display: grid; place-items: center; width: 38px; height: 38px; flex-shrink: 0; border-radius: var(--radius-group); color: var(--brand-ink); background: var(--surface); }
+.requestOverview > span:nth-child(2) { display: grid; flex: 1; gap: var(--s-1); min-width: 0; }
+.requestOverview b { margin-left: var(--s-2); color: var(--brand-ink); }
+.requestOverview strong { color: var(--ink-strong); font-size: var(--text-xs); font-weight: 600; }
+.requestOverview small { color: var(--ink-muted); font-size: var(--text-2xs); line-height: 1.5; }
 .requestOverview > svg { flex-shrink: 0; width: 18px; color: var(--brand-ink); }
-.section { display: grid; gap: 12px; min-width: 0; }
-.heading { flex-wrap: wrap; gap: 4px 12px; }
-.heading h2 { margin: 0; color: var(--ink-strong); font-size: 16px; font-weight: 700; }
-.heading h2 span { margin-left: 4px; color: var(--brand-ink); font-size: 13px; }
-.heading > a { padding: 10px 0; color: var(--ink-muted); font-size: 11px; }
-.childNames { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
-.childChip { display: flex; align-items: center; gap: 9px; padding: 8px 14px 8px 8px; color: var(--ink-strong); font-size: 13px; font-weight: 600; background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--r-pill); }
-.childChip > span { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; color: var(--brand-ink); background: var(--brand-tint); font-size: 12px; font-weight: 700; }
-.helper { margin: 0; padding: 16px; border: 1px dashed var(--card-border); border-radius: 14px; }
-.pendingLink { display: block; width: fit-content; max-width: 100%; color: var(--brand-ink); font-size: 12px; line-height: 1.6; padding: 10px 0; }
-.primaryLink { display: flex; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--brand); color: var(--brand-on); font-size: 13px; font-weight: 600; }
-.diaryRow, .requestRow { min-width: 0; padding: 20px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--surface); box-shadow: var(--card-shadow); }
+.section { display: grid; gap: var(--s-3); min-width: 0; }
+.heading { flex-wrap: wrap; gap: var(--s-1) var(--s-3); }
+.heading h2 { margin: 0; color: var(--ink-strong); font-size: var(--text-base); font-weight: 700; }
+.heading h2 span { margin-left: var(--s-1); color: var(--brand-ink); font-size: var(--text-xs); }
+.heading > a { display: inline-flex; align-items: center; min-height: var(--control-height); padding: var(--s-3) 0; color: var(--ink-muted); font-size: var(--text-2xs); }
+.childNames { display: flex; flex-wrap: wrap; gap: var(--s-3); margin: 0; }
+.childChip { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-2) var(--s-4) var(--s-2) var(--s-2); color: var(--ink-strong); font-size: var(--text-xs); font-weight: 600; background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--r-pill); }
+.childChip > span { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; color: var(--brand-ink); background: var(--brand-tint); font-size: var(--text-2xs); font-weight: 700; }
+.helper { margin: 0; padding: var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-group); }
+.pendingLink { display: block; width: fit-content; max-width: 100%; color: var(--brand-ink); font-size: var(--text-2xs); line-height: 1.6; padding: var(--s-3) 0; }
+.primaryLink { display: flex; justify-content: space-between; gap: var(--s-3); padding: var(--s-4) var(--s-4); border-radius: var(--radius-group); background: var(--brand); color: var(--brand-on); font-size: var(--text-xs); font-weight: 600; }
+.diaryRow, .requestRow { min-width: 0; padding: var(--s-5); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--card-shadow); }
 .diaryRow { display: block; }
-.meta { flex-wrap: wrap; gap: 5px 12px; color: var(--ink-muted); font-size: 11px; }
-.meta strong { color: var(--brand-ink); font-size: 13px; font-weight: 650; overflow-wrap: anywhere; }
-.diaryRow p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 14px 0; color: var(--ink-strong); font-size: 14px; line-height: 1.8; overflow-wrap: anywhere; }
-.readLink { color: var(--brand-ink); font-size: 12px; }
-.requestRow > span:first-child, .shopLink > span:first-of-type { display: grid; min-width: 0; gap: 6px; }
-.requestRow strong, .shopLink strong { color: var(--ink-strong); font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
-.requestRow small, .shopLink small { color: var(--ink-muted); font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
-.requestStatus { flex-shrink: 0; color: var(--brand-ink); font-size: 11px; }
-.shopLink { color: var(--brand-ink); padding: 18px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--surface); min-width: 0; }
+.meta { flex-wrap: wrap; gap: var(--s-1) var(--s-3); color: var(--ink-muted); font-size: var(--text-2xs); }
+.meta strong { color: var(--brand-ink); font-size: var(--text-xs); font-weight: 600; overflow-wrap: anywhere; }
+.diaryRow p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: var(--s-4) 0; color: var(--ink-strong); font-size: var(--text-sm); line-height: 1.8; overflow-wrap: anywhere; }
+.readLink { color: var(--brand-ink); font-size: var(--text-2xs); }
+.requestRow > span:first-child, .shopLink > span:first-of-type { display: grid; min-width: 0; gap: var(--s-2); }
+.requestRow strong, .shopLink strong { color: var(--ink-strong); font-size: var(--text-sm); font-weight: 600; overflow-wrap: anywhere; }
+.requestRow small, .shopLink small { color: var(--ink-muted); font-size: var(--text-2xs); line-height: 1.6; overflow-wrap: anywhere; }
+.requestStatus { flex-shrink: 0; color: var(--brand-ink); font-size: var(--text-2xs); }
+.shopLink { color: var(--brand-ink); padding: var(--s-5); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--surface); min-width: 0; }
 .shopLink > svg { flex-shrink: 0; width: 24px; height: 24px; }
 .shopLink > span:first-of-type { flex: 1; }
 .heading a:hover, .diaryRow:hover .readLink, .pendingLink:hover { color: var(--brand-ink); }
 .primaryLink:hover { background: var(--brand-hover); }
 @media (min-width: 1024px) {
-  .container { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 24px; align-items: start; }
+  .container { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--section-gap); align-items: start; }
   .header, .greeting, .requestOverview, .shopLink, .section:first-of-type { grid-column: 1 / -1; }
   .container > .section:nth-of-type(2) { grid-column: 1 / -1; }
-  .greeting h1 { font-size: 30px; }
+  .greeting h1 { font-size: var(--text-2xl); }
 }
 @media (max-width: 370px) {
-  .greeting h1 { font-size: 22px; }
-  .requestOverview { gap: 10px; padding: 14px 12px; }
-  .requestOverview small { font-size: 10px; }
-  .diaryRow, .requestRow { padding: 16px; }
+  .greeting h1 { font-size: var(--text-xl); }
+  .requestOverview { gap: var(--s-3); padding: var(--s-4) var(--s-3); }
+  .requestOverview small { font-size: var(--text-2xs); }
+  .diaryRow, .requestRow { padding: var(--s-4); }
 }

@@ -70,7 +70,7 @@ function ShopNewProductPage() {
   return (
     <PageSection
       title="갖고 싶은 선물 요청"
-      description="부탁할 가족을 골라 보내세요. 가족이 클로버를 정하면 ‘갖고 싶은 선물’에 보여요."
+      description="가족이 클로버를 정하면 ‘갖고 싶은 선물’에 표시됩니다."
     >
       {error ? <StatusMessage kind="error" message={error} /> : null}
       {recipientsLoading ? <StatusMessage kind="loading" message="부탁할 가족을 불러오고 있어요." /> : null}
@@ -106,7 +106,7 @@ function ShopNewProductPage() {
             value={description}
             maxLength={240}
             required
-            placeholder="색깔, 모양, 갖고 싶은 이유를 짧게 적어 주세요."
+            placeholder="특징이나 원하는 이유"
             onChange={(event) => setDescription(event.target.value)}
           />
         </label>
@@ -116,7 +116,7 @@ function ShopNewProductPage() {
           <input
             type="url"
             value={productUrl}
-            placeholder="쿠팡이나 쇼핑몰 주소"
+            placeholder="https://"
             onChange={(event) => setProductUrl(event.target.value)}
           />
           {productUrlInvalid ? <small className={styles.fieldError}>http:// 또는 https://로 시작하는 주소를 넣어 주세요.</small> : null}

@@ -83,7 +83,7 @@ export default function SharingGroupsPage() {
   }
 
   return (
-    <PageSection title="그룹 관리" description="일기를 공유할 사람과 선물을 부탁할 가족을 모아두세요. 직접 만드는 그룹은 최대 5개예요.">
+    <PageSection title="그룹 관리" description="일기 공개 대상과 가족을 관리합니다.">
       <div className={styles.container}>
         <div className={styles.backLinks}>
           <Link to="/me">← 마이페이지</Link>

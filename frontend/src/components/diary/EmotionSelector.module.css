@@ -1,76 +1,24 @@
-.group {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 6px;
-}
-
+.group { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--s-1); }
 .option {
+  position: relative;
   display: grid;
   justify-items: center;
-  gap: var(--s-1);
+  gap: var(--s-2);
   min-width: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  padding: 6px 4px 7px;
-  background: var(--surface);
+  padding: var(--s-3) 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background: transparent;
   color: var(--ink-muted);
-  transition:
-    transform var(--dur-1) var(--ease-out),
-    border-color var(--dur-1) var(--ease-out),
-    background var(--dur-1) var(--ease-out),
-    box-shadow var(--dur-1) var(--ease-out);
+  cursor: pointer;
+  transition: background var(--dur-1), border-color var(--dur-1);
 }
-
-.option:hover:not(:disabled) {
-  transform: translateY(-2px);
-  border-color: var(--card-border-hover);
-}
-
-.option:disabled {
-  cursor: default;
-  opacity: 0.6;
-  transform: none;
-}
-
-.optionSelected {
-  color: var(--brand-ink);
-  border-color: var(--brand-ink);
-  background: var(--brand-tint);
-  box-shadow: var(--focus-ring);
-}
-
-.emoji {
-  width: 44px;
-  height: 44px;
-  overflow: hidden;
-  display: block;
-  background: var(--brand-tint);
-  border-radius: var(--r-sm);
-}
-
-.label {
-  overflow: hidden;
-  max-width: 100%;
-  font-size: var(--text-2xs);
-  font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-@media (max-width: 370px) {
-  .group {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 460px) {
-  .option {
-    padding: 6px 3px 8px;
-  }
-
-  .emoji {
-    width: 38px;
-    height: 38px;
-    border-radius: var(--r-xs);
-  }
-}
+.option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.option:focus-within { outline: 2px solid var(--brand-ink); outline-offset: 2px; }
+.option:hover { background: var(--surface-sunken); }
+.option:has(input:disabled) { cursor: default; opacity: .55; }
+.optionSelected { color: var(--brand-ink); border-color: var(--brand-tint-strong); background: var(--brand-tint); }
+.emoji { width: 40px; height: 40px; overflow: hidden; display: block; border-radius: 50%; }
+.label { max-width: 100%; font-size: var(--text-2xs); font-weight: 500; white-space: nowrap; }
+.optionSelected .label { font-weight: 700; }
+@media (max-width: 370px) { .emoji { width: 32px; height: 32px; } }

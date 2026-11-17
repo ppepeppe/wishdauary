@@ -1,14 +1,14 @@
-.section { min-width: 0; display: grid; gap: 10px; }
+.section { min-width: 0; display: grid; gap: var(--s-3); }
 .quietHeading { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-.heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; }
-.heading h2 { margin: 0; color: var(--ink-strong); font-size: 14px; font-weight: 650; }
-.controls { display: flex; align-items: center; gap: 6px; margin-left: auto; }
-.controls button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: var(--ink-muted); font-size: 20px; }
+.heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--s-1) var(--s-3); }
+.heading h2 { margin: 0; color: var(--ink-strong); font-size: var(--text-sm); font-weight: 600; }
+.controls { display: flex; align-items: center; gap: var(--s-2); margin-left: auto; }
+.controls button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: var(--ink-muted); font-size: var(--text-lg); }
 .controls button:hover:not(:disabled) { background: var(--brand-tint); color: var(--brand-ink); }
 .controls button:disabled { opacity: .35; cursor: default; }
 .position { min-width: 42px; color: var(--ink-muted); text-align: center; font-size: var(--text-2xs); font-variant-numeric: tabular-nums; }
-.track { display: flex; align-items: flex-start; position: relative; gap: 12px; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: 4px 4px 12px; scroll-snap-type: x mandatory; scroll-padding-inline: 4px; overscroll-behavior-x: contain; scrollbar-width: none; }
+.track { display: flex; align-items: flex-start; position: relative; gap: var(--s-3); min-width: 0; overflow-x: auto; overflow-y: hidden; padding: var(--s-1) var(--s-1) var(--s-3); scroll-snap-type: x mandatory; scroll-padding-inline: 4px; overscroll-behavior-x: contain; scrollbar-width: none; }
 .track::-webkit-scrollbar { display: none; }
 .slide { display: flow-root; flex: 0 0 calc(100% - 36px); min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
-.slide:last-child { margin-right: 36px; }
+.slide:last-child { margin-right: var(--space-36); }
 .single .slide { flex-basis: 100%; margin-right: 0; }

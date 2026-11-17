@@ -1,13 +1,13 @@
-.picker { margin: 0; padding: 16px; border: 1px solid var(--card-border); border-radius: 12px; background: var(--card-inner-bg); min-width: 0; }
-.picker legend { padding: 0 6px; font-weight: 700; color: var(--ink-strong); }
-.scope { display: grid; gap: 8px; }
-.label { font-size: 13px; color: var(--ink-muted); }
-.scope select { width: 100%; min-height: 44px; border: 1px solid var(--line-strong); border-radius: 10px; padding: 10px; font: inherit; background: var(--surface); }
-.hint { font-size: 13px; line-height: 1.6; color: var(--ink-muted); margin: 10px 0; }
-.groups { display: grid; gap: 8px; }
-.groups a { color: var(--brand-ink); font-size: 14px; padding: 8px 0; }
+.picker { margin: 0; padding: var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-group); background: var(--card-inner-bg); min-width: 0; }
+.picker legend { padding: 0 var(--s-2); font-weight: 700; color: var(--ink-strong); }
+.scope { display: grid; gap: var(--s-2); }
+.label { font-size: var(--text-xs); color: var(--ink-muted); }
+.scope select { width: 100%; min-height: 44px; border: 1px solid var(--line-strong); border-radius: var(--radius-control); padding: var(--s-3); font-family: inherit; font-size: var(--text-base); font-weight: 400; background: var(--surface); }
+.hint { font-size: var(--text-xs); line-height: 1.6; color: var(--ink-muted); margin: var(--s-3) 0; }
+.groups { display: grid; gap: var(--s-2); }
+.groups a { color: var(--brand-ink); font-size: var(--text-sm); padding: var(--s-2) 0; }
 .groups button { font: inherit; text-decoration: underline; border: 0; background: none; cursor: pointer; color: var(--brand-ink); }
-.group { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--surface); cursor: pointer; }
+.group { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3); border: 1px solid var(--card-border); border-radius: var(--radius-control); background: var(--surface); cursor: pointer; }
 .group input { width: 18px; height: 18px; accent-color: var(--brand-ink); flex-shrink: 0; }
 .group span { min-width: 0; overflow-wrap: anywhere; }
-.group small { margin-left: 10px; color: var(--ink-muted); }
+.group small { margin-left: var(--s-3); color: var(--ink-muted); }

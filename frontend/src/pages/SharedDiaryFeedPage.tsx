@@ -26,7 +26,7 @@ export default function SharedDiaryFeedPage() {
   }, [page, revision]);
 
   return (
-    <PageSection title="공개·그룹 피드" description="모두에게 공개한 이야기와 나에게 공유된 그룹 일기를 읽어보세요.">
+    <PageSection title="공개·그룹 피드" description="전체 공개 일기와 나에게 공유된 일기입니다.">
       <div className={styles.container}>
         {getAuthSession()?.appRole === 'child' ? <Link to="/sharing-groups">그룹 관리 →</Link> : null}
         {loading ? <StatusMessage kind="loading" message="이야기를 모으고 있어요." /> : null}

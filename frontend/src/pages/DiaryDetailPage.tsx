@@ -147,10 +147,7 @@ function DiaryDetailPage() {
   }
 
   return (
-    <PageSection
-      title="일기 상세"
-      description={isFamily ? '아이의 마음을 읽고 댓글과 하트로 응원해 주세요.' : '기록한 이야기와 가족의 반응을 확인해요.'}
-    >
+    <PageSection title="일기 상세">
       {isLoading ? <StatusMessage kind="loading" message="일기를 펼치고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
@@ -203,12 +200,12 @@ function DiaryDetailPage() {
                   onChange={(event) => setContent(event.target.value)}
                 />
               </label>
-              <PhotoPicker label="일기 사진" description="사진을 바꾸거나 삭제할 수 있어요. 일기와 같은 공개 범위로 보여요."
+              <PhotoPicker label="일기 사진" description="일기와 같은 공개 범위 · 최대 1장"
                 value={imageData} onChange={setImageData} onBusyChange={setPhotoBusy} disabled={isSaving} />
-              <label className={styles.field}>
-                <span>오늘 기분</span>
+              <fieldset className={styles.field}>
+                <legend>오늘 기분</legend>
                 <EmotionSelector value={emotion} onChange={setEmotion} disabled={isSaving} />
-              </label>
+              </fieldset>
               <DiaryAudiencePicker scope={visibilityScope} groupIds={sharingGroupIds}
                 onScopeChange={setVisibilityScope} onGroupIdsChange={setSharingGroupIds} disabled={isSaving} />
               <div className={styles.actionRow}>

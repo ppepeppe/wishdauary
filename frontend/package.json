@@ -6,8 +6,9 @@
   "scripts": {
     "test": "node --import ./scripts/register-test-loader.mjs --test tests/*.test.mjs",
     "dev": "vite",
+    "check:design": "node scripts/check-design-tokens.mjs",
     "check:css": "node scripts/check-css-classes.mjs",
-    "build": "npm run check:css && tsc -b && vite build && mkdir -p dist/server && cp worker/index.js dist/server/index.js",
+    "build": "npm run check:css && npm run check:design && tsc -b && vite build && mkdir -p dist/server && cp worker/index.js dist/server/index.js",
     "preview": "vite preview",
     "mobile:sync": "node scripts/mobile.mjs",
     "mobile:android": "node scripts/mobile.mjs android --development",

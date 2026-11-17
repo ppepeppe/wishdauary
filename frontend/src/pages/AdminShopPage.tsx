@@ -48,7 +48,7 @@ export default function AdminShopPage() {
     finally { pending.current = false; setBusy(false); }
   }
 
-  return <PageSection title="공통 상점 상품 관리" description="모든 아이가 함께 구경할 상품과 필요한 클로버를 등록해요.">
+  return <PageSection title="공통 상점 상품 관리">
     <div className={styles.container}>
       <Link to="/me" className={styles.backLink}>← 마이페이지</Link>
       {isLoading ? <StatusMessage kind="loading" message="공통 상점 상품을 불러오고 있어요." /> : null}

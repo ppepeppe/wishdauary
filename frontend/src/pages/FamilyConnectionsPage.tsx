@@ -58,8 +58,8 @@ function FamilyConnectionsPage() {
 
   return (
     <PageSection title={isFamily ? '아이와 연결하기' : '가족 연결 요청'} description={isFamily
-      ? '아이의 닉네임을 찾아 요청을 보내세요. 아이가 승인한 뒤 가족으로 연결돼요.'
-      : '아는 가족인지 확인하고 승인해 주세요. 승인 전에는 가족으로 연결되지 않아요.'}>
+      ? '아이의 승인 후 가족으로 연결됩니다.'
+      : '아는 가족의 요청만 승인해 주세요.'}>
       <div className={styles.container}>
         <div className={styles.toolbar}>
           <Link to={isFamily ? '/family-home' : '/sharing-groups'} className={styles.backLink}>{isFamily ? '← 홈' : '← 그룹 관리'}</Link>
@@ -73,12 +73,12 @@ function FamilyConnectionsPage() {
           <section className={styles.section}>
             <h2>아이 찾기</h2>
             <form className={styles.search} onSubmit={(event) => void search(event)}>
-              <label>아이 닉네임<input value={query} minLength={1} maxLength={50} required placeholder="아이의 닉네임을 입력해 주세요" onChange={(event) => {
+              <label>아이 닉네임<input value={query} minLength={1} maxLength={50} required  onChange={(event) => {
                 setQuery(event.target.value); setResults([]); setSearched(false); setSearching(false); version.current += 1;
               }} /></label>
               <Button type="submit" disabled={searching || !query.trim()}>{searching ? '찾는 중…' : '아이 검색'}</Button>
             </form>
-            <p className={styles.hint}>한 글자 닉네임은 정확히 입력해 주세요. 같은 닉네임은 사용자 번호로 구분하고, 검색 결과는 최대 20명이에요.</p>
+            <details className={styles.searchHelp}><summary>검색 안내</summary><p className={styles.hint}>한 글자 닉네임은 정확히 입력해 주세요. 동명이인은 사용자 번호로 구분합니다. 검색 결과는 최대 20명입니다.</p></details>
             {searched && results.length === 0 ? <p role="status">검색된 아이가 없어요. 닉네임을 다시 확인해 주세요.</p> : null}
             <div aria-live="polite"><CardCarousel title="검색된 아이" itemLabel="아이">{results.map((child) => {
               const connected = connectedIds.has(child.userId);
@@ -111,7 +111,7 @@ function FamilyConnectionsPage() {
             {data.connections.length === 0 ? <p className={styles.hint}>{isFamily ? '아직 연결된 아이가 없어요.' : '아직 연결된 가족이 없어요.'}</p> : <CardCarousel label={isFamily ? '연결된 아이' : '연결된 가족'} itemLabel="구성원">{data.connections.map((person) => (
               <div key={person.userId} className={styles.row}><span><strong>{person.nickname}</strong><small>#{person.userId}{person.relationLabel ? ` · ${person.relationLabel}` : ''}</small></span><span className={styles.status}>연결됨</span></div>
             ))}</CardCarousel>}
-            {!isFamily ? <p className={styles.hint}>연결을 해제하려면 그룹 관리에서 해당 가족을 모든 그룹에서 제외해 주세요.</p> : null}
+            {!isFamily ? <p className={styles.hint}>모든 그룹에서 가족을 제외하면 연결이 해제됩니다.</p> : null}
           </section>
           {history.length > 0 ? <section className={styles.section}><CardCarousel title="처리한 요청" itemLabel="요청">{history.map((item) => {
             const connected = connectedIds.has(isFamily ? item.childUserId : item.familyUserId);

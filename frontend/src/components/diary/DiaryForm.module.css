@@ -1,6 +1,6 @@
 .form {
   display: grid;
-  gap: var(--s-4);
+  gap: var(--section-gap);
   padding: var(--card-padding);
   border: 1px solid var(--card-border);
   border-radius: var(--card-radius);
@@ -23,7 +23,8 @@
   width: 100%;
   border: 1px solid var(--line-strong);
   border-radius: var(--r-md);
-  padding: 11px 13px;
+  min-height: var(--control-height);
+  padding: var(--control-padding);
   background: var(--surface);
   color: var(--ink-strong);
   transition:
@@ -47,7 +48,10 @@
 }
 
 .textarea::placeholder {
-  color: #afa2aa;
+  color: var(--placeholder);
   font-weight: 400;
   opacity: 1;
 }
+
+fieldset.field { margin: 0; padding: 0; border: 0; min-width: 0; }
+.field legend { padding: 0; margin-bottom: var(--field-gap); }

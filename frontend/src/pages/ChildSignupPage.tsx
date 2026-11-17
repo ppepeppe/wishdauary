@@ -33,14 +33,13 @@ function ChildSignupPage() {
 
   return (
     <PageSection
+      variant="form"
       title="아이 가입"
-      description="아이디와 닉네임으로 시작해요. 가족은 가입 후 연결할 수 있어요."
     >
-      {isSubmitting ? <StatusMessage kind="loading" message="계정을 만들고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       <ChildSignupForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       <p>
-        이미 계정이 있다면 <Link to="/login">로그인</Link>으로 이어서 시작할 수 있어요.
+        이미 가입했나요? <Link to="/login">로그인</Link>
       </p>
     </PageSection>
   );

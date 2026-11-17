@@ -8,10 +8,10 @@
   display: grid;
   gap: var(--s-2);
   padding: var(--s-6);
-  border-radius: var(--r-2xl);
+  border-radius: var(--radius-group);
   background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   transition:
     transform var(--dur-2) var(--ease-out),
     box-shadow var(--dur-2) var(--ease-out),
@@ -19,15 +19,14 @@
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  background: var(--brand-tint);
   border-color: rgba(var(--brand-ink-rgb), 0.24);
 }
 
 .title {
   color: var(--ink-strong);
   font-size: var(--text-lg);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
@@ -41,5 +40,5 @@
 .linkText {
   color: var(--brand-ink);
   font-size: var(--text-sm);
-  font-weight: 800;
+  font-weight: 700;
 }

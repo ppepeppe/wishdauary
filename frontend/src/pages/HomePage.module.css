@@ -1,88 +1,73 @@
-.container { display: grid; gap: 20px; min-width: 0; padding-top: 2px; }
-.recoveryLink { justify-self: center; padding: 12px; color: var(--brand-ink); font-size: var(--text-sm); }
-.headerCard { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 2px 0 4px; }
-.profileBadge { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.profileCopy { display: grid; gap: 3px; min-width: 0; }
-.greeting, .name { margin: 0; }
-.greeting { color: var(--ink-muted); font-size: var(--text-xs); }
-.name { overflow: hidden; color: var(--ink-strong); font-size: 21px; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
-.profileHint { color: var(--ink-muted); font-size: 11px; }
-.balanceChip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding: 10px 12px; border: 1px solid var(--card-border); border-radius: 14px; background: var(--surface); color: var(--brand-ink); }
+.container { display: grid; gap: var(--section-gap); min-width: 0; }
+.recoveryLink { justify-self: center; padding: var(--s-3); color: var(--brand-ink); font-size: var(--text-sm); }
+.headerCard { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+.profileBadge { display: flex; align-items: center; gap: var(--s-3); min-width: 0; }
+.profileCopy { display: grid; gap: var(--s-1); min-width: 0; }
+.name { margin: 0; overflow: hidden; color: var(--ink-strong); font-size: var(--text-lg); font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.profileHint { color: var(--ink-muted); font-size: var(--text-2xs); }
+.balanceChip { display: flex; align-items: center; gap: var(--s-2); flex-shrink: 0; color: var(--green-ink); }
 .balanceIcon { display: grid; place-items: center; }
 .balanceIcon svg { width: 21px; height: 21px; }
-.balanceCopy { display: grid; gap: 2px; }
-.balanceCopy small { color: var(--ink-muted); font-size: 10px; }
-.balanceValue { font-size: 19px; line-height: 1.15; }
-.todayCard { display: grid; gap: 10px; min-width: 0; padding: 16px 18px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--brand-tint); }
-.dateBar { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-.dateBar > div { display: flex; align-items: center; gap: 8px; }
-.dateBar strong { font-size: var(--text-xs); font-weight: 550; }
-.dateCaption { color: var(--brand-ink); font-size: 11px; font-weight: 700; }
-.calendarLink { color: var(--ink-muted); font-size: 11px; }
+.balanceCopy { display: grid; gap: var(--s-1); }
+.balanceCopy small { color: var(--ink-muted); font-size: var(--text-2xs); }
+.balanceValue { font-size: var(--text-lg); line-height: 1.15; }
+.todayCard { display: grid; gap: var(--s-1); min-width: 0; padding: var(--s-3) var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--brand-tint); }
+.dateBar { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); flex-wrap: wrap; }
+.dateBar > div { display: flex; align-items: center; gap: var(--s-2); }
+.dateBar strong { font-size: var(--text-xs); font-weight: 500; }
+.dateCaption { color: var(--brand-ink); font-size: var(--text-2xs); font-weight: 700; }
+.calendarLink { display: inline-flex; align-items: center; min-height: var(--control-height); color: var(--ink-muted); font-size: var(--text-2xs); }
 .calendarLink:hover, .metaLink:hover, .goalDetailLink:hover { color: var(--brand-ink); }
 .streakBanner { padding: 0; }
-.streakCopy { display: flex; gap: 5px 10px; align-items: baseline; flex-wrap: wrap; }
-.streakTitle, .streakDescription { margin: 0; font-size: 12px; line-height: 1.6; }
-.streakTitle { color: var(--brand-ink); font-weight: 650; }
-.streakDescription { color: var(--ink-muted); }
+.streakCopy { display: flex; gap: var(--s-1) var(--s-3); align-items: baseline; flex-wrap: wrap; }
+.streakTitle { margin: 0; font-size: var(--text-xs); color: var(--brand-ink); font-weight: 600; }
 .diaryCard, .goalCard { min-width: 0; border: 1px solid var(--card-border); border-radius: var(--card-radius); background: var(--surface); box-shadow: var(--card-shadow); }
-.diaryCard { padding: 24px 20px 20px; }
-.sectionEyebrow { margin: 0 0 8px; color: var(--brand-ink); font-size: 11px; font-weight: 650; }
-.diaryTitle { margin: 0; font-size: 24px; font-weight: 750; letter-spacing: -.04em; }
-.diarySubtitle { margin: 8px 0 0; color: var(--ink-muted); font-size: var(--text-xs); }
-.emotionRow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin: 24px 0 22px; }
-.emotionButton, .emotionButtonActive { display: grid; justify-items: center; gap: 9px; min-width: 0; padding: 12px 2px; border: 1px solid transparent; border-radius: 14px; color: var(--ink-muted); background: transparent; transition: background var(--dur-1), border-color var(--dur-1); }
-.emotionButton:hover { background: var(--surface-sunken); }
-.emotionButtonActive { background: var(--brand-tint); border-color: var(--brand-tint-strong); color: var(--brand-ink); }
-.emotionEmoji { display: block; width: 44px; height: 44px; overflow: hidden; border-radius: 50%; }
-.emotionLabel { font-size: 11px; white-space: nowrap; }
-.emotionButtonActive .emotionLabel { font-weight: 750; }
-.writeButton { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 50px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--brand); color: var(--brand-on); font-size: var(--text-sm); font-weight: 650; transition: background var(--dur-1); }
-.writeButton:hover { background: var(--brand-hover); }
+.diaryCard { padding: var(--s-6) var(--s-5) var(--s-5); }
+.diaryTitle { margin: 0; font-size: var(--text-lg); font-weight: 700; letter-spacing: var(--tracking-tight); }
+.emotionRow { margin: var(--s-4) 0 var(--s-5); }
+.container .writeButton { justify-content: space-between; border-radius: var(--radius-control); }
 .writeButton svg { width: 18px; height: 18px; flex-shrink: 0; }
-.diaryMetaRow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-.diaryMetaText, .reactionHint { margin: 0; color: var(--ink-muted); font-size: 11px; }
-.metaLink { color: var(--brand-ink); font-size: 11px; }
-.reactionHint { display: flex; align-items: center; gap: 5px; margin-top: 10px; }
+.diaryMetaRow { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-2); flex-wrap: wrap; margin-top: var(--s-4); }
+.diaryMetaText, .reactionHint { margin: 0; color: var(--ink-muted); font-size: var(--text-2xs); }
+.metaLink { display: inline-flex; align-items: center; min-height: var(--control-height); color: var(--brand-ink); font-size: var(--text-2xs); }
+.reactionHint { display: flex; align-items: center; gap: var(--s-1); margin-top: var(--s-3); }
 .reactionEmotion { width: 18px; height: 18px; overflow: hidden; border-radius: 50%; }
-.goalCard { padding: 20px; }
-.goalTopRow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.goalCard { padding: var(--s-5); }
+.goalTopRow { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); flex-wrap: wrap; }
 .goalHeading, .goalName, .goalHelper { margin: 0; }
-.goalHeading { color: var(--ink-muted); font-size: 12px; }
-.goalName { margin-top: 6px; color: var(--ink-strong); font-size: 17px; font-weight: 650; overflow-wrap: anywhere; }
-.goalBadge { flex-shrink: 0; color: var(--brand-ink); font-size: 11px; padding: 4px 8px; border-radius: var(--r-pill); background: var(--brand-tint); }
-.goalContent { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; gap: 16px; margin-top: 18px; }
-.goalImage { width: 64px; height: 64px; border-radius: 12px; }
-.goalProgressBlock { display: grid; gap: 8px; }
-.goalNumbers { display: flex; justify-content: space-between; color: var(--ink-muted); font-size: 11px; }
+.goalHeading { color: var(--ink-muted); font-size: var(--text-2xs); }
+.goalName { margin-top: var(--s-2); color: var(--ink-strong); font-size: var(--text-md); font-weight: 600; overflow-wrap: anywhere; }
+.goalBadge { flex-shrink: 0; color: var(--brand-ink); font-size: var(--text-2xs); padding: var(--s-1) var(--s-2); border-radius: var(--r-pill); background: var(--brand-tint); }
+.goalContent { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; gap: var(--s-4); margin-top: var(--s-5); }
+.goalImage { width: 64px; height: 64px; border-radius: var(--radius-group); }
+.goalProgressBlock { display: grid; gap: var(--s-2); }
+.goalNumbers { display: flex; justify-content: space-between; color: var(--ink-muted); font-size: var(--text-2xs); }
 .progressTrack { height: 6px; overflow: hidden; background: var(--surface-sunken); border-radius: var(--r-pill); }
-.progressFill { height: 100%; background: var(--brand); border-radius: inherit; transition: width var(--dur-3); }
-.goalHelper { color: var(--ink-muted); font-size: 11px; }
-.goalDetailLink { display: flex; align-items: center; gap: 8px; width: fit-content; min-height: 32px; margin-top: 14px; color: var(--brand-ink); font-size: 12px; font-weight: 550; }
-.goalEmpty { display: flex; align-items: center; gap: 14px; }
-.goalEmptyIcon { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: var(--brand-tint); color: var(--brand-ink); }
+.progressFill { height: 100%; background: var(--brand-ink); border-radius: inherit; transition: width var(--dur-3); }
+.goalHelper { color: var(--ink-muted); font-size: var(--text-2xs); }
+.goalDetailLink { display: flex; align-items: center; gap: var(--s-2); width: fit-content; min-height: var(--control-height); margin-top: var(--s-4); color: var(--brand-ink); font-size: var(--text-2xs); font-weight: 500; }
+.goalEmpty { display: flex; align-items: center; gap: var(--s-4); }
+.goalEmptyIcon { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-group); background: var(--brand-tint); color: var(--brand-ink); }
 .goalEmptyCopy { min-width: 0; }
-.goalEmpty .goalName { font-size: 14px; }
-.goalEmpty .goalDetailLink { margin-top: 4px; }
+.goalEmpty .goalName { font-size: var(--text-sm); }
+.goalEmpty .goalDetailLink { margin-top: var(--s-1); }
 @media (max-width: 370px) {
-  .diaryCard, .goalCard { padding: 18px 14px; }
-  .todayCard { padding: 14px; }
-  .emotionRow { gap: 3px; }
-  .emotionEmoji { width: 34px; height: 34px; }
-  .diaryTitle { font-size: 21px; }
-  .name { font-size: 19px; }
-  .balanceChip { padding: 9px; gap: 5px; }
+  .diaryCard, .goalCard { padding: var(--s-5) var(--s-4); }
+  .todayCard { padding: var(--s-4); }
+  .diaryTitle { font-size: var(--text-lg); }
+  .name { font-size: var(--text-lg); }
+  .balanceChip { padding: var(--s-2); gap: var(--s-1); }
 }
 @media (min-width: 1024px) {
-  .container { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+  .container { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--s-6); align-items: start; }
   .headerCard, .todayCard, .container > a, .container > p { grid-column: 1 / -1; }
-  .todayCard { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+  .todayCard { display: flex; align-items: center; justify-content: space-between; gap: var(--s-5); }
   .dateBar { flex: 1; }
   .streakCopy { display: grid; gap: 0; }
-  .diaryCard { padding: 28px 22px 22px; }
-  .goalCard { padding: 22px; }
+  .diaryCard { padding: var(--space-28) var(--s-6) var(--s-6); }
+  .goalCard { padding: var(--s-6); }
   .goalContent { grid-template-columns: 1fr; }
   .goalImage { width: 100%; height: 140px; }
   .goalImage img { object-fit: contain; }
-  .diaryTitle { font-size: 25px; }
+  .diaryTitle { font-size: var(--text-xl); }
 }

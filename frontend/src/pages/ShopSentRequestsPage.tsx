@@ -71,10 +71,7 @@ function ShopSentRequestsPage() {
 
 
   return (
-    <PageSection
-      title="선물"
-      description="카드를 좌우로 넘겨 보낸 요청과 가족의 답변을 확인해요."
-    >
+    <PageSection title="선물">
       <ShopNavigation />
       {sent ? <StatusMessage kind="success" message="요청을 보냈어요. 가족이 클로버를 정하면 ‘갖고 싶은 선물’에서 볼 수 있어요." /> : null}
       {isLoading ? <StatusMessage kind="loading" message="보낸 부탁을 찾고 있어요." /> : null}

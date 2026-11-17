@@ -40,7 +40,7 @@ export default function DiaryAudiencePicker({ scope, groupIds, onScopeChange, on
 
   return (
     <fieldset className={styles.picker} disabled={disabled}>
-      <legend>누구에게 보여줄까요?</legend>
+      <legend>공개 설정</legend>
       <label className={styles.scope}>
         <span className={styles.label}>공개 범위</span>
         <select value={scope} onChange={(event) => onScopeChange(event.target.value as DiaryVisibilityScope)}>
@@ -51,11 +51,11 @@ export default function DiaryAudiencePicker({ scope, groupIds, onScopeChange, on
           {scope === 'friends' ? <option value="friends">이전 친구 공개 설정</option> : null}
         </select>
       </label>
-      {scope === 'public' ? <p className={styles.hint}>로그인한 서비스 사용자 모두가 이 일기를 볼 수 있어요.</p> : null}
-      {scope === 'family' ? <p className={styles.hint}>내 그룹에 추가한 가족 계정 모두에게 보여요.</p> : null}
+      {scope === 'public' ? <p className={styles.hint}>로그인한 모든 사용자에게 공개됩니다.</p> : null}
+      {scope === 'family' ? <p className={styles.hint}>연결된 가족 모두에게 공개됩니다.</p> : null}
       {scope === 'group' ? (
         <div className={styles.groups}>
-          <p className={styles.hint}>여러 그룹을 선택할 수 있어요. 선택한 그룹 중 하나에 속하면 볼 수 있어요.</p>
+          <p className={styles.hint}>선택한 그룹 구성원에게만 공개됩니다.</p>
           {loading ? <p role="status">그룹을 불러오는 중이에요.</p> : null}
           {error ? <p role="alert">{error} <button type="button" onClick={() => setRevision((value) => value + 1)}>다시 불러오기</button></p> : null}
           {!loading && !error && groups.map((group) => (

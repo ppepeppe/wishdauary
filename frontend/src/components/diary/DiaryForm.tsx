@@ -76,13 +76,13 @@ function DiaryForm({
         />
       </label>
 
-      <PhotoPicker label="일기 사진" description="오늘의 사진을 한 장 남겨보세요. 일기와 같은 공개 범위로 보여요."
+      <PhotoPicker label="일기 사진" description="일기와 같은 공개 범위 · 최대 1장"
         value={imageData} onChange={setImageData} onBusyChange={setPhotoBusy} disabled={isSubmitting} />
 
-      <label className={styles.field}>
-        <span>오늘 기분</span>
+      <fieldset className={styles.field}>
+        <legend>오늘 기분</legend>
         <EmotionSelector value={emotion} onChange={setEmotion} disabled={isSubmitting} />
-      </label>
+      </fieldset>
 
       <DiaryAudiencePicker scope={visibilityScope} groupIds={sharingGroupIds}
         onScopeChange={setVisibilityScope} onGroupIdsChange={setSharingGroupIds} disabled={isSubmitting} />

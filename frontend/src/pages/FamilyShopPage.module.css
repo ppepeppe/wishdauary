@@ -1,5 +1,5 @@
-.container { display: grid; gap: 22px; }
-.heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.container { display: grid; gap: var(--s-6); }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
 .heading h2, .form h2 { margin: 0; font-size: var(--text-md); }
 .heading small { color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }
 .form {
@@ -10,27 +10,27 @@
   box-shadow: var(--card-shadow);
   min-width: 0;
 }
-.form fieldset { display: grid; min-width: 0; gap: 18px; border: 0; padding: 22px 0 0; margin: 0; }
-.form label { display: grid; gap: 8px; font-size: var(--text-sm); }
-.form input, .form select, .form textarea { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line-strong); border-radius: var(--r-md); color: var(--ink); background: var(--surface); font: inherit; }
+.form fieldset { display: grid; min-width: 0; gap: var(--s-5); border: 0; padding: var(--s-6) 0 0; margin: 0; }
+.form label { display: grid; gap: var(--s-2); font-size: var(--text-sm); }
+.form input, .form select, .form textarea { width: 100%; min-width: 0; min-height: 44px; padding: var(--s-3) var(--s-3); border: 1px solid var(--line-strong); border-radius: var(--r-md); color: var(--ink); background: var(--surface); font-family: inherit; font-size: var(--text-base); font-weight: 400; }
 .form textarea { min-height: 100px; resize: vertical; }
-.prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
 .actions {
   display: flex;
-  gap: 10px;
+  gap: var(--s-3);
   flex-wrap: wrap;
 }
 .productSection {
   min-width: 0;
   display: grid;
-  gap: 12px;
+  gap: var(--s-3);
   padding-top: 0;
 }
 .productSection h2 { margin: 0; font-size: var(--text-md); }
-.productSection small { margin-left: 4px; color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }
+.productSection small { margin-left: var(--s-1); color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }
 .hint, .empty p { color: var(--ink-muted); font-size: var(--text-xs); line-height: 1.7; }
 .link, .empty a { display: inline-flex; align-items: center; min-height: 44px; color: var(--brand-ink); font-size: var(--text-sm); }
-.footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-2); }
 .heading { flex-wrap: wrap; }
 
 .empty { padding: var(--card-padding); border: 1px solid var(--card-border); border-radius: var(--card-radius); background: var(--card-bg); box-shadow: var(--card-shadow); }

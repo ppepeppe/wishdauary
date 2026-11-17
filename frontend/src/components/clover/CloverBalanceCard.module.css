@@ -29,14 +29,14 @@
   width: 54px;
   height: 54px;
   border-radius: var(--r-xl);
-  font-size: 1.35rem;
+  font-size: var(--text-xl);
   background: rgba(255, 255, 255, 0.72);
   box-shadow: var(--shadow-xs);
 }
 
 .badge {
   margin: 0;
-  padding: 6px 10px;
+  padding: var(--s-2) var(--s-3);
   border-radius: var(--r-pill);
   color: var(--green-ink);
   background: rgba(255, 255, 255, 0.74);
@@ -45,12 +45,12 @@
 }
 
 .gainBadge {
-  padding: 7px 11px;
+  padding: var(--s-2) var(--s-3);
   border-radius: var(--r-pill);
   color: var(--green-ink);
   background: #ffffff;
   font-size: var(--text-xs);
-  font-weight: 800;
+  font-weight: 700;
   box-shadow: var(--shadow-sm);
 }
 
@@ -70,7 +70,7 @@
 .value {
   color: var(--ink-strong);
   font-size: var(--text-2xl);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 

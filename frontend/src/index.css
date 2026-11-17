@@ -19,8 +19,8 @@
   --text-2xs: 0.75rem;
   --text-xs: 0.8125rem;
   --text-sm: 0.875rem;
-  --text-base: 0.9375rem;
-  --text-md: 1.0625rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
   --text-lg: 1.25rem;
   --text-xl: 1.5rem;
   --text-2xl: 1.875rem;
@@ -80,19 +80,29 @@
   --card-bg: #ffffff;
   --card-border: rgba(142, 73, 100, 0.13);
   --card-border-hover: rgba(142, 73, 100, 0.24);
-  --card-radius: 18px;
-  --card-padding: 20px;
-  --card-shadow: 0 3px 16px rgba(101, 58, 77, 0.04);
+  --card-radius: var(--radius-card);
+  --card-padding: var(--s-5);
+  --card-shadow: var(--shadow-xs);
   --card-inner-bg: #fdf7f9;
 
   /* ---------- Radius ---------- */
-  --r-xs: 4px;
-  --r-sm: 8px;
-  --r-md: 10px;
-  --r-lg: 12px;
-  --r-xl: 16px;
-  --r-2xl: 20px;
-  --r-pill: 999px;
+  --radius-small: 4px;
+  --radius-control: 8px;
+  --radius-group: 12px;
+  --radius-card: 16px;
+  --radius-dialog: 24px;
+  --radius-pill: 999px;
+  /* Concentric surfaces: 16px card − 8px inset = 8px media. */
+  --inset-card: var(--s-2);
+  --radius-media: max(0px, calc(var(--radius-card) - var(--inset-card)));
+  --radius-segment: calc(var(--radius-group) - var(--s-1));
+  --r-xs: var(--radius-small);
+  --r-sm: var(--radius-control);
+  --r-md: var(--radius-control);
+  --r-lg: var(--radius-group);
+  --r-xl: var(--radius-card);
+  --r-2xl: var(--radius-dialog);
+  --r-pill: var(--radius-pill);
 
   /* ---------- Elevation (light borders first, shadow last) ---------- */
   --shadow-xs: 0 1px 2px rgba(47, 52, 56, 0.04);
@@ -110,6 +120,21 @@
   --s-6: 24px;
   --s-7: 32px;
   --s-8: 40px;
+  --space-28: 28px;
+  --space-36: 36px;
+  --space-44: 44px;
+  --space-48: 48px;
+  --space-56: 56px;
+  --space-64: 64px;
+  --space-72: 72px;
+  --space-80: 80px;
+  --space-96: 96px;
+  --page-gutter: var(--s-5);
+  --section-gap: var(--s-6);
+  --field-gap: var(--s-2);
+  --control-height: 44px;
+  --control-padding: var(--s-3);
+  --placeholder: #afa2aa;
 
   /* ---------- Motion ---------- */
   --ease-out: cubic-bezier(0.22, 0.9, 0.32, 1);
@@ -162,9 +187,9 @@ body {
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 0;
   min-height: 100vh;
-  font-size: 15px;
+  font-size: var(--text-base);
   letter-spacing: var(--tracking);
   background: var(--canvas);
 }
@@ -233,11 +258,13 @@ textarea,
 select {
   width: 100%;
   border: 1px solid var(--line-strong);
-  border-radius: var(--r-sm);
-  padding: 11px 13px;
+  border-radius: var(--radius-control);
+  min-height: var(--control-height);
+  padding: var(--control-padding);
   color: var(--ink-strong);
   background: var(--surface);
   font-size: var(--text-base);
+  font-weight: 400;
   letter-spacing: var(--tracking);
   transition:
     border-color var(--dur-1) var(--ease-out),
@@ -246,20 +273,20 @@ select {
 
 input::placeholder,
 textarea::placeholder {
-  color: var(--ink-subtle);
+  color: var(--placeholder);
 }
 
 input:hover:not(:disabled),
 textarea:hover:not(:disabled),
 select:hover:not(:disabled) {
-  border-color: #c2c8cc;
+  border-color: var(--card-border-hover);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--brand);
+  border-color: var(--brand-ink);
   box-shadow: var(--focus-ring);
 }
 

@@ -49,9 +49,7 @@ function ShopProductDetailPage() {
   }
 
   return (
-    <PageSection
-      title="선물 상세"
-    >
+    <PageSection title="선물 상세">
       {isLoading ? <StatusMessage kind="loading" message="선물을 살펴보고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}

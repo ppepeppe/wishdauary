@@ -1,54 +1,54 @@
 .preview {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-  padding: 20px;
+  gap: var(--s-4);
+  margin-bottom: var(--s-5);
+  padding: var(--s-5);
   border: 1px solid var(--card-border);
   border-radius: var(--card-radius);
   background: var(--card-bg);
   box-shadow: var(--card-shadow);
   min-width: 0;
 }
-.preview > :first-child { width: 68px; height: 68px; border-radius: 20px; }
+.preview > :first-child { width: 68px; height: 68px; border-radius: var(--radius-card); }
 .preview > div { min-width: 0; overflow-wrap: anywhere; }
-.previewName { margin: 0; color: var(--ink-strong); font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
-.roleBadge { display: inline-block; margin-top: 8px; padding: 3px 7px; border-radius: var(--r-pill); background: var(--brand-tint); color: var(--brand-ink); font-size: 10px; font-weight: 700; }
-.previewEmail { margin: 4px 0 0; color: var(--ink-muted); font-size: var(--text-xs); overflow-wrap: anywhere; }
+.previewName { margin: 0; color: var(--ink-strong); font-size: var(--text-xl); font-weight: 700; letter-spacing: -.03em; }
+.roleBadge { display: inline-block; margin-top: var(--s-2); padding: var(--s-1) var(--s-2); border-radius: var(--r-pill); background: var(--brand-tint); color: var(--brand-ink); font-size: var(--text-2xs); font-weight: 700; }
+.previewEmail { margin: var(--s-1) 0 0; color: var(--ink-muted); font-size: var(--text-xs); overflow-wrap: anywhere; }
 .form { display: grid; gap: var(--s-4); padding: var(--card-padding); border: 1px solid var(--card-border); border-radius: var(--card-radius); background: var(--card-bg); box-shadow: var(--card-shadow); min-width: 0; }
-.field, .photoField { display: grid; gap: 8px; color: var(--ink-strong); font-size: var(--text-sm); font-weight: 700; }
+.field, .photoField { display: grid; gap: var(--s-2); color: var(--ink-strong); font-size: var(--text-sm); font-weight: 700; }
 .fieldHint { color: var(--ink-muted); font-size: var(--text-xs); font-weight: 500; line-height: var(--leading-normal); }
 .fieldset { margin: 0; padding: 0; border: 0; }
-.fieldset legend { margin-bottom: 10px; color: var(--ink-strong); font-size: var(--text-sm); font-weight: 700; }
-.presetGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.presetButton, .presetButtonActive { display: grid; justify-items: center; gap: 6px; padding: 10px 6px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); color: var(--ink-muted); font-size: var(--text-2xs); font-weight: 600; }
+.fieldset legend { margin-bottom: var(--s-3); color: var(--ink-strong); font-size: var(--text-sm); font-weight: 700; }
+.presetGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); }
+.presetButton, .presetButtonActive { display: grid; justify-items: center; gap: var(--s-2); padding: var(--s-3) var(--s-2); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); color: var(--ink-muted); font-size: var(--text-2xs); font-weight: 600; }
 .presetButtonActive { border-color: var(--brand-ink); background: var(--brand-tint); color: var(--brand-ink); }
-.clearPhoto { justify-self: start; border: 0; min-height: 40px; padding: 0; color: var(--ink-muted); background: transparent; font-size: var(--text-xs); font-weight: 600; }
-.logoutBox { display: grid; gap: 10px; margin-top: var(--s-6); }
-.backLink { border: 0; padding: 8px; color: var(--ink-muted); background: transparent; font-size: var(--text-sm); font-weight: 600; }
-.managementNav { display: grid; margin-bottom: 24px; border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; background: var(--surface); box-shadow: var(--card-shadow); }
-.managementLink { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px; border-bottom: 1px solid var(--line); background: var(--card-bg); min-width: 0; }
+.clearPhoto { justify-self: start; border: 0; min-height: var(--control-height); padding: 0; color: var(--ink-muted); background: transparent; font-size: var(--text-xs); font-weight: 600; }
+.logoutBox { display: grid; gap: var(--s-3); margin-top: var(--s-6); }
+.backLink { border: 0; padding: var(--s-2); color: var(--ink-muted); background: transparent; font-size: var(--text-sm); font-weight: 600; }
+.managementNav { display: grid; margin-bottom: var(--s-6); border: 1px solid var(--card-border); border-radius: var(--radius-card); overflow: hidden; background: var(--surface); box-shadow: var(--card-shadow); }
+.managementLink { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); padding: var(--s-5); border-bottom: 1px solid var(--line); background: var(--card-bg); min-width: 0; }
 .managementLink:last-child { border-bottom: 0; }
-.managementLink > span:first-child { display: grid; gap: 6px; min-width: 0; }
+.managementLink > span:first-child { display: grid; gap: var(--s-2); min-width: 0; }
 .managementLink > span:last-child { flex-shrink: 0; color: var(--brand-ink); }
-.managementLink strong { color: var(--ink-strong); font-size: 14px; font-weight: 600; }
-.managementLink small { color: var(--ink-muted); font-size: 12px; line-height: var(--leading-normal); }
+.managementLink strong { color: var(--ink-strong); font-size: var(--text-sm); font-weight: 600; }
+.managementLink small { color: var(--ink-muted); font-size: var(--text-2xs); line-height: var(--leading-normal); }
 .managementLink:hover { background: var(--card-inner-bg); }
 .managementLink:hover strong { color: var(--brand-ink); }
-.appearance { border: 1px solid var(--line); border-radius: 12px; min-width: 0; background: var(--card-inner-bg); }
-.appearance summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; min-height: 64px; list-style: none; cursor: pointer; }
+.appearance { border: 1px solid var(--line); border-radius: var(--radius-group); min-width: 0; background: var(--card-inner-bg); }
+.appearance summary { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); padding: var(--s-4); min-height: 64px; list-style: none; cursor: pointer; }
 .appearance summary::-webkit-details-marker { display: none; }
-.appearance summary > span:first-child { display: grid; gap: 5px; }
-.appearance summary strong { font-size: 13px; font-weight: 650; }
-.appearance summary small { color: var(--ink-muted); font-size: 11px; }
-.disclosureArrow { color: var(--ink-muted); font-size: 22px; transition: transform var(--dur-1); }
+.appearance summary > span:first-child { display: grid; gap: var(--s-1); }
+.appearance summary strong { font-size: var(--text-xs); font-weight: 600; }
+.appearance summary small { color: var(--ink-muted); font-size: var(--text-2xs); }
+.disclosureArrow { color: var(--ink-muted); font-size: var(--text-xl); transition: transform var(--dur-1); }
 .appearance[open] .disclosureArrow { transform: rotate(90deg); }
-.appearanceContent { display: grid; gap: 22px; min-width: 0; padding: 4px 16px 18px; }
+.appearanceContent { display: grid; gap: var(--s-6); min-width: 0; padding: var(--s-1) var(--s-4) var(--s-5); }
 .photoInput { position: absolute; width: 1px !important; height: 1px; clip-path: inset(50%); padding: 0 !important; overflow: hidden; }
-.uploadButton { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; width: fit-content; padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--surface); color: var(--brand-ink); font-size: 12px; cursor: pointer; }
+.uploadButton { display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2); min-height: 44px; width: fit-content; padding: var(--s-3) var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-control); background: var(--surface); color: var(--brand-ink); font-size: var(--text-2xs); cursor: pointer; }
 .photoInput:focus-visible + .uploadButton { outline: 2px solid var(--brand); outline-offset: 3px; }
 .photoInput:disabled + .uploadButton { opacity: .5; cursor: default; }
 @media (min-width: 1024px) {
-  .preview { padding: 24px; }
-  .managementLink { padding: 20px; }
+  .preview { padding: var(--s-6); }
+  .managementLink { padding: var(--s-5); }
 }

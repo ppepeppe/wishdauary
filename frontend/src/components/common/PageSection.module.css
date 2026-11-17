@@ -1,26 +1,32 @@
 .section {
   width: 100%;
   min-width: 0;
-  padding: 8px 0 0;
+  padding: 0;
   background: transparent;
 }
 
 .heading {
-  margin: 2px 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin: 0 0 var(--section-gap);
   padding-right: 0;
 }
+.headingCopy { min-width: 0; }
 
-.heading h2 {
-  margin: 0 0 6px;
+.heading h1 {
+  margin: 0;
   color: var(--ink-strong);
-  font-size: 25px;
+  font-size: var(--text-xl);
   line-height: var(--leading-tight);
   font-weight: 700;
   letter-spacing: var(--tracking-tight);
 }
 
 .heading p {
-  margin: 0;
+  margin: var(--s-2) 0 0;
   max-width: 520px;
   color: var(--ink-muted);
   font-size: var(--text-xs);
@@ -35,3 +41,14 @@
   font-size: var(--text-sm);
   letter-spacing: var(--tracking);
 }
+
+.form {
+  max-width: 440px;
+  margin: var(--space-48) auto;
+  padding: var(--s-6);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+}
+@media (max-width: 640px) { .form { margin-block: var(--s-6); padding: var(--s-5); } }

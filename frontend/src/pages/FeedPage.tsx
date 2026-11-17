@@ -8,10 +8,7 @@ function FeedPage() {
   const { data, isLoading, error } = useReactionFeed();
 
   return (
-    <PageSection
-      title="소식"
-      description="가족이 남긴 하트와 댓글을 확인해요."
-    >
+    <PageSection title="소식">
       <p><Link to="/shared-feed">공개·그룹 피드 보기 →</Link></p>
       {isLoading ? <StatusMessage kind="loading" message="소식을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="소식을 불러오지 못했어요. 잠시 후 다시 시도해 주세요." /> : null}

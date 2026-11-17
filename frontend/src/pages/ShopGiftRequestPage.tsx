@@ -51,10 +51,7 @@ function ShopGiftRequestPage() {
   }
 
   return (
-    <PageSection
-      title="선물 요청하기"
-      description="선물을 부탁할 가족을 고르고, 하고 싶은 말을 적어요."
-    >
+    <PageSection title="선물 요청하기">
       {isLoading ? <StatusMessage kind="loading" message="부탁할 준비를 하고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}

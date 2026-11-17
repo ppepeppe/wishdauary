@@ -1,7 +1,7 @@
 .productGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px 14px;
+  gap: var(--s-4) var(--s-3);
 }
 
 .productGrid .productImage {
@@ -14,9 +14,9 @@
   min-width: 0;
   display: grid;
   grid-template-rows: 1fr auto;
-  padding: 10px;
+  padding: var(--inset-card);
   border: 1px solid var(--card-border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   background: var(--card-bg);
 }
 
@@ -24,13 +24,13 @@
   min-width: 0;
   display: grid;
   align-content: start;
-  gap: 12px;
+  gap: var(--s-3);
 }
 
 .productImage {
   width: 100%;
   height: 160px;
-  border-radius: var(--r-md);
+  border-radius: var(--radius-media);
   background: var(--surface-sunken);
 }
 
@@ -50,12 +50,12 @@
 .productBody {
   min-width: 0;
   display: grid;
-  gap: 7px;
+  gap: var(--s-2);
 }
 
 .productHeader {
   display: grid;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .productHeader h3 {
@@ -64,7 +64,7 @@
   margin: 0;
   color: var(--ink-strong);
   font-size: var(--text-sm);
-  font-weight: 650;
+  font-weight: 600;
   line-height: var(--leading-snug);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -74,8 +74,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  column-gap: 7px;
-  row-gap: 2px;
+  column-gap: var(--s-2);
+  row-gap: var(--s-1);
   color: var(--brand-ink);
   font-size: var(--text-sm);
 }
@@ -100,13 +100,13 @@
 .badgeRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px 8px;
+  gap: var(--s-1) var(--s-2);
 }
 
 .requestPending, .requestApproved, .requestRejected, .sourceBadge {
   max-width: 100%;
   overflow: hidden;
-  font-size: 11px;
+  font-size: var(--text-2xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -128,8 +128,8 @@
   display: grid;
   align-content: start;
   min-height: 44px;
-  gap: 7px;
-  margin-top: 14px;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
 }
 
 .requestButton {
@@ -138,9 +138,9 @@
   justify-content: center;
   min-height: 44px;
   width: 100%;
-  padding: 8px;
+  padding: var(--s-2);
   border: 1px solid var(--brand-tint-strong);
-  border-radius: 10px;
+  border-radius: var(--radius-control);
   background: var(--brand-tint);
   color: var(--brand-ink);
   font-size: var(--text-xs);
@@ -162,13 +162,13 @@
 .requestHint {
   margin: 0;
   color: var(--ink-muted);
-  font-size: 11px;
+  font-size: var(--text-2xs);
   line-height: var(--leading-snug);
 }
 
 @media (max-width: 370px) {
   .productGrid {
-    gap: 10px;
+    gap: var(--s-3);
   }
-  .product { padding: 10px; }
+  .product { padding: var(--inset-card); }
 }

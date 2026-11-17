@@ -33,14 +33,13 @@ function LoginPage() {
 
   return (
     <PageSection
+      variant="form"
       title="로그인"
-      description="이전에 만든 계정으로 바로 이어서 시작할 수 있어요."
     >
-      {isSubmitting ? <StatusMessage kind="loading" message="입력한 계정을 확인하고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       <LoginForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       <p>
-        아직 계정이 없다면 <Link to="/signup">회원가입</Link>으로 시작할 수 있어요.
+        계정이 없나요? <Link to="/signup">회원가입</Link>
       </p>
     </PageSection>
   );

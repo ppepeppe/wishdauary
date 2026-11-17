@@ -124,10 +124,7 @@ function MyPage() {
   }
 
   return (
-    <PageSection
-      title="마이페이지"
-      description={authSession?.appRole === 'child' ? '내 프로필과 공유할 그룹을 관리해요.' : '내 프로필과 아이 연결을 관리해요.'}
-    >
+    <PageSection title="마이페이지">
       {isLoading ? <StatusMessage kind="loading" message="내 정보를 준비하고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message={error} /> : null}
       {successMessage ? <StatusMessage kind="success" message={successMessage} /> : null}
@@ -138,23 +135,23 @@ function MyPage() {
           <p className={styles.previewName}>{nickname.trim() || '이름 없음'}</p>
           {loginId ? <p className={styles.previewEmail}>{loginId}</p> : null}
           {authSession?.appRole === 'child' ? <p className={styles.previewEmail}>사용자 번호 #{authSession.userId} · 가족에게 알려 주세요.</p> : null}
-          {!isLoading ? <span className={styles.roleBadge}>{userRole === 'admin' ? '관리자' : '일반 사용자'}</span> : null}
+          {!isLoading && userRole === 'admin' ? <span className={styles.roleBadge}>관리자</span> : null}
         </div>
       </div>
 
       {authSession ? (
         <nav className={styles.managementNav} aria-label="내 활동 관리">
           {userRole === 'admin' ? <Link to="/admin/shop" className={styles.managementLink}>
-            <span><strong>공통 상점 상품 관리</strong><small>모든 아이가 볼 수 있는 상점 상품을 등록해요.</small></span>
+            <span><strong>공통 상점 상품 관리</strong></span>
             <span aria-hidden="true">→</span>
           </Link> : null}
           <Link to="/family-connections" className={styles.managementLink}>
-            <span><strong>{authSession.appRole === 'child' ? '가족 연결 요청' : '아이와 연결하기'}</strong><small>{authSession.appRole === 'child' ? '가족이 보낸 요청을 확인하고 승인해요.' : '아이를 검색하고 보낸 요청을 확인해요.'}</small></span><span aria-hidden="true">→</span>
+            <span><strong>{authSession.appRole === 'child' ? '가족 연결 요청' : '아이와 연결하기'}</strong></span><span aria-hidden="true">→</span>
           </Link>
           {authSession.appRole === 'child' ? <Link to="/sharing-groups" className={styles.managementLink}>
             <span>
               <strong>그룹 관리</strong>
-              <small>일기를 공유할 사람과 선물을 요청할 가족을 관리해요.</small>
+              <small>일기 공개 대상 · 가족 관리</small>
             </span>
             <span aria-hidden="true">→</span>
           </Link> : null}
@@ -168,8 +165,7 @@ function MyPage() {
             value={nickname}
             maxLength={20}
             disabled={isSaving || isLoading}
-            placeholder="어떻게 불러줄까요?"
-            onChange={(event) => setNickname(event.target.value)}
+                  onChange={(event) => setNickname(event.target.value)}
           />
         </label>
 

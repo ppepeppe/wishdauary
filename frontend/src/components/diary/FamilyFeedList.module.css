@@ -28,19 +28,19 @@
   gap: var(--s-1);
 }
 
-.headerMain > strong { color: var(--ink-muted); font-size: 12px; font-weight: 450; }
+.headerMain > strong { color: var(--ink-muted); font-size: var(--text-2xs); font-weight: 450; }
 
 .actor {
   color: var(--ink-strong);
   font-size: var(--text-sm);
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .emotionBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 9px 4px 4px;
+  gap: var(--s-2);
+  padding: var(--s-1) var(--s-2) var(--s-1) var(--s-1);
   border-radius: var(--r-pill);
   color: var(--ink-muted);
   background: var(--surface-sunken);
@@ -103,10 +103,10 @@
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--s-1);
   border: 1px solid var(--line-strong);
   border-radius: var(--r-pill);
-  padding: 0 14px;
+  padding: 0 var(--s-4);
   background: var(--surface);
   color: var(--ink-muted);
   font-size: var(--text-xs);
