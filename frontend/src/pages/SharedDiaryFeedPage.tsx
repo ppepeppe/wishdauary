@@ -40,7 +40,7 @@ export default function SharedDiaryFeedPage() {
         {groups.error ? <><StatusMessage kind="error" message={groups.error} /><Button onClick={() => void groups.refetch()}>그룹 다시 불러오기</Button></> : null}
         <Tabs label="그룹 선택" value={String(groupId)} onChange={value => { const next = new URLSearchParams(params); next.set('group', value); setParams(next, { replace: true }); setPage(0); }} options={[
           { value: '-1', label: '전체 그룹' },
-          ...(groups.data ?? []).map(group => ({ value: String(group.id), label: `${group.name} · ${group.ownerName}` })),
+          ...(groups.data ?? []).map(group => ({ value: String(group.id), label: group.name })),
           { value: '0', label: '전체 공개' },
         ]}>
         {loading ? <StatusMessage kind="loading" message="이야기를 모으고 있어요." /> : null}

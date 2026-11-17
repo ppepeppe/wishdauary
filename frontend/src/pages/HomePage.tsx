@@ -165,10 +165,17 @@ function HomePage() {
           <EmotionSelector value={selectedEmotion} onChange={setSelectedEmotion} />
         </div>
 
-        <Button type="button" className={styles.writeButton} fullWidth size="lg" onClick={handleWriteNow}>
-          {data?.hasTodayDiary ? '오늘 일기 보기·수정' : '일기 쓰기'}
-          <NavIcon name="arrowRight" />
-        </Button>
+        {data?.hasTodayDiary ? (
+          <Link to={data.todayDiaryId ? `/diaries/${data.todayDiaryId}` : '/diaries'} className={styles.todayDiaryLink}>
+            오늘 일기 보기·수정
+            <NavIcon name="arrowRight" />
+          </Link>
+        ) : (
+          <Button type="button" className={styles.writeButton} fullWidth size="lg" onClick={handleWriteNow}>
+            일기 쓰기
+            <NavIcon name="arrowRight" />
+          </Button>
+        )}
 
         <div className={styles.diaryMetaRow}>
           <p className={styles.diaryMetaText}>
