@@ -68,10 +68,15 @@ public class DiaryController {
         this.deleteDiaryUseCase = deleteDiaryUseCase;
     }
 
+    @GetMapping("/shared-feed/groups")
+    public CommonResponse<List<com.wishdiary.application.diary.SharedFeedGroupResponse>> sharedGroups(@Authenticated AuthenticatedSession session) {
+        return CommonResponse.success("Visible sharing groups retrieved.", sharedFeed.getGroups(session.userId()));
+    }
+
     @GetMapping("/shared-feed")
     public CommonResponse<List<SharedDiaryResponse>> sharedFeed(
-            @Authenticated AuthenticatedSession session, @RequestParam(defaultValue = "0") int page) {
-        return CommonResponse.success("Shared diaries retrieved.", sharedFeed.getSharedFeed(session.userId(), page));
+            @Authenticated AuthenticatedSession session, @RequestParam(defaultValue = "0") int page, @RequestParam(required = false) Long groupId) {
+        return CommonResponse.success("Shared diaries retrieved.", sharedFeed.getSharedFeed(session.userId(), page, groupId));
     }
 
     @PostMapping

@@ -25,6 +25,33 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryJpaEntity, Long> 
     List<DiaryJpaEntity> findSharedFeed(@Param("viewerId") Long viewerId,
                                       Pageable pageable);
 
+    @Query(value = """
+            select d.* from diaries d
+            where (d.visibility_scope = 'PUBLIC'
+               or (d.visibility_scope = 'GROUP' and (d.author_id = :viewerId or exists (
+                   select 1 from diary_audience_groups a
+                   join diary_sharing_groups g on g.id = a.sharing_group_id
+                   join diary_sharing_group_members m on m.sharing_group_id = g.id
+                   where a.diary_id = d.id and g.owner_id = d.author_id
+                     and g.slot is not null and m.user_id = :viewerId
+               )))
+            ) and (
+                (:groupId = 0 and d.visibility_scope = 'PUBLIC')
+                or (:groupId = -1 and d.visibility_scope = 'GROUP')
+                or (:groupId > 0 and d.visibility_scope = 'GROUP' and exists (
+                    select 1 from diary_audience_groups a2
+                    join diary_sharing_groups g2 on g2.id = a2.sharing_group_id
+                    where a2.diary_id = d.id and g2.id = :groupId and g2.owner_id = d.author_id and g2.slot is not null
+                      and (g2.owner_id = :viewerId or exists (
+                        select 1 from diary_sharing_group_members m2 where m2.sharing_group_id = g2.id and m2.user_id = :viewerId
+                      ))
+                ))
+            )
+            order by d.created_at desc, d.id desc
+            """, nativeQuery = true)
+    List<DiaryJpaEntity> findFilteredSharedFeed(@Param("viewerId") Long viewerId, @Param("groupId") Long groupId,
+                                      Pageable pageable);
+
 
     boolean existsByAuthorIdAndWrittenDate(Long authorId, LocalDate writtenDate);
 

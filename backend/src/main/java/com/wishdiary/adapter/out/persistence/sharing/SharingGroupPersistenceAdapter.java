@@ -19,6 +19,10 @@ public class SharingGroupPersistenceAdapter implements SharingGroupPort {
         this.entityManager = entityManager;
     }
 
+    public List<SharingGroup> findVisible(Long viewerId) {
+        return repository.findVisible(viewerId).stream().map(SharingGroupJpaEntity::toDomain).toList();
+    }
+
     public void lockOwner(Long ownerId) {
         entityManager.find(UserJpaEntity.class, ownerId, LockModeType.PESSIMISTIC_WRITE);
     }

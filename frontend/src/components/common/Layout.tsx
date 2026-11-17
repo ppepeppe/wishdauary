@@ -96,7 +96,7 @@ function Layout() {
                 end={item.end}
                 className={({ isActive }) =>
                   [
-                    (isActive || (item.to === '/family-shop' && location.pathname === '/admin/shop')) ? styles.bottomNavItemActive : styles.bottomNavItem,
+                    (isActive || (item.to === '/diaries' && location.pathname === '/shared-feed') || (item.to === '/family-shop' && location.pathname === '/admin/shop')) ? styles.bottomNavItemActive : styles.bottomNavItem,
                     item.isPrimary ? styles.bottomNavPrimary : '',
                   ]
                     .filter(Boolean)

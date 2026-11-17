@@ -29,6 +29,11 @@ public class DiaryPersistenceAdapter implements DiaryRepository, LoadDiaryQueryP
     }
 
     @Override
+    public List<Diary> loadSharedFeed(Long viewerId, int page, Long groupId) {
+        return diaryJpaRepository.findFilteredSharedFeed(viewerId, groupId, PageRequest.of(page, 30)).stream().map(this::toDomain).toList();
+    }
+
+    @Override
     public boolean existsByAuthorIdAndWrittenDate(Long authorId, LocalDate writtenDate) {
         return diaryJpaRepository.existsByAuthorIdAndWrittenDate(authorId, writtenDate);
     }

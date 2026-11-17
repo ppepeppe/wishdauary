@@ -205,6 +205,31 @@ class DiarySharingIntegrationTest {
         } finally { executor.shutdownNow(); }
     }
 
+    @Test
+    @Transactional
+    void groupTabsOnlyExposeMembershipAndFilterBeforePagination() throws Exception {
+        var owner = child("탭 작성자"); var viewer = child("탭 독자"); var outsider = child("외부 아이");
+        long first = group(owner, "친구", List.of(viewer.userId()));
+        long second = group(owner, "비공개 모임", List.of());
+        long shared = write(owner, "group", List.of(first, second));
+        long hidden = write(owner, "group", List.of(second));
+        long published = write(owner, "public", List.of());
+        JsonNode visible = call(get("/api/v1/diaries/shared-feed/groups"), viewer, null, 200);
+        assertTrue(visible.toString().contains("친구"));
+        assertFalse(visible.toString().contains("비공개 모임"));
+        JsonNode chosen = call(get("/api/v1/diaries/shared-feed").param("groupId", String.valueOf(first)), viewer, null, 200);
+        assertEquals(1, chosen.size()); assertEquals(shared, chosen.get(0).get("diaryId").asLong());
+        assertEquals(0, call(get("/api/v1/diaries/shared-feed").param("groupId", String.valueOf(second)), viewer, null, 200).size());
+        assertEquals(0, call(get("/api/v1/diaries/shared-feed").param("groupId", String.valueOf(first)), outsider, null, 200).size());
+        JsonNode onlyPublic = call(get("/api/v1/diaries/shared-feed").param("groupId", "0"), viewer, null, 200);
+        assertTrue(java.util.stream.StreamSupport.stream(onlyPublic.spliterator(), false).anyMatch(item -> item.get("diaryId").asLong() == published));
+        for (var item : onlyPublic) assertEquals("public", item.get("visibilityScope").asText());
+        for (var item : call(get("/api/v1/diaries/shared-feed").param("groupId", "-1"), viewer, null, 200)) {
+            assertEquals("group", item.get("visibilityScope").asText()); assertNotEquals(hidden, item.get("diaryId").asLong());
+        }
+        call(get("/api/v1/diaries/shared-feed/groups"), null, null, 401);
+    }
+
     private SignupResponse child(String nickname) {
         return signup.signup(new ChildSignupRequest(UUID.randomUUID() + "@test.com", "password", nickname));
     }
@@ -246,6 +271,6 @@ class DiarySharingIntegrationTest {
         if (body != null) request.contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsString(body));
         var response = mvc.perform(request).andReturn().getResponse();
         assertEquals(expected, response.getStatus(), response.getContentAsString());
-        return json.readTree(response.getContentAsString()).get("data");
+        return json.readTree(response.getContentAsByteArray()).get("data");
     }
 }

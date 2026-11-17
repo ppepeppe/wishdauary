@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import PageSection from '../components/common/PageSection';
-import PageNavigation from '../components/common/PageNavigation';
+import DiaryNavigation from '../components/diary/DiaryNavigation';
 import EmptyState from '../components/common/EmptyState';
 import LinkButton from '../components/common/LinkButton';
 import StatusMessage from '../components/common/StatusMessage';
@@ -23,13 +22,13 @@ function DiaryListPage() {
   }, [data, selectedDate]);
 
   return (
-    <PageSection title="내 일기">
-      <PageNavigation><Link to="/sharing-groups">그룹 관리 →</Link><Link to="/shared-feed">공개·그룹 피드 →</Link></PageNavigation>
+    <PageSection title="일기">
+      <DiaryNavigation />
       {isLoading ? <StatusMessage kind="loading" message="일기를 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="일기를 불러오지 못했어요. 잠시 후 다시 시도해 주세요." /> : null}
       {data && data.length > 0 ? (
         <div className={styles.content}>
-          <details className={styles.calendarPicker}><summary>달력에서 날짜 선택</summary><DiaryCalendar diaries={data} selectedDate={selectedDate} onSelectDate={date => { if (date) setSelectedDate(date); }} /></details>
+          <details className={styles.calendarPicker} open><summary>달력에서 날짜 선택</summary><DiaryCalendar diaries={data} selectedDate={selectedDate} onSelectDate={date => { if (date) setSelectedDate(date); }} /></details>
           <div className={styles.entries}>
           <nav className={styles.dateNavigation} aria-label="일기 날짜 이동">
             <button type="button" aria-label="이전 날짜" onClick={() => setSelectedDate(shiftDiaryDate(selectedDate, -1))}>←</button>

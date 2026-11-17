@@ -268,7 +268,13 @@ export interface SharedDiaryItem {
   createdAt: string;
 }
 
-export function fetchSharedDiaryFeed(page = 0) {
+export function fetchSharedDiaryFeed(page = 0, groupId?: number) {
   getCurrentUserIdOrThrow();
-  return request<SharedDiaryItem[]>('/api/v1/diaries/shared-feed', { query: { page } });
+  return request<SharedDiaryItem[]>('/api/v1/diaries/shared-feed', { query: { page, groupId } });
+}
+
+export interface SharedFeedGroup { id: number; name: string; ownerName: string }
+export function fetchSharedFeedGroups() {
+  getCurrentUserIdOrThrow();
+  return request<SharedFeedGroup[]>('/api/v1/diaries/shared-feed/groups');
 }

@@ -8,6 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface SharingGroupJpaRepository extends JpaRepository<SharingGroupJpaEntity, Long> {
     @EntityGraph(attributePaths = "memberIds")
+    @Query("select distinct g from SharingGroupJpaEntity g where g.slot is not null and (g.ownerId = :viewerId or :viewerId member of g.memberIds) order by g.id")
+    List<SharingGroupJpaEntity> findVisible(@Param("viewerId") Long viewerId);
+
+    @EntityGraph(attributePaths = "memberIds")
     List<SharingGroupJpaEntity> findAllByOwnerIdAndSlotIsNotNullOrderBySlot(Long ownerId);
 
     @Query("select count(g) from SharingGroupJpaEntity g join g.memberIds m "

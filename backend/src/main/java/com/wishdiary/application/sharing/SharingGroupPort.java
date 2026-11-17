@@ -6,6 +6,7 @@ import java.util.Optional;
 
 public interface SharingGroupPort {
     void lockOwner(Long ownerId);
+    List<SharingGroup> findVisible(Long viewerId);
     List<SharingGroup> findActiveByOwnerId(Long ownerId);
     Optional<SharingGroup> findById(Long groupId);
     SharingGroup save(SharingGroup group);
