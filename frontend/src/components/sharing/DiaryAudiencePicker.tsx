@@ -45,17 +45,14 @@ export default function DiaryAudiencePicker({ scope, groupIds, onScopeChange, on
         <span className={styles.label}>공개 범위</span>
         <select value={scope} onChange={(event) => onScopeChange(event.target.value as DiaryVisibilityScope)}>
           <option value="private">나만 보기</option>
-          <option value="public">전체공개</option>
+          <option value="public">모든 사용자 공개</option>
           <option value="group">그룹 선택</option>
           <option value="family">연결된 가족 공개</option>
           {scope === 'friends' ? <option value="friends">이전 친구 공개 설정</option> : null}
         </select>
       </label>
-      {scope === 'public' ? <p className={styles.hint}>로그인한 모든 사용자에게 공개됩니다.</p> : null}
-      {scope === 'family' ? <p className={styles.hint}>연결된 가족 모두에게 공개됩니다.</p> : null}
       {scope === 'group' ? (
         <div className={styles.groups}>
-          <p className={styles.hint}>선택한 그룹 구성원에게만 공개됩니다.</p>
           {loading ? <p role="status">그룹을 불러오는 중이에요.</p> : null}
           {error ? <p role="alert">{error} <button type="button" onClick={() => setRevision((value) => value + 1)}>다시 불러오기</button></p> : null}
           {!loading && !error && groups.map((group) => (

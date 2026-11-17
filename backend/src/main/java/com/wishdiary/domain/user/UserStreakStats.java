@@ -18,7 +18,7 @@ public record UserStreakStats(
             return initialize(userId, writtenDate);
         }
 
-        if (lastWrittenDate.isEqual(writtenDate)) {
+        if (!writtenDate.isAfter(lastWrittenDate)) {
             return this;
         }
 

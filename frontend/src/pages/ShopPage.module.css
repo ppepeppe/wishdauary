@@ -188,3 +188,7 @@
 .catalogHeading p strong { color: var(--ink-strong); }
 .catalogHeading select { width: auto; min-height: 44px; max-width: 180px; padding: var(--s-2) var(--space-28) var(--s-2) var(--s-3); border-color: transparent; background-color: transparent; color: var(--ink-muted); font-size: var(--text-base); }
 @media (min-width: 1024px) { .container { gap: var(--s-6); } .catalogTools { gap: var(--s-3); } }
+
+.rewardGuide { margin-top: var(--s-3); padding-top: var(--s-2); border-top: 1px solid var(--line); color: var(--ink-muted); font-size: var(--text-xs); }
+.rewardGuide summary { display: flex; align-items: center; min-height: var(--control-height); cursor: pointer; }
+.rewardGuide p { margin: var(--s-2) 0 0; line-height: var(--leading-normal); }

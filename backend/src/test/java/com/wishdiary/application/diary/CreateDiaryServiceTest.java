@@ -201,7 +201,7 @@ class CreateDiaryServiceTest {
         ));
         verify(recordCloverLedgerPort).record(argThat(cloverLedger ->
                 cloverLedger.getUserId().equals(1L)
-                        && cloverLedger.getAmount() == 2
+                        && cloverLedger.getAmount() == 1
                         && cloverLedger.getReason() == CloverReason.STREAK_3
                         && cloverLedger.getRefId().equals(LocalDate.of(2026, 4, 11).toEpochDay())
         ));
@@ -315,7 +315,7 @@ class CreateDiaryServiceTest {
 
         verify(recordCloverLedgerPort).record(argThat(cloverLedger ->
                 cloverLedger.getUserId().equals(1L)
-                        && cloverLedger.getAmount() == 5
+                        && cloverLedger.getAmount() == 3
                         && cloverLedger.getReason() == CloverReason.STREAK_7
                         && cloverLedger.getRefId().equals(LocalDate.of(2026, 4, 11).toEpochDay())
         ));
@@ -358,7 +358,7 @@ class CreateDiaryServiceTest {
         createDiaryService.create(1L, request);
 
         verify(recordCloverLedgerPort, never()).record(argThat(cloverLedger ->
-                cloverLedger.getReason() == CloverReason.STREAK_3 && cloverLedger.getAmount() == 2
+                cloverLedger.getReason() == CloverReason.STREAK_3 && cloverLedger.getAmount() == 1
         ));
     }
 }

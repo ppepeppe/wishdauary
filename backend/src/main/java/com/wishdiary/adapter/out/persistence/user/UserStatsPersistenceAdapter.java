@@ -2,6 +2,9 @@ package com.wishdiary.adapter.out.persistence.user;
 
 import com.wishdiary.application.user.UpdateUserStreakPort;
 import com.wishdiary.domain.user.UserStreakStats;
+import com.wishdiary.domain.user.UserNotFoundException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
@@ -9,9 +12,18 @@ import org.springframework.stereotype.Component;
 public class UserStatsPersistenceAdapter implements UpdateUserStreakPort {
 
     private final UserStatsJpaRepository userStatsJpaRepository;
+    private final EntityManager entityManager;
 
-    public UserStatsPersistenceAdapter(UserStatsJpaRepository userStatsJpaRepository) {
+    public UserStatsPersistenceAdapter(UserStatsJpaRepository userStatsJpaRepository, EntityManager entityManager) {
         this.userStatsJpaRepository = userStatsJpaRepository;
+        this.entityManager = entityManager;
+    }
+
+    @Override
+    public void lockUser(Long userId) {
+        if (entityManager.find(UserJpaEntity.class, userId, LockModeType.PESSIMISTIC_WRITE) == null) {
+            throw new UserNotFoundException(userId);
+        }
     }
 
     @Override

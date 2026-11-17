@@ -5,6 +5,8 @@ import java.util.Optional;
 
 public interface UpdateUserStreakPort {
 
+    void lockUser(Long userId);
+
     Optional<UserStreakStats> loadUserStreak(Long userId);
 
     UserStreakStats saveUserStreak(UserStreakStats userStreakStats);
