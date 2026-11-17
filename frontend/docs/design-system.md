@@ -21,6 +21,7 @@
 | 빈 목록 | `EmptyState`와 필요한 다음 동작 하나 | 빈 목록을 오류 alert로 표시, 장식용 큰 아이콘 |
 | 처리 결과 | `StatusMessage`, 오류만 alert | 평상시 안내를 성공·오류 메시지로 표시 |
 | 기분 하나 선택 | `EmotionSelector`의 native radio | 독립적인 토글 버튼 여러 개 |
+| 일기 본문·사진 | `DiaryContentField`의 입력칸 하단 첨부 도구 | 사진 버튼을 별도 섹션으로 띄우기 |
 | 같은 목록 좌우 탐색 | 기존 `CardCarousel`, 위치·이전·다음 제공 | 상점을 다시 캐러셀로 변경 |
 | 계정 정보·도움말 | 관련 위치의 details | 매번 보이는 긴 사용법 |
 

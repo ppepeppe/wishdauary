@@ -4,7 +4,7 @@ import { DIARY_PLACEHOLDER } from '../../constants/diary';
 import { getTodayDateInKorea } from '../../constants/date';
 import type { CreateDiaryRequest, DiaryEmotion, DiaryVisibilityScope } from '../../types/diary';
 import Button from '../common/Button';
-import PhotoPicker from '../common/PhotoPicker';
+import DiaryContentField from './DiaryContentField';
 import HoverHint from '../common/HoverHint';
 import EmotionSelector from './EmotionSelector';
 import styles from './DiaryForm.module.css';
@@ -64,20 +64,9 @@ function DiaryForm({
         />
       </label>
 
-      <label className={styles.field}>
-        <span>이날의 이야기</span>
-        <textarea
-          className={styles.textarea}
-          rows={7}
-          value={content}
-          placeholder={DIARY_PLACEHOLDER}
-          disabled={isSubmitting}
-          onChange={(event) => setContent(event.target.value)}
-        />
-      </label>
-
-      <PhotoPicker label="일기 사진" variant="compact"
-        value={imageData} onChange={setImageData} onBusyChange={setPhotoBusy} disabled={isSubmitting} />
+      <DiaryContentField label="이날의 이야기" value={content} onChange={setContent}
+        placeholder={DIARY_PLACEHOLDER} imageData={imageData} onPhotoChange={setImageData}
+        onPhotoBusyChange={setPhotoBusy} disabled={isSubmitting} />
 
       <fieldset className={styles.field}>
         <legend>오늘 기분</legend>

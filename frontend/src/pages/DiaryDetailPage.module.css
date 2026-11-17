@@ -98,23 +98,6 @@
   font-weight: 700;
 }
 
-.field textarea,
-.field select {
-  width: 100%;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r-md);
-  padding: var(--s-3) var(--s-4);
-  background: var(--surface);
-  color: var(--ink-strong);
-  font-size: var(--text-base);
-  font-weight: 400;
-}
-
-.field textarea {
-  resize: vertical;
-  line-height: var(--leading-normal);
-}
-
 .deleteButton,
 .cancelButton {
   min-height: var(--control-height);

@@ -4,7 +4,7 @@ import { getAuthSession } from '../services/session/authSession';
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import Button from '../components/common/Button';
-import PhotoPicker from '../components/common/PhotoPicker';
+import DiaryContentField from '../components/diary/DiaryContentField';
 import HoverHint from '../components/common/HoverHint';
 import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
@@ -191,17 +191,8 @@ function DiaryDetailPage() {
             </article>
           ) : (
             <form className={styles.form} onSubmit={handleSave}>
-              <label className={styles.field}>
-                <span>일기 내용</span>
-                <textarea
-                  value={content}
-                  rows={12}
-                  disabled={isSaving}
-                  onChange={(event) => setContent(event.target.value)}
-                />
-              </label>
-              <PhotoPicker label="일기 사진" variant="compact"
-                value={imageData} onChange={setImageData} onBusyChange={setPhotoBusy} disabled={isSaving} />
+              <DiaryContentField label="일기 내용" value={content} onChange={setContent} rows={12}
+                imageData={imageData} onPhotoChange={setImageData} onPhotoBusyChange={setPhotoBusy} disabled={isSaving} />
               <fieldset className={styles.field}>
                 <legend>오늘 기분</legend>
                 <EmotionSelector value={emotion} onChange={setEmotion} disabled={isSaving} />

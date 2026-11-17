@@ -44,15 +44,15 @@ function PhotoPicker({ value, onChange, onBusyChange, disabled = false, label = 
         <button type="button" className={value ? styles.thumbnailButton : styles.addButton}
           aria-label={`${label} ${value ? '바꾸기' : '추가'}`} title={value ? '사진 바꾸기' : '사진 첨부'}
           disabled={disabled || busy} onClick={() => input.current?.click()}>
-          {value ? <img src={value} alt={`${label} 미리보기`} /> : <span aria-hidden="true">+</span>}
+          {value ? <img src={value} alt={`${label} 미리보기`} /> : <><span aria-hidden="true">+</span><span>사진</span></>}
         </button>
-        <div className={styles.attachmentCopy}>
-          <span className={styles.attachmentLabel}>{value ? '사진 1/1' : '사진'}</span>
-          {value ? <div className={styles.compactActions}>
+        {value ? <div className={styles.attachmentCopy}>
+          <span className={styles.attachmentLabel}>사진 1/1</span>
+          <div className={styles.compactActions}>
             <button type="button" disabled={disabled || busy} onClick={() => input.current?.click()}>바꾸기</button>
             <button type="button" disabled={disabled || busy} onClick={() => { onChange(null); setError(null); }}>삭제</button>
-          </div> : null}
-        </div>
+          </div>
+        </div> : null}
         {busy ? <span className={styles.busy} role="status">사진 준비 중…</span> : null}
       </div> : <>
       <span className={styles.title}>{label} <small>(선택)</small></span>
