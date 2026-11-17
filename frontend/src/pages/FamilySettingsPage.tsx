@@ -1,4 +1,5 @@
 import CardCarousel from '../components/common/CardCarousel';
+import FamilyEnglishReviews from '../components/rewards/FamilyEnglishReviews';
 import { Link } from 'react-router-dom';
 import ProductArtwork from '../components/shop/ProductArtwork';
 import { useState } from 'react';
@@ -81,12 +82,14 @@ function FamilySettingsPage() {
   const pendingGiftRequestCount = giftRequests.filter((request) => request.status === 'pending').length;
 
   return (
-    <PageSection title="받은 선물 요청">
+    <PageSection title="받은 요청">
       <PageNavigation><Link to="/family-shop">상점 관리 →</Link><Link to="/family-connections">아이 연결 →</Link></PageNavigation>
       {isLoading ? <StatusMessage kind="loading" message="받은 요청을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="선물 요청을 불러오지 못했어요. 잠시 후 다시 확인해 주세요." /> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
       {successMessage ? <StatusMessage kind="success" message={successMessage} /> : null}
+
+      <FamilyEnglishReviews />
 
       {childrenGoals.length > 0 ? (
         <div className={styles.goalSection}>

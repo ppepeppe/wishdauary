@@ -10,6 +10,7 @@ public class CloverLedger {
     private final CloverReason reason;
     private final Long refId;
     private final LocalDateTime createdAt;
+    private final CloverDetails details;
 
     private CloverLedger(
             Long id,
@@ -19,6 +20,12 @@ public class CloverLedger {
             Long refId,
             LocalDateTime createdAt
     ) {
+        this(id, userId, amount, reason, refId, createdAt, null);
+    }
+
+    private CloverLedger(Long id, Long userId, int amount, CloverReason reason, Long refId,
+            LocalDateTime createdAt, CloverDetails details) {
+        this.details = details;
         this.id = id;
         this.userId = userId;
         this.amount = amount;
@@ -48,6 +55,12 @@ public class CloverLedger {
     ) {
         return new CloverLedger(id, userId, amount, reason, refId, createdAt);
     }
+
+    public CloverLedger withDetails(CloverDetails details) {
+        return new CloverLedger(id, userId, amount, reason, refId, createdAt, details);
+    }
+
+    public CloverDetails getDetails() { return details; }
 
     public Long getId() {
         return id;

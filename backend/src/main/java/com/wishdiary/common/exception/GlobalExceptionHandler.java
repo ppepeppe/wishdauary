@@ -14,6 +14,17 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler({com.wishdiary.application.reward.RewardConflictException.class,
+            com.wishdiary.domain.english.InvalidStudyReviewException.class})
+    public ResponseEntity<CommonResponse<Void>> handleRewardConflict(RuntimeException exception) {
+        return ResponseEntity.status(409).body(CommonResponse.fail("REWARD_CONFLICT", exception.getMessage()));
+    }
+
+    @ExceptionHandler(com.wishdiary.application.english.StudyRequestNotFoundException.class)
+    public ResponseEntity<CommonResponse<Void>> handleStudyNotFound(RuntimeException exception) {
+        return ResponseEntity.status(404).body(CommonResponse.fail("ENGLISH_REQUEST_NOT_FOUND", exception.getMessage()));
+    }
+
     @ExceptionHandler(com.wishdiary.application.diary.InvalidDiaryPhotoException.class)
     public ResponseEntity<CommonResponse<Void>> handleInvalidDiaryPhoto(RuntimeException exception) {
         return ResponseEntity.badRequest().body(CommonResponse.fail("INVALID_DIARY_PHOTO", exception.getMessage()));

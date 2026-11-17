@@ -1,4 +1,5 @@
 import FamilyConnectionNotice from '../components/family/FamilyConnectionNotice';
+import TodayEnglishCard from '../components/rewards/TodayEnglishCard';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import EmotionIcon from '../components/diary/EmotionIcon';
@@ -32,10 +33,11 @@ function HomePage() {
   const authSession = getAuthSession();
   const locationState = (location.state ?? null) as HomePageLocationState | null;
   const { data, isLoading, error, refetch } = useHomeData();
-  const { goal } = useWishGoal();
+  const { goal, refetch: refreshGoal } = useWishGoal();
   const { data: giftRequests } = useAsyncData(fetchSentGiftRequests, true);
   const [showSavedMessage, setShowSavedMessage] = useState(Boolean(locationState?.showDiarySavedMessage));
   const [selectedEmotion, setSelectedEmotion] = useState<DiaryEmotion>('happy');
+  const refreshRewards = useCallback(async () => { await Promise.all([refetch(), refreshGoal()]); }, [refetch, refreshGoal]);
   const [profile, setProfile] = useState<MyProfile | null>(null);
 
   const loadProfile = useCallback(async () => {
@@ -129,7 +131,7 @@ function HomePage() {
             <span className={styles.profileHint}>마이페이지 <span aria-hidden="true">›</span></span>
           </div>
         </Link>
-        <div className={styles.balanceChip} role="group" aria-label={`모은 클로버 ${(data?.cloverBalance ?? 0).toFixed(1)}개`}>
+        <div className={styles.balanceChip} role="group" aria-label={`모은 클로버 ${(data?.cloverBalance ?? 0).toLocaleString('ko-KR')}개`}>
           <span className={styles.balanceIcon} aria-hidden="true">
             <CloverIcon />
           </span>
@@ -188,6 +190,8 @@ function HomePage() {
           </p>
         ) : null}
       </section>
+
+      <TodayEnglishCard onRewardChanged={refreshRewards} />
 
       <section className={styles.goalCard}>
         {goal ? (

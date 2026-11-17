@@ -15,6 +15,8 @@ import { getChildWishProducts } from '../utils/shopNavigation';
 import styles from './ShopPage.module.css';
 
 const CLOVER_REASON_LABELS: Record<string, string> = {
+  FAMILY_AWARD: '가족의 칭찬',
+  ENGLISH_STUDY: '한 줄 영어',
   DIARY_WRITE: '일기 쓰기',
   STREAK_3: '3일 연속 보너스',
   STREAK_5: '5일 연속 보너스',
@@ -78,6 +80,7 @@ function ShopWishlistPage() {
                       {CLOVER_REASON_LABELS[entry.reason] ?? entry.reason}
                     </span>
                     <span className={styles.historyDate}>{formatHistoryDate(entry.createdAt)}</span>
+                    {entry.note || entry.givenByName ? <p className={styles.historyNote}>{[entry.givenByName, entry.note].filter(Boolean).join(' · ')}</p> : null}
                     <strong className={entry.amount >= 0 ? styles.historyGain : styles.historySpend}>
                       {entry.amount >= 0 ? `+${entry.amount}` : entry.amount} 클로버
                     </strong>

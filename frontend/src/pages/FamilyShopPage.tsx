@@ -1,4 +1,5 @@
 import CardCarousel from '../components/common/CardCarousel';
+import Tabs from '../components/common/Tabs';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
@@ -21,6 +22,7 @@ async function loadShop() {
 function FamilyShopPage() {
   const { data, isLoading, error, refetch } = useAsyncData(loadShop);
   const [showForm, setShowForm] = useState(false);
+  const [category, setCategory] = useState('custom');
   const [childId, setChildId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -63,6 +65,7 @@ function FamilyShopPage() {
       await createFamilyShopProduct({ childUserId: targetId, title: title.trim(), description: description.trim(),
         imageData, productUrl: url || null, cloverPrice, purchasePriceWon });
       setShowForm(false); setTitle(''); setDescription(''); setPrice(''); setPurchasePrice(''); setImageData(null); setProductUrl('');
+      setCategory('family');
       setMessage('선물을 등록했어요. 선택한 아이의 갖고 싶은 선물에 표시돼요.');
       await refetch();
     } catch (caught) { setActionError(caught instanceof Error ? caught.message : '선물을 등록하지 못했어요.'); }
@@ -96,19 +99,17 @@ function FamilyShopPage() {
               <div className={styles.actions}><Button type="submit" disabled={busy || photoBusy || !title.trim() || !description.trim()}>{busy ? '등록 중…' : '선물 등록하기'}</Button><Button type="button" variant="secondary" disabled={photoBusy} onClick={() => setShowForm(false)}>취소</Button></div>
             </fieldset>
           </form> : null}
-          <section className={styles.productSection} aria-labelledby="child-products-title">
-            <h2 id="child-products-title">아이가 올린 상품 <small>{childProducts.length}</small></h2>
-            <p className={styles.hint}>클로버를 정한 선물은 아이의 목록에 표시됩니다.</p>
-            {childProducts.length === 0 ? <p className={styles.hint}>아이가 갖고 싶은 상품을 올리면 여기에 보여요.</p> : <CardCarousel label="아이가 올린 상품" itemLabel="상품">{childProducts.map((product) => (
-              <FamilyShopProductRow key={product.productId} product={product} childName={data.children.find((child) => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />
-            ))}</CardCarousel>}
-          </section>
-          <section className={styles.productSection} aria-labelledby="family-products-title">
-            <h2 id="family-products-title">가족이 등록한 선물 <small>{familyProducts.length}</small></h2>
-            {familyProducts.length === 0 ? <p className={styles.hint}>등록한 선물이 없어요.</p> : <CardCarousel label="가족이 등록한 선물" itemLabel="상품">{familyProducts.map((product) => (
-              <FamilyShopProductRow key={product.productId} product={product} childName={data.children.find((child) => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />
-            ))}</CardCarousel>}
-          </section>
+          <Tabs label="상품 구분" value={category} onChange={setCategory} options={[
+            { value: 'custom', label: `아이가 올린 상품 ${childProducts.length}` },
+            { value: 'family', label: `가족이 등록한 선물 ${familyProducts.length}` },
+          ]}>
+            {category === 'custom' ? <p className={styles.hint}>클로버를 정한 선물은 아이의 목록에 표시됩니다.</p> : null}
+            {(category === 'custom' ? childProducts : familyProducts).length === 0 ? <p className={styles.hint}>{category === 'custom' ? '아이가 요청한 상품이 없어요.' : '가족이 등록한 선물이 없어요.'}</p> :
+              <CardCarousel key={category} label={category === 'custom' ? '아이가 올린 상품' : '가족이 등록한 선물'} itemLabel="상품">
+                {(category === 'custom' ? childProducts : familyProducts).map(product => <FamilyShopProductRow key={product.productId} product={product}
+                  childName={data.children.find(child => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />)}
+              </CardCarousel>}
+          </Tabs>
         </> : null}
         <div className={styles.footer}>
           <Link to="/family-settings" className={styles.link}>아이가 보낸 선물 요청 보기 →</Link>

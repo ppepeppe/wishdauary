@@ -10,7 +10,9 @@ public record CloverHistoryResponse(List<Entry> entries) {
             int amount,
             String reason,
             Long refId,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            String note,
+            String givenByName
     ) {
     }
 }

@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { getAuthSession } from '../../services/session/authSession';
 import { fetchProductPricingRequests, fetchReceivedGiftRequests, fetchSentGiftRequests } from '../../services/api/shopApi';
 import NavIcon, { type NavIconName } from './NavIcon';
+import { fetchEnglishReviews } from '../../services/api/rewardApi';
 import { GIFT_REQUESTS_CHANGED_EVENT } from '../../constants/events';
 import styles from './Layout.module.css';
 
@@ -18,7 +19,7 @@ const familyNavItems: typeof childNavItems = [
   { to: '/family-home', label: '홈', icon: 'home', end: true },
   { to: '/family-feed', label: '아이 일기', icon: 'diary', end: true },
   { to: '/family-shop', label: '상점 관리', icon: 'store', end: true },
-  { to: '/family-settings', label: '선물 요청', icon: 'gift', end: true },
+  { to: '/family-settings', label: '받은 요청', icon: 'gift', end: true },
   { to: '/me', label: '마이', icon: 'profile', end: true },
 ];
 
@@ -43,9 +44,9 @@ function Layout() {
 
       try {
         if (authSession.appRole === 'family') {
-          const [requests, pricing] = await Promise.all([fetchReceivedGiftRequests(), fetchProductPricingRequests()]);
+          const [requests, pricing, english] = await Promise.all([fetchReceivedGiftRequests(), fetchProductPricingRequests(), fetchEnglishReviews()]);
           if (!ignore && current === version) {
-            setGiftBadgeCount(requests.filter((request) => request.status === 'pending').length + pricing.length);
+            setGiftBadgeCount(requests.filter((request) => request.status === 'pending').length + pricing.length + english.length);
           }
           return;
         }

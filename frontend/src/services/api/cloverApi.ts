@@ -29,6 +29,8 @@ export interface CloverHistoryEntry {
   amount: number;
   reason: string;
   createdAt: string;
+  note?: string | null;
+  givenByName?: string | null;
 }
 
 interface CloverHistoryApiResponse {
@@ -37,6 +39,8 @@ interface CloverHistoryApiResponse {
     amount?: number;
     reason?: string;
     createdAt?: string;
+    note?: string | null;
+    givenByName?: string | null;
   }>;
 }
 
@@ -53,6 +57,8 @@ export async function fetchCloverHistory(): Promise<CloverHistoryEntry[]> {
       ledgerId: entry.ledgerId ?? 0,
       amount: entry.amount ?? 0,
       reason: entry.reason ?? '',
+      note: entry.note ?? null,
+      givenByName: entry.givenByName ?? null,
       createdAt: entry.createdAt ?? new Date(0).toISOString(),
     }));
 }

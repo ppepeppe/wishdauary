@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CloverLedgerPersistenceAdapter implements RecordCloverLedgerPort, LoadCloverBalancePort, LoadCloverLedgerHistoryPort {
+public class CloverLedgerPersistenceAdapter implements com.wishdiary.application.clover.FindCloverAwardPort, RecordCloverLedgerPort, LoadCloverBalancePort, LoadCloverLedgerHistoryPort {
 
     private final CloverLedgerJpaRepository cloverLedgerJpaRepository;
 
@@ -42,6 +42,11 @@ public class CloverLedgerPersistenceAdapter implements RecordCloverLedgerPort, L
                 .toList();
     }
 
+    @Override
+    public java.util.Optional<CloverLedger> findByRequestKey(Long familyUserId, String key) {
+        return cloverLedgerJpaRepository.findByGivenByUserIdAndRequestKey(familyUserId, key).map(this::toDomain);
+    }
+
     private CloverLedgerJpaEntity toEntity(CloverLedger cloverLedger) {
         return new CloverLedgerJpaEntity(
                 cloverLedger.getId(),
@@ -50,7 +55,7 @@ public class CloverLedgerPersistenceAdapter implements RecordCloverLedgerPort, L
                 cloverLedger.getReason().name(),
                 cloverLedger.getRefId(),
                 cloverLedger.getCreatedAt()
-        );
+        ).withDetails(cloverLedger.getDetails());
     }
 
     private CloverLedger toDomain(CloverLedgerJpaEntity cloverLedgerJpaEntity) {
@@ -61,6 +66,6 @@ public class CloverLedgerPersistenceAdapter implements RecordCloverLedgerPort, L
                 CloverReason.valueOf(cloverLedgerJpaEntity.getReason()),
                 cloverLedgerJpaEntity.getRefId(),
                 cloverLedgerJpaEntity.getCreatedAt()
-        );
+        ).withDetails(cloverLedgerJpaEntity.getDetails());
     }
 }

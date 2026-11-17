@@ -54,3 +54,5 @@
   .requestOverview small { font-size: var(--text-2xs); }
   .diaryRow, .requestRow { padding: var(--s-4); }
 }
+
+.heading h3 { margin: 0; color: var(--ink-muted); font-size: var(--text-sm); font-weight: 500; }

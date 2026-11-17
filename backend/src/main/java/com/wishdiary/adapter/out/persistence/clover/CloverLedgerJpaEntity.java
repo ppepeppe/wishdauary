@@ -38,6 +38,27 @@ public class CloverLedgerJpaEntity {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(length = 300)
+    private String note;
+    @Column
+    private Long givenByUserId;
+    @Column(length = 160)
+    private String givenByName;
+    @Column(length = 36)
+    private String requestKey;
+
+    public CloverLedgerJpaEntity withDetails(com.wishdiary.domain.clover.CloverDetails details) {
+        if (details != null) {
+            note = details.note(); givenByUserId = details.givenByUserId();
+            givenByName = details.givenByName(); requestKey = details.requestKey();
+        }
+        return this;
+    }
+
+    public com.wishdiary.domain.clover.CloverDetails getDetails() {
+        return new com.wishdiary.domain.clover.CloverDetails(note, givenByUserId, givenByName, requestKey);
+    }
+
     protected CloverLedgerJpaEntity() {
     }
 

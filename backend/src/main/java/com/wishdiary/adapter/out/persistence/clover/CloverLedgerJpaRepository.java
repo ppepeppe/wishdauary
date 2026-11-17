@@ -13,4 +13,6 @@ public interface CloverLedgerJpaRepository extends JpaRepository<CloverLedgerJpa
     boolean existsByUserIdAndReasonAndRefId(Long userId, String reason, Long refId);
 
     List<CloverLedgerJpaEntity> findAllByUserIdOrderByCreatedAtDesc(Long userId);
+
+    java.util.Optional<CloverLedgerJpaEntity> findByGivenByUserIdAndRequestKey(Long givenByUserId, String requestKey);
 }

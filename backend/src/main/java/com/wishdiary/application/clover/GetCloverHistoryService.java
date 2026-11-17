@@ -26,7 +26,9 @@ public class GetCloverHistoryService implements GetCloverHistoryUseCase {
                         ledger.getAmount(),
                         ledger.getReason().name(),
                         ledger.getRefId(),
-                        ledger.getCreatedAt()
+                        ledger.getCreatedAt(),
+                        ledger.getDetails() == null ? null : ledger.getDetails().note(),
+                        ledger.getDetails() == null ? null : ledger.getDetails().givenByName()
                 ))
                 .toList();
         return new CloverHistoryResponse(entries);
