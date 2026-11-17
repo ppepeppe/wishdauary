@@ -15,6 +15,7 @@ public record DiaryDetailResponse(
         LocalDate writtenDate,
         LocalDateTime createdAt,
         List<Long> sharingGroupIds,
-        boolean hearted
+        boolean hearted,
+        String imageData
 ) {
 }

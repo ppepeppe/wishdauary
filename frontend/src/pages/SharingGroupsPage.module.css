@@ -4,7 +4,7 @@
 }
 
 .container a {
-  color: var(--brand);
+  color: var(--brand-ink);
   font-size: var(--text-sm);
 }
 
@@ -147,5 +147,5 @@
 
 .actions > button:last-child:not(:first-child):hover,
 .person > button:last-child:hover {
-  color: var(--brand);
+  color: var(--brand-ink);
 }

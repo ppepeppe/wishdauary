@@ -1,8 +1,8 @@
 .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .toolbar a { display: inline-flex; align-items: center; gap: 12px; min-height: 40px; padding: 0 12px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--surface); color: var(--ink-muted); font-size: 12px; }
 .toolbar a span { color: var(--ink-subtle); }
-.toolbar a:hover { color: var(--brand); border-color: var(--card-border-hover); }
+.toolbar a:hover { color: var(--brand-ink); border-color: var(--card-border-hover); }
 .content, .entries { display: grid; gap: 16px; min-width: 0; align-content: start; }
 .empty { display: grid; gap: 16px; }
-.empty > a { justify-self: start; display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 16px; border-radius: 12px; background: var(--brand); color: white; font-size: 13px; }
+.empty > a { justify-self: start; display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 16px; border-radius: 12px; background: var(--brand); color: var(--brand-on); font-size: 13px; }
 @media (min-width: 1024px) { .content { grid-template-columns: minmax(0, .95fr) minmax(0, 1.15fr); gap: 24px; align-items: start; } }

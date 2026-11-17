@@ -33,19 +33,21 @@
   --tracking-tight: -0.025em;
 
   /* ---------- Ink (charcoal, not pure black) ---------- */
-  --ink-strong: #24343b;
-  --ink: #3b4d55;
-  --ink-muted: #697b83;
-  --ink-subtle: #767e85;
+  --ink-strong: #3c3037;
+  --ink: #574a52;
+  --ink-muted: #82727b;
+  --ink-subtle: #9e9098;
   --ink-inverse: #ffffff;
 
-  /* ---------- Brand: teal ---------- */
-  --brand: #087f95;
-  --brand-hover: #066b7e;
-  --brand-press: #055667;
-  --brand-tint: #edf8fa;
-  --brand-tint-strong: #d5eef3;
-  --brand-ink: #08768a;
+  /* ---------- Brand: soft pink with readable rose text ---------- */
+  --brand: #edc4d2;
+  --brand-hover: #e7b5c7;
+  --brand-press: #dfa4ba;
+  --brand-on: #66364a;
+  --brand-tint: #fcf3f6;
+  --brand-tint-strong: #f5dfe7;
+  --brand-ink: #8e4964;
+  --brand-ink-rgb: 142, 73, 100;
 
   /* ---------- Clover: green ---------- */
   --green: #3f9c63;
@@ -66,22 +68,22 @@
   --danger-ink: #a1332e;
 
   /* ---------- Surfaces ---------- */
-  --canvas: #ffffff;
+  --canvas: #fffcfd;
   --surface: #ffffff;
-  --surface-sunken: #f3f7f8;
-  --app-bg: #f7fafb;
+  --surface-sunken: #f8f1f4;
+  --app-bg: #fdf8fa;
   --surface-inverse: #2f3438;
-  --line: #eaedef;
-  --line-strong: #dadfe3;
+  --line: #f0e6eb;
+  --line-strong: #e3d4dc;
 
   /* ---------- Shared content cards ---------- */
   --card-bg: #ffffff;
-  --card-border: rgba(8, 85, 106, 0.11);
-  --card-border-hover: rgba(8, 127, 149, 0.24);
+  --card-border: rgba(142, 73, 100, 0.13);
+  --card-border-hover: rgba(142, 73, 100, 0.24);
   --card-radius: 18px;
   --card-padding: 20px;
-  --card-shadow: 0 3px 16px rgba(24, 65, 78, 0.035);
-  --card-inner-bg: #f6fafb;
+  --card-shadow: 0 3px 16px rgba(101, 58, 77, 0.04);
+  --card-inner-bg: #fdf7f9;
 
   /* ---------- Radius ---------- */
   --r-xs: 4px;
@@ -116,7 +118,7 @@
   --dur-3: 300ms;
 
   /* ---------- Focus ---------- */
-  --focus-ring: 0 0 0 3px rgba(8, 127, 149, 0.20);
+  --focus-ring: 0 0 0 3px rgba(142, 73, 100, 0.18);
 
   /* ---------- Layout ---------- */
   --shell-max: 980px;
@@ -203,12 +205,12 @@ a {
 }
 
 p a {
-  color: var(--brand);
+  color: var(--brand-ink);
   font-weight: 600;
 }
 
 p a:hover {
-  color: var(--brand-hover);
+  color: var(--brand-ink);
 }
 
 img,
@@ -283,7 +285,7 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--brand);
+  outline: 2px solid var(--brand-ink);
   outline-offset: 2px;
 }
 

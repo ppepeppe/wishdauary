@@ -194,3 +194,5 @@
   color: var(--ink-subtle);
   font-size: var(--text-2xs);
 }
+.photo { margin: 0; overflow: hidden; border: 1px solid var(--card-border); border-radius: 14px; background: var(--surface-sunken); }
+.photo img { width: 100%; max-height: 560px; object-fit: contain; }

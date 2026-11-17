@@ -9,37 +9,37 @@
 .greeting h1 { margin: 0 0 8px; color: var(--ink-strong); font-size: 25px; line-height: 1.4; font-weight: 750; letter-spacing: -.04em; }
 .greetingName { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .greeting > span, .helper { color: var(--ink-muted); font-size: 12px; line-height: 1.8; }
-.requestOverview { display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid #d5e9ed; border-radius: 16px; background: #eef7f8; }
-.overviewIcon { display: grid; place-items: center; width: 38px; height: 38px; flex-shrink: 0; border-radius: 12px; color: var(--brand); background: var(--surface); }
+.requestOverview { display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid var(--brand-tint-strong); border-radius: 16px; background: var(--brand-tint); }
+.overviewIcon { display: grid; place-items: center; width: 38px; height: 38px; flex-shrink: 0; border-radius: 12px; color: var(--brand-ink); background: var(--surface); }
 .requestOverview > span:nth-child(2) { display: grid; flex: 1; gap: 4px; min-width: 0; }
 .requestOverview strong { color: var(--ink-strong); font-size: 13px; font-weight: 650; }
 .requestOverview small { color: var(--ink-muted); font-size: 11px; line-height: 1.5; }
-.requestOverview > svg { flex-shrink: 0; width: 18px; color: var(--brand); }
+.requestOverview > svg { flex-shrink: 0; width: 18px; color: var(--brand-ink); }
 .section { display: grid; gap: 12px; min-width: 0; }
 .heading { flex-wrap: wrap; gap: 4px 12px; }
 .heading h2 { margin: 0; color: var(--ink-strong); font-size: 16px; font-weight: 700; }
-.heading h2 span { margin-left: 4px; color: var(--brand); font-size: 13px; }
+.heading h2 span { margin-left: 4px; color: var(--brand-ink); font-size: 13px; }
 .heading > a { padding: 10px 0; color: var(--ink-muted); font-size: 11px; }
 .childNames { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
 .childChip { display: flex; align-items: center; gap: 9px; padding: 8px 14px 8px 8px; color: var(--ink-strong); font-size: 13px; font-weight: 600; background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--r-pill); }
 .childChip > span { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; color: var(--brand-ink); background: var(--brand-tint); font-size: 12px; font-weight: 700; }
 .helper { margin: 0; padding: 16px; border: 1px dashed var(--card-border); border-radius: 14px; }
 .pendingLink { display: block; width: fit-content; max-width: 100%; color: var(--brand-ink); font-size: 12px; line-height: 1.6; padding: 10px 0; }
-.primaryLink { display: flex; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--brand); color: white; font-size: 13px; font-weight: 600; }
+.primaryLink { display: flex; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--brand); color: var(--brand-on); font-size: 13px; font-weight: 600; }
 .diaryRow, .requestRow { min-width: 0; padding: 20px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--surface); box-shadow: var(--card-shadow); }
 .diaryRow { display: block; }
 .meta { flex-wrap: wrap; gap: 5px 12px; color: var(--ink-muted); font-size: 11px; }
 .meta strong { color: var(--brand-ink); font-size: 13px; font-weight: 650; overflow-wrap: anywhere; }
 .diaryRow p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 14px 0; color: var(--ink-strong); font-size: 14px; line-height: 1.8; overflow-wrap: anywhere; }
-.readLink { color: var(--brand); font-size: 12px; }
+.readLink { color: var(--brand-ink); font-size: 12px; }
 .requestRow > span:first-child, .shopLink > span:first-of-type { display: grid; min-width: 0; gap: 6px; }
 .requestRow strong, .shopLink strong { color: var(--ink-strong); font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
 .requestRow small, .shopLink small { color: var(--ink-muted); font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
-.requestStatus { flex-shrink: 0; color: var(--brand); font-size: 11px; }
-.shopLink { color: var(--brand); padding: 18px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--surface); min-width: 0; }
+.requestStatus { flex-shrink: 0; color: var(--brand-ink); font-size: 11px; }
+.shopLink { color: var(--brand-ink); padding: 18px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--surface); min-width: 0; }
 .shopLink > svg { flex-shrink: 0; width: 24px; height: 24px; }
 .shopLink > span:first-of-type { flex: 1; }
-.heading a:hover, .diaryRow:hover .readLink, .pendingLink:hover { color: var(--brand-hover); }
+.heading a:hover, .diaryRow:hover .readLink, .pendingLink:hover { color: var(--brand-ink); }
 .primaryLink:hover { background: var(--brand-hover); }
 @media (min-width: 1024px) {
   .container { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 24px; align-items: start; }

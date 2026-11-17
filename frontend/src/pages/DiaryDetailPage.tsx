@@ -4,6 +4,7 @@ import { getAuthSession } from '../services/session/authSession';
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import Button from '../components/common/Button';
+import PhotoPicker from '../components/common/PhotoPicker';
 import HoverHint from '../components/common/HoverHint';
 import PageSection from '../components/common/PageSection';
 import StatusMessage from '../components/common/StatusMessage';
@@ -45,6 +46,8 @@ function DiaryDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [content, setContent] = useState('');
+  const [imageData, setImageData] = useState<string | null>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
   const [visibilityScope, setVisibilityScope] = useState<DiaryVisibilityScope>('private');
   const [sharingGroupIds, setSharingGroupIds] = useState<number[]>([]);
   const isOwner = diary?.authorId === getAuthSession()?.userId;
@@ -58,6 +61,7 @@ function DiaryDetailPage() {
 
     let active = true;
     setDiary(null); setComments([]); setIsEditing(false); setActionError(null);
+    setImageData(null); setPhotoBusy(false);
 
     async function load() {
       try {
@@ -67,6 +71,7 @@ function DiaryDetailPage() {
         if (!active) return;
         setDiary(detail);
         setContent(detail.content);
+        setImageData(detail.imageData ?? null);
         setVisibilityScope(detail.visibilityScope);
         setSharingGroupIds(detail.sharingGroupIds ?? []);
         setEmotion(detail.emotion ?? null);
@@ -95,21 +100,24 @@ function DiaryDetailPage() {
     event.preventDefault();
     const trimmedContent = content.trim();
 
-    if (!isOwner || !trimmedContent || (visibilityScope === 'group' && sharingGroupIds.length === 0)) {
+    if (photoBusy || !isOwner || !trimmedContent || (visibilityScope === 'group' && sharingGroupIds.length === 0)) {
       return;
     }
 
     try {
       setIsSaving(true);
       setActionError(null);
+      const photoChange = imageData === (diary?.imageData ?? null) ? {} : imageData ? { imageData } : { removePhoto: true };
       const updatedDiary = await updateDiary(parsedDiaryId, {
         content: trimmedContent,
         visibilityScope,
         sharingGroupIds,
         emotion,
+        ...photoChange,
       });
       setDiary(updatedDiary);
       setContent(updatedDiary.content);
+      setImageData(updatedDiary.imageData ?? null);
       setVisibilityScope(updatedDiary.visibilityScope);
       setSharingGroupIds(updatedDiary.sharingGroupIds ?? []);
       setEmotion(updatedDiary.emotion ?? null);
@@ -168,6 +176,7 @@ function DiaryDetailPage() {
                 </p>
               ) : null}
               <p className={styles.content}>{diary.content}</p>
+              {diary.imageData ? <figure className={styles.photo}><img src={diary.imageData} alt="일기에 첨부한 사진" /></figure> : null}
               <div className={styles.reactionRow}>
                 <span>하트 {diary.heartCount ?? 0}</span>
                 <span>댓글 {diary.commentCount ?? 0}</span>
@@ -194,6 +203,8 @@ function DiaryDetailPage() {
                   onChange={(event) => setContent(event.target.value)}
                 />
               </label>
+              <PhotoPicker label="일기 사진" description="사진을 바꾸거나 삭제할 수 있어요. 일기와 같은 공개 범위로 보여요."
+                value={imageData} onChange={setImageData} onBusyChange={setPhotoBusy} disabled={isSaving} />
               <label className={styles.field}>
                 <span>오늘 기분</span>
                 <EmotionSelector value={emotion} onChange={setEmotion} disabled={isSaving} />
@@ -202,11 +213,11 @@ function DiaryDetailPage() {
                 onScopeChange={setVisibilityScope} onGroupIdsChange={setSharingGroupIds} disabled={isSaving} />
               <div className={styles.actionRow}>
                 <HoverHint hint={!isSaving && !content.trim() ? '일기 내용을 한 글자라도 적으면 저장할 수 있어요' : null}>
-                  <Button type="submit" disabled={isSaving || !content.trim() || (visibilityScope === 'group' && sharingGroupIds.length === 0)}>
+                  <Button type="submit" disabled={isSaving || photoBusy || !content.trim() || (visibilityScope === 'group' && sharingGroupIds.length === 0)}>
                     {isSaving ? '저장 중...' : '저장하기'}
                   </Button>
                 </HoverHint>
-                <button type="button" className={styles.cancelButton} disabled={isSaving} onClick={() => { setContent(diary.content); setVisibilityScope(diary.visibilityScope); setSharingGroupIds(diary.sharingGroupIds ?? []); setEmotion(diary.emotion ?? null); setIsEditing(false); }}>
+                <button type="button" className={styles.cancelButton} disabled={isSaving || photoBusy} onClick={() => { setContent(diary.content); setImageData(diary.imageData ?? null); setVisibilityScope(diary.visibilityScope); setSharingGroupIds(diary.sharingGroupIds ?? []); setEmotion(diary.emotion ?? null); setIsEditing(false); }}>
                   취소
                 </button>
               </div>

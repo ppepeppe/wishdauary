@@ -44,7 +44,7 @@
 }
 
 .product:hover h3 {
-  color: var(--brand);
+  color: var(--brand-ink);
 }
 
 .productBody {
@@ -139,7 +139,7 @@
   min-height: 44px;
   width: 100%;
   padding: 8px;
-  border: 1px solid #d3e8ec;
+  border: 1px solid var(--brand-tint-strong);
   border-radius: 10px;
   background: var(--brand-tint);
   color: var(--brand-ink);

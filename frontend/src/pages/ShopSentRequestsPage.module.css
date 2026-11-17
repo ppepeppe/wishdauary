@@ -3,7 +3,7 @@
   gap: var(--s-4);
 }
 
-.receiptButton { min-height: 44px; padding: 10px 14px; border: 0; border-radius: 10px; background: var(--brand); color: white; font: inherit; font-weight: 700; cursor: pointer; }
+.receiptButton { min-height: 44px; padding: 10px 14px; border: 0; border-radius: 10px; background: var(--brand); color: var(--brand-on); font: inherit; font-weight: 700; cursor: pointer; }
 .receiptButton:disabled { opacity: .6; cursor: wait; }
 
 .backLink {

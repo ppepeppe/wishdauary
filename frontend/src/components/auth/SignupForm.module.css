@@ -28,7 +28,7 @@
 .input:focus,
 .select:focus {
   outline: none;
-  border-color: var(--brand);
+  border-color: var(--brand-ink);
   box-shadow: var(--focus-ring);
 }
 

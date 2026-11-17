@@ -33,7 +33,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--brand);
+  color: var(--brand-ink);
   background: var(--surface-sunken);
   border: 0;
   font-size: 4rem;
@@ -196,12 +196,12 @@
 }
 
 .recipientButton:hover {
-  border-color: var(--brand);
+  border-color: var(--brand-ink);
   background: var(--surface-sunken);
 }
 
 .recipientButtonActive {
-  border-color: var(--brand);
+  border-color: var(--brand-ink);
   background: var(--brand-tint);
   box-shadow: var(--focus-ring);
 }
@@ -227,7 +227,7 @@
   align-items: center;
   justify-content: center;
   padding: 0 16px;
-  color: #ffffff;
+  color: var(--brand-on);
   background: var(--brand);
   font-weight: 800;
   font-size: var(--text-md);
@@ -285,7 +285,7 @@
 
 .goalButton:hover:not(:disabled) {
   background: var(--brand-tint-strong);
-  border-color: var(--brand);
+  border-color: var(--brand-ink);
 }
 
 .goalButtonActive {

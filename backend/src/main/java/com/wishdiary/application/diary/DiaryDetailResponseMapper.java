@@ -7,6 +7,11 @@ import org.springframework.stereotype.Component;
 public class DiaryDetailResponseMapper {
 
     public DiaryDetailResponse toResponse(Diary diary, long heartCount, long commentCount, boolean hearted) {
+        return toResponse(diary, heartCount, commentCount, hearted, null);
+    }
+
+    public DiaryDetailResponse toResponse(Diary diary, long heartCount, long commentCount, boolean hearted,
+            com.wishdiary.domain.diary.DiaryPhoto photo) {
         return new DiaryDetailResponse(
                 diary.getId(),
                 diary.getAuthorId(),
@@ -18,7 +23,8 @@ public class DiaryDetailResponseMapper {
                 diary.getWrittenDate(),
                 diary.getCreatedAt(),
                 diary.getSharingGroupIds(),
-                hearted
+                hearted,
+                photo == null ? null : "data:image/jpeg;base64," + java.util.Base64.getEncoder().encodeToString(photo.bytes())
         );
     }
 }

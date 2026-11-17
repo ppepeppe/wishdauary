@@ -49,7 +49,7 @@
 
 /* ---------- Variants ---------- */
 .primary {
-  color: #ffffff;
+  color: var(--brand-on);
   background: var(--brand);
   box-shadow: var(--shadow-xs);
 }
@@ -67,12 +67,12 @@
 .secondary {
   color: var(--brand-ink);
   background: var(--brand-tint);
-  border-color: rgba(8, 127, 149, 0.18);
+  border-color: rgba(var(--brand-ink-rgb), 0.18);
 }
 
 .secondary:hover:not(:disabled) {
   background: var(--brand-tint-strong);
-  border-color: rgba(8, 127, 149, 0.3);
+  border-color: rgba(var(--brand-ink-rgb), 0.3);
   transform: translateY(-1px);
 }
 

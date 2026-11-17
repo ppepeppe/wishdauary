@@ -118,7 +118,7 @@
 }
 
 .daySelected {
-  color: var(--ink-inverse);
+  color: var(--brand-on);
   font-weight: 800;
   background: var(--brand);
 }

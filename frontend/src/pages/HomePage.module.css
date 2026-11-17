@@ -1,5 +1,5 @@
 .container { display: grid; gap: 20px; min-width: 0; padding-top: 2px; }
-.recoveryLink { justify-self: center; padding: 12px; color: var(--brand); font-size: var(--text-sm); }
+.recoveryLink { justify-self: center; padding: 12px; color: var(--brand-ink); font-size: var(--text-sm); }
 .headerCard { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 2px 0 4px; }
 .profileBadge { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .profileCopy { display: grid; gap: 3px; min-width: 0; }
@@ -13,13 +13,13 @@
 .balanceCopy { display: grid; gap: 2px; }
 .balanceCopy small { color: var(--ink-muted); font-size: 10px; }
 .balanceValue { font-size: 19px; line-height: 1.15; }
-.todayCard { display: grid; gap: 10px; min-width: 0; padding: 16px 18px; border: 1px solid var(--card-border); border-radius: 16px; background: #eef7f8; }
+.todayCard { display: grid; gap: 10px; min-width: 0; padding: 16px 18px; border: 1px solid var(--card-border); border-radius: 16px; background: var(--brand-tint); }
 .dateBar { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .dateBar > div { display: flex; align-items: center; gap: 8px; }
 .dateBar strong { font-size: var(--text-xs); font-weight: 550; }
 .dateCaption { color: var(--brand-ink); font-size: 11px; font-weight: 700; }
 .calendarLink { color: var(--ink-muted); font-size: 11px; }
-.calendarLink:hover, .metaLink:hover, .goalDetailLink:hover { color: var(--brand-hover); }
+.calendarLink:hover, .metaLink:hover, .goalDetailLink:hover { color: var(--brand-ink); }
 .streakBanner { padding: 0; }
 .streakCopy { display: flex; gap: 5px 10px; align-items: baseline; flex-wrap: wrap; }
 .streakTitle, .streakDescription { margin: 0; font-size: 12px; line-height: 1.6; }
@@ -33,11 +33,11 @@
 .emotionRow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin: 24px 0 22px; }
 .emotionButton, .emotionButtonActive { display: grid; justify-items: center; gap: 9px; min-width: 0; padding: 12px 2px; border: 1px solid transparent; border-radius: 14px; color: var(--ink-muted); background: transparent; transition: background var(--dur-1), border-color var(--dur-1); }
 .emotionButton:hover { background: var(--surface-sunken); }
-.emotionButtonActive { background: var(--brand-tint); border-color: #cbe8ed; color: var(--brand-ink); }
+.emotionButtonActive { background: var(--brand-tint); border-color: var(--brand-tint-strong); color: var(--brand-ink); }
 .emotionEmoji { display: block; width: 44px; height: 44px; overflow: hidden; border-radius: 50%; }
 .emotionLabel { font-size: 11px; white-space: nowrap; }
 .emotionButtonActive .emotionLabel { font-weight: 750; }
-.writeButton { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 50px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--brand); color: white; font-size: var(--text-sm); font-weight: 650; transition: background var(--dur-1); }
+.writeButton { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 50px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--brand); color: var(--brand-on); font-size: var(--text-sm); font-weight: 650; transition: background var(--dur-1); }
 .writeButton:hover { background: var(--brand-hover); }
 .writeButton svg { width: 18px; height: 18px; flex-shrink: 0; }
 .diaryMetaRow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: 14px; }

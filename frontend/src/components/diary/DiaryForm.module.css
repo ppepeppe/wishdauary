@@ -35,16 +35,19 @@
 .select:focus,
 .dateInput:focus {
   outline: none;
-  border-color: var(--brand);
+  border-color: var(--brand-ink);
   box-shadow: var(--focus-ring);
 }
 
 .textarea {
+  font-weight: 400;
   resize: vertical;
   min-height: 180px;
   line-height: var(--leading-normal);
 }
 
 .textarea::placeholder {
-  color: var(--ink-subtle);
+  color: #afa2aa;
+  font-weight: 400;
+  opacity: 1;
 }

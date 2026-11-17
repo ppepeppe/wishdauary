@@ -14,6 +14,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(com.wishdiary.application.diary.InvalidDiaryPhotoException.class)
+    public ResponseEntity<CommonResponse<Void>> handleInvalidDiaryPhoto(RuntimeException exception) {
+        return ResponseEntity.badRequest().body(CommonResponse.fail("INVALID_DIARY_PHOTO", exception.getMessage()));
+    }
+
     @ExceptionHandler(com.wishdiary.domain.shop.GiftReceiptAccessDeniedException.class)
     public ResponseEntity<CommonResponse<Void>> handleGiftReceiptAccessDenied(RuntimeException exception) {
         return ResponseEntity.status(403).body(CommonResponse.fail("GIFT_RECEIPT_ACCESS_DENIED", exception.getMessage()));
@@ -107,7 +112,7 @@ public class GlobalExceptionHandler {
             case "writtenDate" -> "기록 날짜";
             case "title" -> "선물 이름";
             case "description" -> "선물 설명";
-            case "imageData" -> "선물 사진";
+            case "imageData" -> "사진";
             case "productUrl" -> "쇼핑몰 링크";
             case "cloverPrice" -> "클로버 가격";
             case "purchasePriceWon" -> "실제 구매가";

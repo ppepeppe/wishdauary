@@ -124,7 +124,7 @@
 }
 
 .primaryLink {
-  color: #ffffff;
+  color: var(--brand-on);
   background: var(--brand);
   box-shadow: var(--shadow-xs);
 }

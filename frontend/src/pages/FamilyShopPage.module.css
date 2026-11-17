@@ -29,7 +29,7 @@
 .productSection h2 { margin: 0; font-size: var(--text-md); }
 .productSection small { margin-left: 4px; color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }
 .hint, .empty p { color: var(--ink-muted); font-size: var(--text-xs); line-height: 1.7; }
-.link, .empty a { display: inline-flex; align-items: center; min-height: 44px; color: var(--brand); font-size: var(--text-sm); }
+.link, .empty a { display: inline-flex; align-items: center; min-height: 44px; color: var(--brand-ink); font-size: var(--text-sm); }
 .footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
 .heading { flex-wrap: wrap; }
 

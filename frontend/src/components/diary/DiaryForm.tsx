@@ -4,6 +4,7 @@ import { DIARY_PLACEHOLDER } from '../../constants/diary';
 import { getTodayDateInKorea } from '../../constants/date';
 import type { CreateDiaryRequest, DiaryEmotion, DiaryVisibilityScope } from '../../types/diary';
 import Button from '../common/Button';
+import PhotoPicker from '../common/PhotoPicker';
 import HoverHint from '../common/HoverHint';
 import EmotionSelector from './EmotionSelector';
 import styles from './DiaryForm.module.css';
@@ -27,12 +28,14 @@ function DiaryForm({
   const [visibilityScope, setVisibilityScope] = useState<DiaryVisibilityScope>('private');
   const [sharingGroupIds, setSharingGroupIds] = useState<number[]>([]);
   const [emotion, setEmotion] = useState<DiaryEmotion | null>(initialEmotion);
+  const [imageData, setImageData] = useState<string | null>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
   const trimmedContent = content.trim();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!trimmedContent || (visibilityScope === 'group' && sharingGroupIds.length === 0)) {
+    if (photoBusy || !trimmedContent || (visibilityScope === 'group' && sharingGroupIds.length === 0)) {
       return;
     }
 
@@ -42,6 +45,7 @@ function DiaryForm({
       sharingGroupIds,
       emotion,
       writtenDate,
+      ...(imageData ? { imageData } : {}),
     });
   }
 
@@ -64,13 +68,16 @@ function DiaryForm({
         <span>이날의 이야기</span>
         <textarea
           className={styles.textarea}
-          rows={10}
+          rows={7}
           value={content}
           placeholder={DIARY_PLACEHOLDER}
           disabled={isSubmitting}
           onChange={(event) => setContent(event.target.value)}
         />
       </label>
+
+      <PhotoPicker label="일기 사진" description="오늘의 사진을 한 장 남겨보세요. 일기와 같은 공개 범위로 보여요."
+        value={imageData} onChange={setImageData} onBusyChange={setPhotoBusy} disabled={isSubmitting} />
 
       <label className={styles.field}>
         <span>오늘 기분</span>
@@ -81,7 +88,7 @@ function DiaryForm({
         onScopeChange={setVisibilityScope} onGroupIdsChange={setSharingGroupIds} disabled={isSubmitting} />
 
       <HoverHint hint={!isSubmitting && !trimmedContent ? '오늘의 이야기를 한 글자라도 적으면 저장할 수 있어요' : null}>
-        <Button type="submit" fullWidth disabled={isSubmitting || !trimmedContent || (visibilityScope === 'group' && sharingGroupIds.length === 0)}>
+        <Button type="submit" fullWidth disabled={isSubmitting || photoBusy || !trimmedContent || (visibilityScope === 'group' && sharingGroupIds.length === 0)}>
           {isSubmitting ? '저장 중...' : '저장하기'}
         </Button>
       </HoverHint>

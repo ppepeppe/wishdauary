@@ -56,7 +56,9 @@ class CreateDiaryServiceTest {
                 updateUserStreakPort,
                 createDiaryValidator,
                 createDiaryResponseMapper,
-                new DiaryAudiencePolicy(org.mockito.Mockito.mock(com.wishdiary.application.sharing.SharingGroupPort.class), org.mockito.Mockito.mock(com.wishdiary.application.group.FamilyConnectionPort.class))
+                new DiaryAudiencePolicy(org.mockito.Mockito.mock(com.wishdiary.application.sharing.SharingGroupPort.class), org.mockito.Mockito.mock(com.wishdiary.application.group.FamilyConnectionPort.class)),
+                org.mockito.Mockito.mock(DecodeDiaryPhotoPort.class),
+                org.mockito.Mockito.mock(DiaryPhotoPort.class)
         );
     }
 

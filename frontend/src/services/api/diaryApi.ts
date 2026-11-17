@@ -33,6 +33,7 @@ interface ReactionFeedApiItem {
 }
 
 interface DiaryEntryApiItem {
+  imageData?: string | null;
   id?: number;
   diaryId?: number;
   authorId?: number;
@@ -89,6 +90,7 @@ function normalizeDiaryDetail(item: DiaryEntryApiItem): DiaryDetail {
   return {
     ...entry,
     authorId: item.authorId,
+    imageData: item.imageData ?? null,
     content: item.content ?? entry.contentPreview,
     writtenDate: item.writtenDate ?? entry.createdAt,
   };
@@ -170,6 +172,8 @@ export async function updateDiary(diaryId: number, payload: UpdateDiaryRequest) 
       visibilityScope: payload.visibilityScope,
       sharingGroupIds: payload.visibilityScope === 'group' ? payload.sharingGroupIds ?? [] : [],
       emotion: payload.emotion,
+      ...(payload.imageData !== undefined ? { imageData: payload.imageData } : {}),
+      ...(payload.removePhoto ? { removePhoto: true } : {}),
     }),
   });
 
@@ -243,6 +247,7 @@ export async function createDiary(payload: CreateDiaryRequest) {
     sharingGroupIds: payload.visibilityScope === 'group' ? payload.sharingGroupIds ?? [] : [],
     writtenDate: payload.writtenDate,
     emotion: payload.emotion,
+    ...(payload.imageData ? { imageData: payload.imageData } : {}),
   };
 
   const diary = await request<DiaryEntryApiItem>('/api/v1/diaries', {

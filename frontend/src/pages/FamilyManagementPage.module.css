@@ -64,7 +64,7 @@
   border: 1px solid transparent;
   border-radius: var(--r-md);
   padding: 0 16px;
-  color: #ffffff;
+  color: var(--brand-on);
   background: var(--brand);
   font-size: var(--text-sm);
   font-weight: 800;

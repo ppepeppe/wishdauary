@@ -4,7 +4,7 @@
   justify-content: space-between;
   gap: 8px;
   margin-bottom: 16px;
-  color: var(--brand);
+  color: var(--brand-ink);
   font-size: var(--text-sm);
   font-weight: 600;
   padding: 14px 16px;

@@ -34,7 +34,7 @@
 
 .optionSelected {
   color: var(--brand-ink);
-  border-color: var(--brand);
+  border-color: var(--brand-ink);
   background: var(--brand-tint);
   box-shadow: var(--focus-ring);
 }

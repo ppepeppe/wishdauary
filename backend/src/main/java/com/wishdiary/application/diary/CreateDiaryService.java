@@ -28,6 +28,8 @@ public class CreateDiaryService implements CreateDiaryUseCase {
     private final UpdateUserStreakPort updateUserStreakPort;
     private final CreateDiaryValidator createDiaryValidator;
     private final CreateDiaryResponseMapper createDiaryResponseMapper;
+    private final DecodeDiaryPhotoPort photoDecoder;
+    private final DiaryPhotoPort photos;
 
     public CreateDiaryService(
             DiaryRepository diaryRepository,
@@ -36,7 +38,9 @@ public class CreateDiaryService implements CreateDiaryUseCase {
             UpdateUserStreakPort updateUserStreakPort,
             CreateDiaryValidator createDiaryValidator,
             CreateDiaryResponseMapper createDiaryResponseMapper,
-            DiaryAudiencePolicy audiencePolicy
+            DiaryAudiencePolicy audiencePolicy,
+            DecodeDiaryPhotoPort photoDecoder,
+            DiaryPhotoPort photos
     ) {
         this.diaryRepository = diaryRepository;
         this.recordCloverLedgerPort = recordCloverLedgerPort;
@@ -45,6 +49,8 @@ public class CreateDiaryService implements CreateDiaryUseCase {
         this.updateUserStreakPort = updateUserStreakPort;
         this.createDiaryValidator = createDiaryValidator;
         this.createDiaryResponseMapper = createDiaryResponseMapper;
+        this.photoDecoder = photoDecoder;
+        this.photos = photos;
     }
 
     @Override
@@ -52,10 +58,12 @@ public class CreateDiaryService implements CreateDiaryUseCase {
     public CreateDiaryResponse create(Long authorId, CreateDiaryRequest request) {
         LoadedUser author = loadUserPort.loadById(authorId);
         createDiaryValidator.validateAuthorCanCreate(author);
+        var photo = photoDecoder.decode(request.imageData());
 
         Diary diary = createDiary(author, request);
         audiencePolicy.validateSelection(diary);
         Diary savedDiary = diaryRepository.save(diary);
+        if (photo != null) photos.save(savedDiary.getId(), photo);
         recordDiaryWriteClover(savedDiary);
         UserStreakStats updatedUserStreakStats = updateDiaryStreak(savedDiary);
         recordStreakBonus(savedDiary, updatedUserStreakStats);

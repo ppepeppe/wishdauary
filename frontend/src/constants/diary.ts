@@ -16,7 +16,4 @@ export function getVisibilityScopeLabel(scope?: string | null) {
   return option?.label ?? '나만 보기';
 }
 
-export const DIARY_PLACEHOLDER = `그날 있었던 일, 그냥 떠오르는 거 아무거나 적어도 좋아요 🙂
-짧아도 괜찮고,
-꼭 맞게 쓰지 않아도 괜찮아요.
-그날 느꼈던 솔직한 마음을 적어보세요 ✨`;
+export const DIARY_PLACEHOLDER = '오늘은 어떤 일이 있었나요?';

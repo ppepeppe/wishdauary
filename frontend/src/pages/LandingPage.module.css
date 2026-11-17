@@ -1,35 +1,35 @@
 .page { background: var(--surface); }
 .navigation { display: flex; gap: 28px; width: min(1136px, calc(100% - 48px)); margin: auto; min-height: 54px; align-items: stretch; border-bottom: 1px solid var(--line); }
 .navigation a { display: flex; align-items: center; padding: 0 2px; font-size: 15px; font-weight: 600; white-space: nowrap; }
-.navigation a:hover, .navigation .current { color: var(--brand); }
+.navigation a:hover, .navigation .current { color: var(--brand-ink); }
 .navigation .current { border-bottom: 2px solid var(--brand); }
 .content { width: min(1136px, calc(100% - 48px)); margin: auto; }
 .intro { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; padding-top: 28px; scroll-margin-top: 100px; }
-.banner { padding: 32px 36px; border-radius: 8px; background: #edf7fa; }
+.banner { padding: 32px 36px; border-radius: 8px; background: var(--brand-tint); }
 .bannerLabel { color: var(--brand-ink); font-size: 13px; font-weight: 600; }
 .banner h1 { font-size: 30px; line-height: 1.4; font-weight: 700; letter-spacing: -.035em; margin: 12px 0; }
 .banner p { margin: 0 0 22px; color: var(--ink-muted); font-size: 14px; line-height: 1.6; }
-.primaryLink { display: inline-flex; align-items: center; justify-content: space-between; gap: 32px; min-height: 42px; padding: 0 18px; border-radius: 4px; background: var(--brand); color: white; font-size: 14px; font-weight: 700; }
+.primaryLink { display: inline-flex; align-items: center; justify-content: space-between; gap: 32px; min-height: 42px; padding: 0 18px; border-radius: 4px; background: var(--brand); color: var(--brand-on); font-size: 14px; font-weight: 700; }
 .primaryLink:hover { background: var(--brand-hover); }
 .joinPanel { padding: 24px; border: 1px solid var(--line); border-radius: 8px; }
-.joinIcon { display: block; margin-bottom: 18px; color: var(--brand); }
+.joinIcon { display: block; margin-bottom: 18px; color: var(--brand-ink); }
 .joinIcon svg { width: 28px; height: 28px; }
 .joinPanel h2 { margin: 0 0 10px; font-size: 18px; }
 .joinPanel p { margin: 0 0 20px; color: var(--ink-muted); font-size: 13px; line-height: 1.65; }
-.joinPanel > a { display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; color: var(--brand); }
+.joinPanel > a { display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; color: var(--brand-ink); }
 .loginHint { display: block; margin-top: 16px; font-size: 12px; color: var(--ink-muted); }
 .loginHint a { margin-left: 6px; text-decoration: underline; text-underline-offset: 3px; }
 .shortcuts { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 720px; margin: 28px auto 38px; }
 .shortcuts a { display: grid; justify-items: center; gap: 10px; padding: 12px 4px; font-size: 14px; font-weight: 500; }
 .shortcutIcon { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 18px; background: #f5f7f8; color: #445d69; }
 .shortcutIcon svg { width: 27px; height: 27px; }
-.shortcuts a:hover { color: var(--brand); }
-.shortcuts a:hover .shortcutIcon { background: var(--brand-tint); color: var(--brand); }
+.shortcuts a:hover { color: var(--brand-ink); }
+.shortcuts a:hover .shortcutIcon { background: var(--brand-tint); color: var(--brand-ink); }
 .section { margin-bottom: 48px; scroll-margin-top: 95px; }
 .sectionHeading { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
 .sectionHeading h2 { margin: 0; font-size: 21px; letter-spacing: -.025em; }
 .sectionHeading p { margin: 7px 0 0; font-size: 14px; color: var(--ink-muted); }
-.sectionHeading > a { flex-shrink: 0; color: var(--brand); font-size: 14px; font-weight: 700; }
+.sectionHeading > a { flex-shrink: 0; color: var(--brand-ink); font-size: 14px; font-weight: 700; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .filter, .filterActive { min-height: 34px; border: 0; border-radius: 6px; padding: 7px 13px; font-size: 13px; color: var(--ink); background: var(--surface-sunken); }
 .filterActive { background: var(--brand-tint); color: var(--brand-ink); font-weight: 700; }
@@ -56,7 +56,7 @@
 .productInfo { display: block; padding: 12px 2px 0; }
 .productInfo > span { font-size: 12px; color: var(--ink-muted); }
 .productInfo h3 { margin: 5px 0 7px; font-size: 16px; font-weight: 500; }
-.productInfo > strong { font-size: 13px; color: var(--brand); font-weight: 600; }
+.productInfo > strong { font-size: 13px; color: var(--brand-ink); font-weight: 600; }
 .cloverGuide { padding: 28px; background: #f6f8f7; border-radius: 8px; }
 .cloverLabel { font-size: 12px; color: var(--green-ink); font-weight: 600; }
 .cloverGuide h3 { margin: 14px 0; font-size: 22px; line-height: 1.45; }

@@ -105,7 +105,7 @@
 }
 
 .recipientButtonActive {
-  border-color: var(--brand);
+  border-color: var(--brand-ink);
   background: var(--brand-tint);
   box-shadow: var(--focus-ring);
 }
@@ -176,7 +176,7 @@
   min-height: 52px;
   border: 0;
   border-radius: var(--r-lg);
-  color: #ffffff;
+  color: var(--brand-on);
   background: var(--brand);
   font-weight: 800;
   font-size: var(--text-md);

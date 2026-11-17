@@ -19,6 +19,7 @@ export interface DiaryEntry {
 }
 
 export interface DiaryDetail extends DiaryEntry {
+  imageData?: string | null;
   authorId?: number;
   content: string;
   writtenDate: string;
@@ -34,6 +35,7 @@ export interface TodayDiaryStatus {
 }
 
 export interface CreateDiaryRequest {
+  imageData?: string | null;
   content: string;
   visibilityScope: DiaryVisibilityScope;
   sharingGroupIds?: number[];
@@ -42,6 +44,8 @@ export interface CreateDiaryRequest {
 }
 
 export interface UpdateDiaryRequest {
+  imageData?: string | null;
+  removePhoto?: boolean;
   content: string;
   visibilityScope: DiaryVisibilityScope;
   sharingGroupIds?: number[];

@@ -13,7 +13,7 @@
 
 .mobileShell {
   min-height: 100vh;
-  background: #edf3f5;
+  background: var(--brand-tint);
 }
 
 .mobileFrame {
@@ -80,7 +80,7 @@
 }
 
 .bottomNavItemActive {
-  color: var(--brand);
+  color: var(--brand-ink);
   background: transparent;
   font-weight: 700;
 }
@@ -100,7 +100,7 @@
 .bottomNavPrimary .bottomNavIcon {
   width: 40px;
   height: 36px;
-  color: #ffffff;
+  color: var(--brand-on);
   background: var(--brand);
   border-radius: 12px;
   box-shadow: none;
@@ -237,7 +237,7 @@
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  color: #ffffff;
+  color: var(--brand-on);
   background: var(--brand);
   border-radius: 10px;
   box-shadow: none;
@@ -324,9 +324,9 @@
 }
 
 .activeLink {
-  color: var(--brand);
+  color: var(--brand-ink);
   background: transparent;
-  border-bottom-color: var(--brand);
+  border-bottom-color: var(--brand-ink);
   font-weight: 700;
 }
 
@@ -349,7 +349,7 @@
 }
 
 .myPageLink:hover {
-  color: var(--brand);
+  color: var(--brand-ink);
   background: var(--brand-tint);
 }
 
@@ -398,7 +398,7 @@
   display: inline-flex;
   align-items: center;
   padding: 0 16px;
-  color: #fff;
+  color: var(--brand-on);
   background: var(--brand);
   border-radius: 8px;
   font-size: 0.875rem;
@@ -536,7 +536,7 @@
     place-items: center;
     flex-shrink: 0;
     border-radius: 12px;
-    color: white;
+    color: var(--brand-on);
     background: var(--brand);
     font-size: 20px;
     letter-spacing: -1px;
@@ -568,7 +568,7 @@
     font-size: 13px;
     font-weight: 650;
   }
-  .desktopAccount > svg { flex-shrink: 0; color: var(--brand); }
+  .desktopAccount > svg { flex-shrink: 0; color: var(--brand-ink); }
   .desktopAccount > span:last-child { margin-left: auto; color: var(--ink-muted); }
 }
 

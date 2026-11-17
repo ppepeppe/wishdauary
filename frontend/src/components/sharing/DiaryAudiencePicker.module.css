@@ -8,6 +8,6 @@
 .groups a { color: var(--brand-ink); font-size: 14px; padding: 8px 0; }
 .groups button { font: inherit; text-decoration: underline; border: 0; background: none; cursor: pointer; color: var(--brand-ink); }
 .group { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--surface); cursor: pointer; }
-.group input { width: 18px; height: 18px; accent-color: var(--brand); flex-shrink: 0; }
+.group input { width: 18px; height: 18px; accent-color: var(--brand-ink); flex-shrink: 0; }
 .group span { min-width: 0; overflow-wrap: anywhere; }
 .group small { margin-left: 10px; color: var(--ink-muted); }

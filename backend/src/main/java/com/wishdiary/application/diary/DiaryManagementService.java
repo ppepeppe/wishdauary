@@ -24,6 +24,8 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
     private final DiaryCommentRepository diaryCommentRepository;
     private final LoadUserPort loadUserPort;
     private final DiaryDetailResponseMapper diaryDetailResponseMapper;
+    private final DecodeDiaryPhotoPort photoDecoder;
+    private final DiaryPhotoPort photos;
 
     public DiaryManagementService(
             LoadDiaryQueryPort loadDiaryQueryPort,
@@ -32,7 +34,9 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
             DiaryCommentRepository diaryCommentRepository,
             LoadUserPort loadUserPort,
             DiaryDetailResponseMapper diaryDetailResponseMapper,
-            DiaryAudiencePolicy audiencePolicy
+            DiaryAudiencePolicy audiencePolicy,
+            DecodeDiaryPhotoPort photoDecoder,
+            DiaryPhotoPort photos
     ) {
         this.loadDiaryQueryPort = loadDiaryQueryPort;
         this.diaryRepository = diaryRepository;
@@ -41,6 +45,8 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
         this.loadUserPort = loadUserPort;
         this.audiencePolicy = audiencePolicy;
         this.diaryDetailResponseMapper = diaryDetailResponseMapper;
+        this.photoDecoder = photoDecoder;
+        this.photos = photos;
     }
 
     @Override
@@ -62,6 +68,11 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
         Diary diary = loadDiary(diaryId);
         validateOwnerAccess(requester, diary);
 
+        if (request.removePhoto() && request.imageData() != null && !request.imageData().isBlank()) {
+            throw new InvalidDiaryPhotoException("사진 첨부와 삭제 중 하나만 선택해 주세요.");
+        }
+        var photo = photoDecoder.decode(request.imageData());
+
         Diary updatedDiary = diary.update(
                 request.content(),
                 DiaryEmotion.from(request.emotion()),
@@ -69,6 +80,8 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
                 request.sharingGroupIds()
         );
         audiencePolicy.validateSelection(updatedDiary);
+        if (request.removePhoto()) photos.delete(diaryId);
+        else if (photo != null) photos.save(diaryId, photo);
         return toDetailResponse(diaryRepository.save(updatedDiary), false);
     }
 
@@ -104,6 +117,6 @@ public class DiaryManagementService implements GetDiaryDetailUseCase, UpdateDiar
         List<Long> diaryIds = List.of(diary.getId());
         long heartCount = heartReactionRepository.countByDiaryIds(diaryIds).getOrDefault(diary.getId(), 0L);
         long commentCount = diaryCommentRepository.countByDiaryIds(diaryIds).getOrDefault(diary.getId(), 0L);
-        return diaryDetailResponseMapper.toResponse(diary, heartCount, commentCount, hearted);
+        return diaryDetailResponseMapper.toResponse(diary, heartCount, commentCount, hearted, photos.load(diary.getId()).orElse(null));
     }
 }

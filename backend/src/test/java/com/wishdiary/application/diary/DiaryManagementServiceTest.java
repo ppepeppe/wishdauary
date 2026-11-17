@@ -57,7 +57,9 @@ class DiaryManagementServiceTest {
                 diaryCommentRepository,
                 loadUserPort,
                 new DiaryDetailResponseMapper(),
-                new com.wishdiary.application.diary.DiaryAudiencePolicy(org.mockito.Mockito.mock(com.wishdiary.application.sharing.SharingGroupPort.class), org.mockito.Mockito.mock(com.wishdiary.application.group.FamilyConnectionPort.class))
+                new com.wishdiary.application.diary.DiaryAudiencePolicy(org.mockito.Mockito.mock(com.wishdiary.application.sharing.SharingGroupPort.class), org.mockito.Mockito.mock(com.wishdiary.application.group.FamilyConnectionPort.class)),
+                org.mockito.Mockito.mock(DecodeDiaryPhotoPort.class),
+                org.mockito.Mockito.mock(DiaryPhotoPort.class)
         );
     }
 
