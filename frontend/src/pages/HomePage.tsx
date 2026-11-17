@@ -10,6 +10,8 @@ import CloverIcon from '../components/common/CloverIcon';
 import NavIcon from '../components/common/NavIcon';
 import ProductArtwork from '../components/shop/ProductArtwork';
 import { formatKoreanDate, getTodayDateInKorea } from '../constants/date';
+import { getEmotionMeta } from '../constants/emotion';
+import { getNextStreakReward } from '../utils/streakReward';
 import EmotionSelector from '../components/diary/EmotionSelector';
 import { useHomeData } from '../hooks/useHomeData';
 import { useWishGoal } from '../hooks/useWishGoal';
@@ -85,6 +87,8 @@ function HomePage() {
   const currentGoal = pendingGoalRequest ? goalTarget : goal ? Math.min(goalTarget, goal.currentCloverBalance) : 0;
   const progressRatio = goalTarget > 0 ? Math.min(100, (currentGoal / goalTarget) * 100) : 0;
   const goalRemaining = goal?.remainingClovers ?? 0;
+  const nextStreakReward = getNextStreakReward(data?.currentStreak ?? 0);
+  const todayEmotion = getEmotionMeta(data?.todayDiaryEmotion);
 
   function handleWriteNow() {
     if (data?.hasTodayDiary) { navigate(data.todayDiaryId ? `/diaries/${data.todayDiaryId}` : '/diaries'); return; }
@@ -154,16 +158,32 @@ function HomePage() {
         <div className={styles.streakBanner}>
           <div className={styles.streakCopy}>
             <p className={styles.streakTitle}>{data?.currentStreak ? `${data.currentStreak}일 연속 기록` : '오늘의 첫 기록을 남겨보세요'}</p>
+            <p className={styles.streakReward}>
+              {nextStreakReward
+                ? `${nextStreakReward.days}일 연속 쓰면 보너스 ${nextStreakReward.clovers}클로버!`
+                : '3·5·7일 연속 기록 보너스를 모두 달성했어요'}
+            </p>
           </div>
         </div>
       </section>
 
       <section className={styles.diaryCard}>
-        <h1 className={styles.diaryTitle}>오늘의 기분</h1>
+        <h1 className={styles.diaryTitle}>{data?.hasTodayDiary ? '오늘의 기록' : '오늘의 기분'}</h1>
 
-        <div className={styles.emotionRow}>
-          <EmotionSelector value={selectedEmotion} onChange={setSelectedEmotion} />
-        </div>
+        {data?.hasTodayDiary ? (
+          <div className={styles.savedDiarySummary}>
+            {data.todayDiaryEmotion && todayEmotion ? (
+              <>
+                <span className={styles.savedEmotion}><EmotionIcon emotion={data.todayDiaryEmotion} /></span>
+                <p><span className={styles.savedEmotionLabel}>일기에 남긴 기분</span><strong>{todayEmotion.label}</strong></p>
+              </>
+            ) : <p>오늘의 일기를 남겼어요</p>}
+          </div>
+        ) : (
+          <div className={styles.emotionRow}>
+            <EmotionSelector value={selectedEmotion} onChange={setSelectedEmotion} />
+          </div>
+        )}
 
         {data?.hasTodayDiary ? (
           <Link to={data.todayDiaryId ? `/diaries/${data.todayDiaryId}` : '/diaries'} className={styles.todayDiaryLink}>
@@ -177,23 +197,14 @@ function HomePage() {
           </Button>
         )}
 
-        <div className={styles.diaryMetaRow}>
-          <p className={styles.diaryMetaText}>
-            {data?.hasTodayDiary
-              ? `오늘 일기 ${data.todayDiaryCount}개`
-              : '오늘 작성한 일기 없음'}
-          </p>
-          <Link to={data?.hasTodayDiary ? '/diaries' : '/feed'} className={styles.metaLink}>
-            {data?.hasTodayDiary ? '내 일기 보기' : '받은 소식'}
-          </Link>
-        </div>
+        {!data?.hasTodayDiary ? (
+          <div className={styles.diaryMetaRow}>
+            <p className={styles.diaryMetaText}>오늘 작성한 일기 없음</p>
+            <Link to="/feed" className={styles.metaLink}>받은 소식</Link>
+          </div>
+        ) : null}
         {data?.hasTodayDiary ? (
           <p className={styles.reactionHint}>
-            {data.todayDiaryEmotion ? (
-              <span className={styles.reactionEmotion}>
-                <EmotionIcon emotion={data.todayDiaryEmotion} />
-              </span>
-            ) : null}
             하트 {data.todayDiaryHeartCount} · 댓글 {data.todayDiaryCommentCount}
           </p>
         ) : null}
