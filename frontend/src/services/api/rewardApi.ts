@@ -10,10 +10,10 @@ export function fetchTodayEnglish() {
   getCurrentChildUserIdOrThrow();
   return request<TodayEnglish>('/api/v1/english/today');
 }
-export function requestEnglishReview(receiverFamilyUserId: number, studyDate: string) {
+export function requestEnglishReview(receiverFamilyUserId: number, studyDate: string, contentId: number | null, contentVersion: number | null) {
   getCurrentChildUserIdOrThrow();
   return request<EnglishStudy>('/api/v1/english/requests', {
-    method: 'POST', body: JSON.stringify({ receiverFamilyUserId, studyDate }),
+    method: 'POST', body: JSON.stringify({ receiverFamilyUserId, studyDate, contentId, contentVersion }),
   });
 }
 export function fetchEnglishReviews() {

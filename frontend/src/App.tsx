@@ -28,6 +28,7 @@ import FamilyConnectionsPage from './pages/FamilyConnectionsPage';
 import FamilyShopPage from './pages/FamilyShopPage';
 import SignupRolePage from './pages/SignupRolePage';
 import AdminShopPage from './pages/AdminShopPage';
+import AdminEnglishPage from './pages/AdminEnglishPage';
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
 
         <Route element={<RequireAppRole />}>
           <Route path="/admin/shop" element={<AdminShopPage />} />
+          <Route path="/admin/english" element={<AdminEnglishPage />} />
           <Route path="/family-connections" element={<FamilyConnectionsPage />} />
           <Route path="/shared-feed" element={<SharedDiaryFeedPage />} />
           <Route path="/diaries/:diaryId" element={<DiaryDetailPage />} />

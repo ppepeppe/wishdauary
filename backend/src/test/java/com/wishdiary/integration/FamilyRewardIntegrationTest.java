@@ -132,7 +132,12 @@ class FamilyRewardIntegrationTest {
                 "reason", reason, "requestKey", UUID.randomUUID().toString()));
     }
     private JsonNode request(JsonNode child, JsonNode adult) throws Exception {
-        return call(post("/api/v1/english/requests"), child, Map.of("receiverFamilyUserId", adult.get("userId").asLong(), "studyDate", todayDate()), 200);
+        JsonNode today = call(get("/api/v1/english/today"), child, null, 200);
+        var body = new HashMap<String,Object>();
+        body.put("receiverFamilyUserId", adult.get("userId").asLong()); body.put("studyDate", today.get("studyDate").asText());
+        body.put("contentId", today.get("content").get("contentId").isNull() ? null : today.get("content").get("contentId").asLong());
+        body.put("contentVersion", today.get("content").get("version").isNull() ? null : today.get("content").get("version").asLong());
+        return call(post("/api/v1/english/requests"), child, body, 200);
     }
     private JsonNode review(JsonNode adult, long id, String action, int status) throws Exception {
         return call(patch("/api/v1/english/requests/" + id), adult, Map.of("action", action), status);

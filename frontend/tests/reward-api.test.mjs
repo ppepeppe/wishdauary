@@ -22,10 +22,10 @@ test('English requests specify the selected family and studied day without a cli
   login('child');
   globalThis.fetch = async (url,init) => {
     assert.equal(new URL(url).pathname,'/api/v1/english/requests');
-    assert.deepEqual(JSON.parse(init.body),{receiverFamilyUserId:20,studyDate:'2026-11-17'});
+    assert.deepEqual(JSON.parse(init.body),{receiverFamilyUserId:20,studyDate:'2026-11-17',contentId:15,contentVersion:2});
     return Response.json({requestId:4,status:'pending'});
   };
-  assert.equal((await api.requestEnglishReview(20,'2026-11-17')).status,'pending');
+  assert.equal((await api.requestEnglishReview(20,'2026-11-17',15,2)).status,'pending');
 });
 test('adult confirmation targets one request and keeps the approved server state', async () => {
   login('family');
@@ -47,6 +47,6 @@ test('credit history preserves the family reason and supports old diary rewards'
 });
 test('role-specific reward calls reject the wrong client role before sending', () => {
   login('child'); assert.throws(()=>api.awardClovers({}),/가족/); assert.throws(()=>api.fetchEnglishReviews(),/가족/);
-  login('family'); assert.throws(()=>api.fetchTodayEnglish(),/아이/); assert.throws(()=>api.requestEnglishReview(1,'2026-11-17'),/아이/);
+  login('family'); assert.throws(()=>api.fetchTodayEnglish(),/아이/); assert.throws(()=>api.requestEnglishReview(1,'2026-11-17',15,0),/아이/);
   storage.clear(); assert.throws(()=>api.fetchTodayEnglish(),/로그인/);
 });

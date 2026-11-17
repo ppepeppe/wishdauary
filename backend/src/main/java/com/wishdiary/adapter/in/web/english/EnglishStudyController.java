@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/english")
 public class EnglishStudyController {
-    public record RequestStudy(@NotNull @Positive Long receiverFamilyUserId, @NotNull java.time.LocalDate studyDate) {}
+    public record RequestStudy(@NotNull @Positive Long receiverFamilyUserId, @NotNull java.time.LocalDate studyDate, Long contentId, Long contentVersion) {}
     public record ReviewStudy(@NotNull Action action) {}
     public enum Action { APPROVE, REJECT }
     private final ManageEnglishStudyUseCase studies;
@@ -23,7 +23,7 @@ public class EnglishStudyController {
     }
     @PostMapping("/requests")
     public CommonResponse<EnglishStudyResponse> request(@Authenticated AuthenticatedSession session, @Valid @RequestBody RequestStudy body) {
-        return CommonResponse.success("English confirmation requested.", studies.request(session.userId(), body.receiverFamilyUserId(), body.studyDate()));
+        return CommonResponse.success("English confirmation requested.", studies.request(session.userId(), body.receiverFamilyUserId(), body.studyDate(), body.contentId(), body.contentVersion()));
     }
     @GetMapping("/requests")
     public CommonResponse<List<EnglishStudyResponse>> pending(@Authenticated AuthenticatedSession session) {

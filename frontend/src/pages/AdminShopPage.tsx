@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import PageSection from '../components/common/PageSection';
+import AdminNavigation from '../components/common/AdminNavigation';
 import StatusMessage from '../components/common/StatusMessage';
 import CatalogProductManager from '../components/shop/CatalogProductManager';
 import ShopPhotoPicker from '../components/shop/ShopPhotoPicker';
@@ -48,6 +49,7 @@ export default function AdminShopPage() {
   }
 
   return <PageSection title="공통 상점 상품 관리">
+    <AdminNavigation />
     <div className={styles.container}>
       <Link to="/family-shop" className={styles.backLink}>← 상점 관리</Link>
       {isLoading ? <StatusMessage kind="loading" message="공통 상점 상품을 불러오고 있어요." /> : null}

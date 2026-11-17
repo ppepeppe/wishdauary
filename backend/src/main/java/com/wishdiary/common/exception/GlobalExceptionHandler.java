@@ -14,6 +14,16 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(com.wishdiary.application.english.EnglishContentNotFoundException.class)
+    public ResponseEntity<CommonResponse<Void>> handleEnglishContentNotFound(RuntimeException exception) {
+        return ResponseEntity.status(404).body(CommonResponse.fail("ENGLISH_CONTENT_NOT_FOUND", exception.getMessage()));
+    }
+
+    @ExceptionHandler(com.wishdiary.application.english.EnglishContentUnavailableException.class)
+    public ResponseEntity<CommonResponse<Void>> handleEnglishContentUnavailable(RuntimeException exception) {
+        return ResponseEntity.status(503).body(CommonResponse.fail("ENGLISH_CONTENT_UNAVAILABLE", exception.getMessage()));
+    }
+
     @ExceptionHandler({com.wishdiary.application.reward.RewardConflictException.class,
             com.wishdiary.domain.english.InvalidStudyReviewException.class})
     public ResponseEntity<CommonResponse<Void>> handleRewardConflict(RuntimeException exception) {

@@ -145,6 +145,9 @@ function MyPage() {
             <span><strong>공통 상점 상품 관리</strong></span>
             <span aria-hidden="true">→</span>
           </Link> : null}
+          {userRole === 'admin' ? <Link to="/admin/english" className={styles.managementLink}>
+            <span><strong>영어 콘텐츠 관리</strong></span><span aria-hidden="true">→</span>
+          </Link> : null}
           <Link to="/family-connections" className={styles.managementLink}>
             <span><strong>{authSession.appRole === 'child' ? '가족 연결 요청' : '아이와 연결하기'}</strong></span><span aria-hidden="true">→</span>
           </Link>

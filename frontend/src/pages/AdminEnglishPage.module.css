@@ -1,0 +1,25 @@
+.container { display: grid; gap: var(--s-4); min-width: 0; }
+.backLink { width: fit-content; color: var(--ink-muted); font-size: var(--text-xs); min-height: 44px; display: inline-flex; align-items: center; }
+.heading { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); min-width: 0; }
+.heading h2 { margin: 0; color: var(--ink-strong); font-size: var(--text-sm); font-weight: 600; }
+.heading > span { color: var(--ink-muted); font-size: var(--text-xs); }
+.today, .form { display: grid; gap: var(--s-3); padding: var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--surface); }
+.today > p { margin: 0; color: var(--ink-strong); font-size: var(--text-xl); line-height: var(--leading-snug); font-weight: 600; overflow-wrap: anywhere; }
+.today > span { color: var(--ink-muted); font-size: var(--text-sm); overflow-wrap: anywhere; }
+.guide { color: var(--ink-muted); font-size: var(--text-xs); }
+.guide summary { min-height: 44px; cursor: pointer; line-height: 44px; }
+.guide p { margin: var(--s-2) 0 0; line-height: var(--leading-normal); }
+.form h2 { margin: 0; font-size: var(--text-base); color: var(--ink-strong); }
+.form fieldset { display: grid; gap: var(--s-4); padding: 0; border: 0; margin: 0; min-width: 0; }
+.form label, .search { display: grid; gap: var(--s-2); min-width: 0; color: var(--ink); font-size: var(--text-xs); }
+.form input, .search input { min-width: 0; width: 100%; min-height: 44px; padding: var(--s-3); border: 1px solid var(--line-strong); border-radius: var(--radius-control); background: var(--surface); color: var(--ink-strong); font: inherit; font-size: var(--text-base); }
+.actions { display: flex; justify-content: flex-end; gap: var(--s-2); }
+.tools { display: grid; gap: var(--s-2); }
+.list { display: grid; gap: var(--s-2); }
+.content { display: flex; align-items: center; gap: var(--s-3); min-width: 0; padding: var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--surface); }
+.content > div { flex: 1; min-width: 0; }
+.content h3 { margin: 0; font-size: var(--text-base); font-weight: 600; line-height: var(--leading-snug); overflow-wrap: anywhere; }
+.content p { margin: var(--s-2) 0 0; color: var(--ink-muted); font-size: var(--text-xs); overflow-wrap: anywhere; }
+.content button { flex-shrink: 0; }
+.todayLabel { display: inline-block; margin-top: var(--s-2); color: var(--brand-ink); font-size: var(--text-2xs); }
+.pagination { display: flex; align-items: center; justify-content: center; gap: var(--s-4); color: var(--ink-muted); font-size: var(--text-xs); }

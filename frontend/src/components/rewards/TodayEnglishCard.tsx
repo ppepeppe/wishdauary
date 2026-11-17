@@ -24,7 +24,7 @@ export default function TodayEnglishCard({ onRewardChanged }: { onRewardChanged:
     event.preventDefault();
     if (pending.current || !selected || !today.data) return;
     pending.current = true; setBusy(true); setError(null);
-    try { await requestEnglishReview(selected, today.data.studyDate); setChoosing(false); await refresh(); }
+    try { await requestEnglishReview(selected, today.data.studyDate, today.data.content.contentId, today.data.content.version); setChoosing(false); await refresh(); }
     catch (caught) { setError(caught instanceof Error ? caught.message : '확인을 요청하지 못했어요.'); await today.refetch(); }
     finally { pending.current = false; setBusy(false); }
   }

@@ -21,19 +21,23 @@ public class EnglishStudyService implements ManageEnglishStudyUseCase {
     private final UpdateUserStreakPort locks;
     private final RecordCloverLedgerPort ledger;
     private final EnglishStudyResponseMapper mapper;
+    private final GetDailyEnglishContentUseCase daily;
     public EnglishStudyService(EnglishStudyPort studies, StudyCalendar calendar, FamilyRewardAccess access,
             FamilyConnectionPort connections, UpdateUserStreakPort locks, RecordCloverLedgerPort ledger,
-            EnglishStudyResponseMapper mapper) {
+            EnglishStudyResponseMapper mapper, GetDailyEnglishContentUseCase daily) {
         this.studies = studies; this.calendar = calendar; this.access = access; this.connections = connections;
-        this.locks = locks; this.ledger = ledger; this.mapper = mapper;
+        this.locks = locks; this.ledger = ledger; this.mapper = mapper; this.daily = daily;
     }
+    @Transactional
     public EnglishTodayResponse today(Long childId) {
         access.requireChild(childId);
         var date = calendar.today();
-        return new EnglishTodayResponse(date, DailyEnglish.forDate(date), studies.findByDay(childId, date).map(mapper::map).orElse(null));
+        var existing = studies.findByDay(childId, date);
+        var lesson = existing.map(EnglishLesson::snapshot).orElseGet(() -> daily.get(date).lesson());
+        return new EnglishTodayResponse(date, lesson, existing.map(mapper::map).orElse(null));
     }
     @Transactional
-    public EnglishStudyResponse request(Long childId, Long receiverId, java.time.LocalDate studyDate) {
+    public EnglishStudyResponse request(Long childId, Long receiverId, java.time.LocalDate studyDate, Long contentId, Long contentVersion) {
         access.requireChild(childId);
         access.requireFamily(receiverId);
         locks.lockUser(childId);
@@ -42,7 +46,11 @@ public class EnglishStudyService implements ManageEnglishStudyUseCase {
         if (!date.equals(studyDate)) throw new RewardConflictException("날짜가 바뀌었어요. 오늘의 영어를 새로 불러와 주세요.");
         var existing = studies.findByDay(childId, date);
         if (existing.isEmpty()) {
-            return mapper.map(studies.save(EnglishStudy.request(childId, receiverId, date, DailyEnglish.forDate(date), calendar.now())));
+            var content = daily.get(date);
+            if (!java.util.Objects.equals(content.id(), contentId) || !java.util.Objects.equals(content.version(), contentVersion)) {
+                throw new RewardConflictException("영어 문장이 수정됐어요. 최신 내용을 다시 읽은 뒤 확인을 요청해 주세요.");
+            }
+            return mapper.map(studies.save(EnglishStudy.request(childId, receiverId, date, content.lesson(), calendar.now())));
         }
         var previous = existing.get();
         if (previous.status() == EnglishStudy.Status.APPROVED) return mapper.map(previous);

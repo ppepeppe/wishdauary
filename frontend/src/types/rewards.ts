@@ -13,7 +13,7 @@ export interface EnglishStudy {
 }
 export interface TodayEnglish {
   studyDate: string;
-  content: { sentence: string; meaning: string };
+  content: { contentId: number | null; version: number | null; sentence: string; meaning: string };
   request: EnglishStudy | null;
 }
 export interface CloverAwardPayload {
