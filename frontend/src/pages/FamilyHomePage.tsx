@@ -1,6 +1,5 @@
 import CardCarousel from '../components/common/CardCarousel';
 import Tabs from '../components/common/Tabs';
-import FamilyCloverAward from '../components/rewards/FamilyCloverAward';
 import FamilyEnglishReviews from '../components/rewards/FamilyEnglishReviews';
 import { fetchEnglishReviews } from '../services/api/rewardApi';
 import { useSelectedChild } from '../hooks/useSelectedChild';
@@ -72,7 +71,6 @@ function FamilyHomePage() {
         {children.length > 0 ? <Tabs label="아이 선택" value={String(childId)} onChange={selectChild}
           options={children.map(child => ({ value: String(child.userId), label: child.nickname }))}>
           {selectedChild ? <Link to={`/family/children/${selectedChild.userId}`} className={styles.pendingLink}>{selectedChild.nickname} 프로필 · 선물 요청 · 클로버 내역 →</Link> : null}
-          {selectedChild ? <FamilyCloverAward key={`award-${selectedChild.userId}`} diaryPath={`/family-feed?child=${selectedChild.userId}`} childId={selectedChild.userId} childName={selectedChild.nickname} /> : null}
           {diaries.isLoading && !diaries.data ? <StatusMessage kind="loading" message="아이의 일기를 불러오고 있어요." /> : null}
           {diaries.error ? <><StatusMessage kind="error" message={diaries.error} /><Button variant="ghost" onClick={() => void refreshDiaries()}>일기 다시 불러오기</Button></> : null}
           <CardCarousel key={`diaries-${childId}`} label="최근 아이 일기" itemLabel="일기">{recentDiaries.map(diary => <Link key={diary.id} to={`/diaries/${diary.id}`} className={styles.diaryRow}>
