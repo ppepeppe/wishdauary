@@ -12,6 +12,7 @@ interface TabsProps {
 export default function Tabs({ label, options, value, onChange, children }: TabsProps) {
   const id = useId();
   function handleKey(event: KeyboardEvent<HTMLDivElement>) {
+    if ((event.target as HTMLElement).closest('[role="tablist"]') !== event.currentTarget) return;
     const index = options.findIndex(option => option.value === value);
     const targets: Record<string, number> = { ArrowRight: (index + 1) % options.length,
       ArrowLeft: (index + options.length - 1) % options.length, Home: 0, End: options.length - 1 };

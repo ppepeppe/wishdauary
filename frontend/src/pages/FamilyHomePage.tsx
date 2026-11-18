@@ -83,13 +83,13 @@ function FamilyHomePage() {
       </section>
 
       {selectedChild ? <section className={styles.section} aria-labelledby="family-requests-title">
-        <div className={styles.heading}><h2 id="family-requests-title">{selectedChild.nickname}의 확인할 요청 {pendingCount !== undefined ? <span>{pendingCount}</span> : null}</h2><Link to="/family-settings">모든 아이 요청 보기 →</Link></div>
+        <div className={styles.heading}><h2 id="family-requests-title">{selectedChild.nickname}의 확인할 요청 {pendingCount !== undefined ? <span>{pendingCount}</span> : null}</h2><Link to={`/family-settings?child=${childId}`}>요청 자세히 보기 →</Link></div>
         {requests.isLoading && !requests.data ? <StatusMessage kind="loading" message="선물·가격 설정 요청을 불러오고 있어요." /> : null}
         {requests.error ? <><StatusMessage kind="error" message={requests.error} /><Button variant="ghost" onClick={() => void refreshRequests()}>선물 요청 다시 불러오기</Button></> : null}
-        <CardCarousel label="선물 승인 요청" itemLabel="요청">{childGifts.map((gift) => <Link key={gift.notificationId} to="/family-settings" className={styles.requestRow}>
+        <CardCarousel label="선물 승인 요청" itemLabel="요청">{childGifts.map((gift) => <Link key={gift.notificationId} to={`/family-settings?child=${childId}`} className={styles.requestRow}>
           <span><strong>{gift.productTitle}</strong><small>{gift.requesterChildNickname} · 선물 요청</small></span><span className={styles.requestStatus}>승인 대기 →</span>
         </Link>)}</CardCarousel>
-        {childPricing.map(product => <Link key={product.productId} to="/family-settings" className={styles.requestRow}>
+        {childPricing.map(product => <Link key={product.productId} to={`/family-settings?child=${childId}`} className={styles.requestRow}>
           <span><strong>{product.title}</strong><small>선물 가격 설정 요청</small></span><span className={styles.requestStatus}>가격 정하기 →</span>
         </Link>)}
         <FamilyEnglishReviews key={childId} childId={childId} embedded onPendingCountChange={handleEnglishCountChange}

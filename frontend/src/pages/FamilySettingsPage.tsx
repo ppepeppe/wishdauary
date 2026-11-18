@@ -1,7 +1,8 @@
+import { useSelectedChild } from '../hooks/useSelectedChild';
 import CardCarousel from '../components/common/CardCarousel';
 import FamilyEnglishReviews from '../components/rewards/FamilyEnglishReviews';
 import ProductArtwork from '../components/shop/ProductArtwork';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAsyncData } from '../hooks/useAsyncData';
 import HoverHint from '../components/common/HoverHint';
 import PageSection from '../components/common/PageSection';
@@ -26,8 +27,14 @@ function formatDate(value: string) {
 
 function FamilySettingsPage() {
   const [requestTab, setRequestTab] = useState('gifts');
-  const [englishPendingCount, setEnglishPendingCount] = useState<number>();
+  const [englishPending, setEnglishPending] = useState<{ childId: number | undefined; count: number | undefined }>();
   const { data, isLoading, error, processRequest, priceProduct } = useGiftRequests();
+  const children = data?.children ?? [];
+  const { childId, selectChild } = useSelectedChild(children);
+  const handleEnglishCountChange = useCallback((count: number | undefined) => {
+    setEnglishPending({ childId, count });
+  }, [childId]);
+  const englishPendingCount = englishPending?.childId === childId ? englishPending?.count : undefined;
   const [processingId, setProcessingId] = useState<number | null>(null);
   const [pricingId, setPricingId] = useState<number | null>(null);
   const [priceInputs, setPriceInputs] = useState<Record<number, string>>({});
@@ -35,7 +42,8 @@ function FamilySettingsPage() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { data: goals, refetch: refetchGoals } = useAsyncData(fetchChildrenWishGoals, true);
-  const childrenGoals = goals ?? [];
+  const childrenGoals = (goals ?? []).filter(goal => goal.childUserId === childId);
+  useEffect(() => { setActionError(null); setSuccessMessage(null); }, [childId]);
 
   async function handleProcess(notificationId: number, action: 'APPROVE' | 'REJECT') {
     try {
@@ -78,16 +86,21 @@ function FamilySettingsPage() {
     }
   }
 
-  const giftRequests = data?.giftRequests ?? [];
-  const productPricingRequests = data?.productPricingRequests ?? [];
+  const giftRequests = (data?.giftRequests ?? []).filter(request => request.requesterChildUserId === childId);
+  const productPricingRequests = (data?.productPricingRequests ?? []).filter(product => product.childUserId === childId);
   const pendingGiftRequestCount = giftRequests.filter((request) => request.status === 'pending').length;
 
   return (
     <PageSection title="받은 요청">
+      {isLoading && !data ? <StatusMessage kind="loading" message="아이와 받은 요청을 불러오고 있어요." /> : null}
+      {error && !data ? <StatusMessage kind="error" message="아이와 받은 요청을 불러오지 못했어요." /> : null}
+      {data && children.length === 0 ? <StatusMessage kind="empty" message="연결된 아이가 없어요." /> : null}
+      {children.length > 0 ? <Tabs label="아이 선택" value={String(childId)} onChange={selectChild}
+        options={children.map(child => ({ value: String(child.userId), label: child.nickname }))}>
       <Tabs label="받은 요청 종류" value={requestTab} onChange={setRequestTab}
         options={[{ value: 'gifts', label: '선물 요청', count: data ? getPendingGiftReviewCount(giftRequests, productPricingRequests) : undefined },
           { value: 'english', label: '영어 확인 요청', count: englishPendingCount }]}>
-      <div hidden={requestTab !== 'english'}><FamilyEnglishReviews onPendingCountChange={setEnglishPendingCount} /></div>
+      <div hidden={requestTab !== 'english'}><FamilyEnglishReviews key={childId} childId={childId} onPendingCountChange={handleEnglishCountChange} /></div>
       <div hidden={requestTab !== 'gifts'}>
       {isLoading ? <StatusMessage kind="loading" message="받은 요청을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="선물 요청을 불러오지 못했어요. 잠시 후 다시 확인해 주세요." /> : null}
@@ -259,6 +272,7 @@ function FamilySettingsPage() {
       ) : null}
       </div>
       </Tabs>
+      </Tabs> : null}
     </PageSection>
   );
 }
