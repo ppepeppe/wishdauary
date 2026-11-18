@@ -75,7 +75,7 @@ function FamilyShopPage() {
   }
 
   return (
-    <PageSection title="상점 관리" actions={category === 'family' && data && data.children.length > 0 ? <Button onClick={() => { setShowForm(true); setMessage(null); }}>+ 선물 제안</Button> : null}>
+    <PageSection title="상점 관리">
       <FamilyShopNavigation />
       <div className={styles.container}>
         {isLoading ? <StatusMessage kind="loading" message="상점을 불러오고 있어요." /> : null}
@@ -84,6 +84,10 @@ function FamilyShopPage() {
         {message ? <StatusMessage kind="success" message={message} /> : null}
         {category !== 'catalog' && data && data.children.length === 0 ? <div className={styles.empty}>
           <p>아이의 연결 승인을 받은 뒤 선물을 등록할 수 있어요.</p><Link to="/family-connections">아이 찾고 연결 요청하기 →</Link>
+        </div> : null}
+        {category === 'family' ? <div className={styles.heading}>
+          <h2>가족이 제안한 선물 <small>{familyProducts.length}</small></h2>
+          {data && data.children.length > 0 ? <Button disabled={busy} onClick={() => { setShowForm(true); setMessage(null); setActionError(null); }}>+ 선물 제안</Button> : null}
         </div> : null}
         {data && data.children.length > 0 ? <>
           {showForm && category === 'family' ? <form className={styles.form} onSubmit={(event) => void save(event)}>
