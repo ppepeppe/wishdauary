@@ -83,7 +83,7 @@ function FamilyHomePage() {
       </section>
 
       {selectedChild ? <section className={styles.section} aria-labelledby="family-requests-title">
-        <div className={styles.heading}><h2 id="family-requests-title">확인할 요청 {pendingCount !== undefined ? <span>{pendingCount}</span> : null}</h2><Link to="/family-settings">모든 아이 요청 보기 →</Link></div>
+        <div className={styles.heading}><h2 id="family-requests-title">{selectedChild.nickname}의 확인할 요청 {pendingCount !== undefined ? <span>{pendingCount}</span> : null}</h2><Link to="/family-settings">모든 아이 요청 보기 →</Link></div>
         {requests.isLoading && !requests.data ? <StatusMessage kind="loading" message="선물·가격 설정 요청을 불러오고 있어요." /> : null}
         {requests.error ? <><StatusMessage kind="error" message={requests.error} /><Button variant="ghost" onClick={() => void refreshRequests()}>선물 요청 다시 불러오기</Button></> : null}
         <CardCarousel label="선물 승인 요청" itemLabel="요청">{childGifts.map((gift) => <Link key={gift.notificationId} to="/family-settings" className={styles.requestRow}>
