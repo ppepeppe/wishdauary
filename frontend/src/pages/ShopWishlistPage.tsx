@@ -1,4 +1,6 @@
 import PageSection from '../components/common/PageSection';
+import { useSearchParams } from 'react-router-dom';
+import Tabs from '../components/common/Tabs';
 import EmptyState from '../components/common/EmptyState';
 import LinkButton from '../components/common/LinkButton';
 import StatusMessage from '../components/common/StatusMessage';
@@ -12,8 +14,13 @@ import styles from './ShopPage.module.css';
 
 function ShopWishlistPage() {
   const { data, isLoading, error, refetch } = useShop();
+  const [params, setParams] = useSearchParams();
+  const category = params.get('category') === 'family' ? 'family' : 'custom';
 
-  const myProducts = getChildWishProducts(data?.products ?? [], getAuthSession()?.userId);
+  const userId = getAuthSession()?.userId;
+  const appliedProducts = getChildWishProducts(data?.products ?? [], userId, 'custom');
+  const suggestedProducts = getChildWishProducts(data?.products ?? [], userId, 'family');
+  const visibleProducts = category === 'custom' ? appliedProducts : suggestedProducts;
 
   return (
     <PageSection title="선물">
@@ -42,18 +49,26 @@ function ShopWishlistPage() {
 
           <section className={styles.productSection}>
             <div className={styles.sectionTitleRow}>
-              <h2 className={styles.sectionTitle}>내가 갖고 싶은 선물 <span className={styles.sectionCount}>{myProducts.length}</span></h2>
+              <h2 className={styles.sectionTitle}>갖고 싶은 선물</h2>
               <LinkButton to="/shop/products/new" size="sm">
-                <span aria-hidden="true">+</span> 선물 요청
+                <span aria-hidden="true">+</span> 선물 신청
               </LinkButton>
             </div>
-            {myProducts.length > 0 ? (
-              <ShopProductGrid products={myProducts} cloverBalance={data.cloverBalance} hasRecipients={data.recipients.length > 0} showPurchasePrice={false} layout="grid" />
+            <Tabs label="갖고 싶은 선물 구분" value={category} onChange={value => {
+              const next = new URLSearchParams(params); next.set('category', value); setParams(next, { replace: true });
+            }} options={[
+              { value: 'custom', label: `내가 신청한 선물 ${appliedProducts.length}` },
+              { value: 'family', label: `가족이 제안한 선물 ${suggestedProducts.length}` },
+            ]}>
+            {visibleProducts.length > 0 ? (
+              <ShopProductGrid key={category} products={visibleProducts} cloverBalance={data.cloverBalance} hasRecipients={data.recipients.length > 0} showPurchasePrice={false} layout="grid" />
             ) : (
-              <EmptyState title="아직 등록된 선물이 없어요" description="가족이 클로버를 정한 선물이 여기에 표시됩니다.">
-                <LinkButton to="/shop/requests" variant="neutral">요청 내역 보기</LinkButton>
+              <EmptyState title={category === 'custom' ? '아직 내가 신청한 선물이 없어요' : '아직 가족이 제안한 선물이 없어요'}
+                description={category === 'custom' ? '신청한 선물은 가족이 클로버를 정하면 여기에 표시돼요.' : undefined}>
+                {category === 'custom' ? <LinkButton to="/shop/requests" variant="neutral">신청 상태 확인하기</LinkButton> : null}
               </EmptyState>
             )}
+            </Tabs>
           </section>
         </div>
       ) : null}

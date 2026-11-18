@@ -62,7 +62,7 @@ function ShopProductGrid({ products, cloverBalance, hasRecipients, showPurchaseP
               </strong>
             </div>
             <p>{product.description}</p>
-            {product.postedByName ? <p className={styles.attribution}>{product.source === 'custom' ? '요청' : '등록'} · {product.postedByName}</p> : null}
+            {product.postedByName ? <p className={styles.attribution}>{product.source === 'custom' ? '신청' : product.source === 'family' ? '제안' : '등록'} · {product.postedByName}</p> : null}
             {product.source === 'custom' && product.pricedByName ? <p className={styles.attribution}>클로버 설정 · {product.pricedByName}</p> : null}
             <div className={styles.badgeRow}>
               {product.source === 'family' && !product.postedByName ? <span className={styles.sourceBadge}>가족이 골라준 선물</span> : null}

@@ -21,10 +21,25 @@ test('each child wishlist includes their own wishes and gifts chosen for them', 
   assert.deepEqual(getChildWishProducts(products, undefined), []);
 });
 
+test('wishlist tabs separate the childs own applications from family suggestions without exposing another childs gifts', () => {
+  assert.deepEqual(getChildWishProducts(products, 10, 'custom').map(item => item.productId), [2]);
+  assert.deepEqual(getChildWishProducts(products, 10, 'family').map(item => item.productId), [4]);
+  assert.deepEqual(getChildWishProducts(products, 20, 'custom').map(item => item.productId), [3]);
+  assert.deepEqual(getChildWishProducts(products, 20, 'family').map(item => item.productId), [5]);
+  assert.deepEqual(getChildWishProducts(products, undefined, 'family'), []);
+});
+
+test('unpriced applications remain outside both wishlist tabs until the family sets clovers', () => {
+  const waiting = [{ productId: 7, source: 'custom', childUserId: 10, cloverPrice: 0 },
+    { productId: 8, source: 'family', childUserId: 10, cloverPrice: 0 }];
+  assert.deepEqual(getChildWishProducts(waiting, 10, 'custom'), []);
+  assert.deepEqual(getChildWishProducts(waiting, 10, 'family'), []);
+});
+
 test('detail and request links return to the appropriate product list', () => {
   assert.equal(getProductListPath('preset'), '/shop');
   assert.equal(getProductListPath('custom'), '/shop/wishlist');
-  assert.equal(getProductListPath('family'), '/shop/wishlist');
+  assert.equal(getProductListPath('family'), '/shop/wishlist?category=family');
   assert.equal(getProductListPath(), '/shop');
 });
 
