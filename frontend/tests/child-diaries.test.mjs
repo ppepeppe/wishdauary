@@ -17,3 +17,17 @@ test('each child diary tab filters by identity before selecting recent entries',
   assert.deepEqual(getChildDiaries(diaries),[]);
   assert.equal(diaries.length,6);
 });
+
+test('family calendar shows all entries for the selected child and written date', () => {
+  const diaries = [
+    { id: 1, actorUserId: 10, writtenDate: '2026-11-13', createdAt: '2026-11-18T10:00:00' },
+    { id: 2, actorUserId: 10, writtenDate: '2026-11-13', createdAt: '2026-11-13T11:00:00' },
+    { id: 3, actorUserId: 20, writtenDate: '2026-11-13' },
+    { id: 4, actorUserId: 10, writtenDate: '2026-11-14' },
+    { id: 5, actorUserId: 10, createdAt: '2026-11-13T12:00:00' },
+  ];
+  assert.deepEqual(getChildDiaries(diaries, 10, '2026-11-13').map(d => d.id), [1, 2, 5]);
+  assert.deepEqual(getChildDiaries(diaries, 20, '2026-11-13').map(d => d.id), [3]);
+  assert.deepEqual(getChildDiaries(diaries, 10, '2026-11-15'), []);
+  assert.deepEqual(getChildDiaries(diaries, undefined, '2026-11-13'), []);
+});
