@@ -133,12 +133,8 @@ export default function SharingGroupsPage() {
         ) : null}
         {selectedGroup ? <Tabs label="내 그룹" value={String(selectedGroup.id)} onChange={selectGroup}
           options={groups.map(group => ({ value: String(group.id), label: group.name }))}>
-          {selectedGroup.defaultGroup ? <SharingGroupMembers group={selectedGroup} busy={busy}
-            onEdit={() => openForm(selectedGroup)} onDelete={() => void remove(selectedGroup)} /> : <article key={selectedGroup.id} className={styles.card}>
-            <div className={styles.heading}><h2>{selectedGroup.name}</h2><span>{selectedGroup.defaultGroup ? '기본 · ' : ''}{selectedGroup.memberIds.length}명</span></div>
-            <p>{selectedGroup.members.map(member => member.nickname).join(', ') || '아직 구성원이 없어요.'}</p>
-            <div className={styles.actions}><Button variant="secondary" disabled={busy} onClick={() => openForm(selectedGroup)}>수정</Button><button type="button" disabled={busy} onClick={() => void remove(selectedGroup)}>그룹 삭제</button></div>
-          </article>}
+          <SharingGroupMembers group={selectedGroup} busy={busy}
+            onEdit={() => openForm(selectedGroup)} onDelete={() => void remove(selectedGroup)} />
         </Tabs> : null}
       </div>
     </PageSection>
