@@ -39,3 +39,8 @@
   font-weight: 500;
   line-height: var(--leading-normal);
 }
+.availability { display: grid; gap: var(--s-1); margin-top: calc(-1 * var(--s-2)); }
+.availability:has(p:empty) { display: none; }
+.available { margin: 0; color: var(--brand-ink); font-size: var(--text-xs); font-weight: 500; }
+.availability button { justify-self: start; min-height: 44px; border: 0; background: transparent; color: var(--brand-ink); font: inherit; font-size: var(--text-xs); text-decoration: underline; }
+.input[aria-invalid="true"] { border-color: var(--brand-ink); }

@@ -143,7 +143,7 @@ class GroupFamilyConnectionIntegrationTest {
 
     private JsonNode signup(String role, String nickname) throws Exception {
         Map<String, Object> body = new java.util.HashMap<>(Map.of(
-                "email", UUID.randomUUID() + "@test.com", "password", "password", "nickname", nickname));
+                "email", UUID.randomUUID() + "@test.com", "password", "password", "nickname", role.equals("child") && nickname.length() == 1 ? nickname : TestNicknames.unique(nickname)));
         if (role.equals("family")) { body.put("familyRelation", "MOTHER"); body.put("relationLabel", "엄마"); }
         return call(post("/api/v1/auth/signup/" + role), null, body, 201);
     }

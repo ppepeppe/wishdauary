@@ -50,3 +50,8 @@ export async function login(payload: LoginRequest) {
     }),
   });
 }
+
+export interface SignupAvailability { available: boolean; message: string }
+export function checkSignupAvailability(field: 'LOGIN_ID' | 'NICKNAME', value: string, signal?: AbortSignal) {
+  return request<SignupAvailability>('/api/v1/auth/signup/availability', { query: { field, value }, signal });
+}

@@ -73,7 +73,7 @@ class FamilyRewardIntegrationTest {
         JsonNode entry = call(get("/api/v1/clovers/history"), child, null, 200).get("entries").get(0);
         assertEquals("FAMILY_AWARD", entry.get("reason").asText());
         assertEquals("친구를 도와줬어요", entry.get("note").asText());
-        assertEquals("이모", entry.get("givenByName").asText());
+        assertEquals(adult.get("nickname").asText() + " (이모)", entry.get("givenByName").asText());
         for (Object invalid : new Object[]{0, -1, 1001, 1.5}) {
             var bad = award(child, 1, "칭찬"); bad.put("amount", invalid);
             call(post("/api/v1/clovers/awards"), adult, bad, 400);
@@ -115,7 +115,7 @@ class FamilyRewardIntegrationTest {
         assertEquals(0, call(get("/api/v1/english/requests"), adult, null, 200).size());
         JsonNode entry = call(get("/api/v1/clovers/history"), child, null, 200).get("entries").get(0);
         assertEquals("ENGLISH_STUDY", entry.get("reason").asText());
-        assertEquals("이모", entry.get("givenByName").asText());
+        assertEquals(adult.get("nickname").asText() + " (이모)", entry.get("givenByName").asText());
         assertTrue(entry.get("note").asText().contains(today.get("content").get("sentence").asText()));
     }
 
@@ -192,7 +192,7 @@ class FamilyRewardIntegrationTest {
         call(patch("/api/v1/family-connections/requests/" + link.get("requestId").asLong()), child, Map.of("action", "APPROVE"), 200);
     }
     private JsonNode signup(String role) throws Exception {
-        var body = new HashMap<String,Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", role.equals("child") ? "서아" : "이모"));
+        var body = new HashMap<String,Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", TestNicknames.unique(role.equals("child") ? "서아" : "이모")));
         if (role.equals("family")) { body.put("familyRelation", "AUNT"); body.put("relationLabel", "이모"); }
         return call(post("/api/v1/auth/signup/" + role), null, body, 201);
     }

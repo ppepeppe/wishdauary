@@ -40,6 +40,7 @@ public class FamilySignupService implements FamilySignupUseCase {
     @Transactional
     public SignupResponse signup(FamilySignupRequest request) {
         signupPolicy.validateLoginIdNotExists(request.loginId(), signupPersistencePort);
+        signupPolicy.validateNicknameNotExists(request.nickname(), signupPersistencePort);
         Group group = signupPersistencePort.saveGroup(new Group(null, signupInviteCodeGenerator.generate(), true));
 
         String encodedPassword = passwordEncoderPort.encode(request.password());

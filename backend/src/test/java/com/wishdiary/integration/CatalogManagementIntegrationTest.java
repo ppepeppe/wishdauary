@@ -43,7 +43,7 @@ class CatalogManagementIntegrationTest {
             entities.clear();
             assertEquals("admin", call(get("/api/v1/users/me"), user, null, 200).get("userRole").asText());
             JsonNode saved = call(patch("/api/v1/users/me"), user,
-                    Map.of("nickname", "관리자", "avatarPreset", "mint", "userRole", "USER"), 200);
+                    Map.of("nickname", TestNicknames.unique("관리자"), "avatarPreset", "mint", "userRole", "USER"), 200);
             assertEquals("admin", saved.get("userRole").asText());
             entities.flush(); entities.clear();
             assertEquals("ADMIN", database.queryForObject("select user_role from users where id = ?", String.class, id));
@@ -164,15 +164,15 @@ class CatalogManagementIntegrationTest {
         call(patch("/api/v1/family-connections/requests/" + link.get("requestId").asLong()), child, Map.of("action", "APPROVE"), 200);
         JsonNode uploaded = call(post("/api/v1/shop/family-products"), family,
                 Map.of("childUserId", childId, "title", "가족이 고른 선물", "description", "함께 골라요", "cloverPrice", 3), 201);
-        assertEquals("하루 (엄마)", uploaded.get("postedByName").asText());
+        assertEquals(family.get("nickname").asText() + " (엄마)", uploaded.get("postedByName").asText());
         long productId = uploaded.get("productId").asLong();
         call(patch("/api/v1/shop/products/" + productId + "/price"), family, Map.of("cloverPrice", 8), 200);
         entities.flush(); entities.clear();
         assertEquals(familyId, database.queryForObject("select created_by_user_id from shop_products where id = ?", Long.class, productId));
         JsonNode wish = call(post("/api/v1/shop/wish-requests"), child,
                 Map.of("receiverFamilyUserId", familyId, "title", "아이의 부탁", "description", "갖고 싶어요"), 201);
-        assertEquals("하루", wish.get("postedByName").asText());
-        assertEquals("하루 (엄마)", wish.get("pricedByName").asText());
+        assertEquals(child.get("nickname").asText(), wish.get("postedByName").asText());
+        assertEquals(family.get("nickname").asText() + " (엄마)", wish.get("pricedByName").asText());
         database.update("update shop_products set created_by_user_id = null where id = ?", productId);
         entities.clear();
         for (JsonNode item : call(get("/api/v1/shop/products"), child, null, 200)) {
@@ -272,7 +272,7 @@ class CatalogManagementIntegrationTest {
 
     private JsonNode signup(String role) throws Exception {
         var body = new HashMap<String, Object>(Map.of("email", UUID.randomUUID() + "@test.com", "password", "password",
-                "nickname", "하루", "userRole", "ADMIN"));
+                "nickname", TestNicknames.unique("하루"), "userRole", "ADMIN"));
         if (role.equals("family")) { body.put("familyRelation", "MOTHER"); body.put("relationLabel", "엄마"); }
         return call(post("/api/v1/auth/signup/" + role), null, body, 201);
     }

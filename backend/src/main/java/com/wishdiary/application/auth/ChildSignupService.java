@@ -38,6 +38,7 @@ public class ChildSignupService implements ChildSignupUseCase {
     @Transactional
     public SignupResponse signup(ChildSignupRequest request) {
         signupPolicy.validateLoginIdNotExists(request.loginId(), signupPersistencePort);
+        signupPolicy.validateNicknameNotExists(request.nickname(), signupPersistencePort);
 
         String encodedPassword = passwordEncoderPort.encode(request.password());
         User user = signupPersistencePort.saveUser(

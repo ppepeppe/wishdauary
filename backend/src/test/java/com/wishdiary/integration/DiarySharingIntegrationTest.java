@@ -321,11 +321,11 @@ class DiarySharingIntegrationTest {
     }
 
     private SignupResponse child(String nickname) {
-        return signup.signup(new ChildSignupRequest(UUID.randomUUID() + "@test.com", "password", nickname));
+        return signup.signup(new ChildSignupRequest(UUID.randomUUID() + "@test.com", "password", TestNicknames.unique(nickname)));
     }
 
     private SignupResponse family(SignupResponse child) {
-        SignupResponse family = familySignup.signup(new FamilySignupRequest(UUID.randomUUID() + "@test.com", "password", "family",
+        SignupResponse family = familySignup.signup(new FamilySignupRequest(UUID.randomUUID() + "@test.com", "password", TestNicknames.unique("family"),
                 com.wishdiary.domain.group.FamilyRelation.MOTHER, "엄마", null));
         groups.create(child.userId(), new SharingGroupRequest("우리 가족", Set.of(family.userId())));
         return family;

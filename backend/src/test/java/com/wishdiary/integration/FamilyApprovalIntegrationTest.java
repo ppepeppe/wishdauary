@@ -140,7 +140,7 @@ class FamilyApprovalIntegrationTest {
         return call(post("/api/v1/diaries"), child, Map.of("content", "오늘 기록", "visibilityScope", scope, "writtenDate", LocalDate.now().minusDays(2L * fixtureDay++).toString()), 201).get("diaryId").asLong();
     }
     private JsonNode signup(String role, String nickname) throws Exception {
-        var body = new java.util.HashMap<String,Object>(Map.of("email", UUID.randomUUID()+"@test.com", "password", "password", "nickname", nickname));
+        var body = new java.util.HashMap<String,Object>(Map.of("email", UUID.randomUUID()+"@test.com", "password", "password", "nickname", role.equals("child") && nickname.length() == 1 ? nickname : TestNicknames.unique(nickname)));
         if (role.equals("family")) { body.put("familyRelation", "MOTHER"); body.put("relationLabel", "엄마"); }
         return call(post("/api/v1/auth/signup/"+role), null, body, 201);
     }

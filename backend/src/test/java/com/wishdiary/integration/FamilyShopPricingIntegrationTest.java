@@ -356,7 +356,7 @@ class FamilyShopPricingIntegrationTest {
 
     private JsonNode signup(String role) throws Exception {
         var body = new java.util.HashMap<String, Object>(Map.of("email", UUID.randomUUID() + "@test.com",
-                "password", "password", "nickname", "테스트"));
+                "password", "password", "nickname", TestNicknames.unique("테스트")));
         if (role.equals("family")) { body.put("familyRelation", "MOTHER"); body.put("relationLabel", "엄마"); }
         return call(post("/api/v1/auth/signup/" + role), null, body, 201);
     }

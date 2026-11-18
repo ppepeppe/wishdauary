@@ -11,4 +11,9 @@ public class SignupPolicy {
             throw new DuplicateLoginIdException();
         }
     }
+    public void validateNicknameNotExists(String nickname, SignupPersistencePort persistence) {
+        if (persistence.existsUserByNickname(nickname)) {
+            throw new com.wishdiary.domain.user.DuplicateNicknameException();
+        }
+    }
 }

@@ -76,7 +76,7 @@ class GiftRedemptionConcurrencyIntegrationTest {
     }
 
     private JsonNode signup(String role) throws Exception {
-        var body = new java.util.HashMap<String, Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", "동시 요청 점검"));
+        var body = new java.util.HashMap<String, Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", TestNicknames.unique("동시 요청 점검")));
         if (role.equals("family")) { body.put("familyRelation", "MOTHER"); body.put("relationLabel", "엄마"); }
         Result result = call(post("/api/v1/auth/signup/" + role), null, body);
         assertEquals(201, result.status());

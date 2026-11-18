@@ -39,7 +39,7 @@ class AuthAndShopFlowIntegrationTest {
     @Test
     void signupAndValidationErrorsAreShownInKorean() {
         String email = "duplicate-" + System.nanoTime() + "@test.com";
-        Map<String, String> signup = Map.of("email", email, "password", "password", "nickname", "아이");
+        Map<String, String> signup = Map.of("email", email, "password", "password", "nickname", TestNicknames.unique("아이"));
         ResponseEntity<Map> first = restTemplate.postForEntity("/api/v1/auth/signup/child", signup, Map.class);
         assertEquals(HttpStatus.CREATED, first.getStatusCode());
 
@@ -49,7 +49,7 @@ class AuthAndShopFlowIntegrationTest {
 
         ResponseEntity<Map> invalid = restTemplate.postForEntity(
                 "/api/v1/auth/signup/child",
-                Map.of("loginId", "two words", "password", "password", "nickname", "아이"),
+                Map.of("loginId", "two words", "password", "password", "nickname", TestNicknames.unique("아이")),
                 Map.class
         );
         assertEquals(HttpStatus.BAD_REQUEST, invalid.getStatusCode());
@@ -65,7 +65,7 @@ class AuthAndShopFlowIntegrationTest {
                 Map.of(
                         "email", "child-" + suffix + "@test.com",
                         "password", "password",
-                        "nickname", "미아"
+                        "nickname", TestNicknames.unique("미아")
                 )
         );
         Map<String, Object> child = data(childSignup);
@@ -76,7 +76,7 @@ class AuthAndShopFlowIntegrationTest {
                 Map.of(
                         "email", "family-" + suffix + "@test.com",
                         "password", "password",
-                        "nickname", "엄마",
+                        "nickname", TestNicknames.unique("엄마"),
                         "familyRelation", "MOTHER",
                         "relationLabel", "엄마"
                 )
@@ -215,7 +215,7 @@ class AuthAndShopFlowIntegrationTest {
         Map<String, Object> childrenGoalsResponse = exchange(HttpMethod.GET, "/api/v1/wish-goals/children", familyToken, null);
         List<Map<String, Object>> childrenGoals = dataList(childrenGoalsResponse);
         assertEquals(1, childrenGoals.size());
-        assertEquals("미아", string(childrenGoals.get(0), "childNickname"));
+        assertEquals(string(child, "nickname"), string(childrenGoals.get(0), "childNickname"));
 
         Map<String, Object> clearGoalResponse = exchange(HttpMethod.DELETE, "/api/v1/wish-goals/me", childToken, null);
         assertTrue((Boolean) clearGoalResponse.get("success"));
@@ -234,10 +234,10 @@ class AuthAndShopFlowIntegrationTest {
     void defaultCatalogIsAvailableImmediatelyAndGiftRequestCanBeApproved() {
         String suffix = String.valueOf(System.nanoTime());
         Map<String, Object> child = data(post("/api/v1/auth/signup/child", Map.of(
-                "email", "catalog-child-" + suffix + "@test.com", "password", "password", "nickname", "아이")));
+                "email", "catalog-child-" + suffix + "@test.com", "password", "password", "nickname", TestNicknames.unique("아이"))));
         String childToken = string(child, "accessToken");
         Map<String, Object> family = data(post("/api/v1/auth/signup/family", Map.of(
-                "email", "catalog-family-" + suffix + "@test.com", "password", "password", "nickname", "엄마",
+                "email", "catalog-family-" + suffix + "@test.com", "password", "password", "nickname", TestNicknames.unique("엄마"),
                 "familyRelation", "MOTHER", "relationLabel", "엄마")));
         String familyToken = string(family, "accessToken");
         connectFamily(childToken, number(family, "userId").longValue());

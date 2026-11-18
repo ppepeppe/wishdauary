@@ -97,7 +97,7 @@ class EnglishContentManagementIntegrationTest {
         call(patch("/api/v1/family-connections/requests/" + link.get("requestId").asLong()), child, Map.of("action", "APPROVE"), 200);
     }
     private JsonNode signup(String role) throws Exception {
-        var body = new HashMap<String,Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", "콘텐츠 확인"));
+        var body = new HashMap<String,Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", TestNicknames.unique("콘텐츠 확인")));
         if (role.equals("family")) { body.put("familyRelation", "AUNT"); body.put("relationLabel", "이모"); }
         return call(post("/api/v1/auth/signup/" + role), null, body, 201);
     }

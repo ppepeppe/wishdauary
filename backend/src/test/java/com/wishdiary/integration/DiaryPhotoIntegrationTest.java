@@ -88,7 +88,7 @@ class DiaryPhotoIntegrationTest {
     }
     private JsonNode detail(JsonNode user, long id, int status) throws Exception { return call(get("/api/v1/diaries/" + id), user, null, status); }
     private JsonNode signup(String role) throws Exception {
-        var body = new java.util.HashMap<String,Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", "사진 확인"));
+        var body = new java.util.HashMap<String,Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", TestNicknames.unique("사진 확인")));
         if (role.equals("family")) { body.put("familyRelation", "AUNT"); body.put("relationLabel", "고모"); }
         return call(post("/api/v1/auth/signup/" + role), null, body, 201);
     }

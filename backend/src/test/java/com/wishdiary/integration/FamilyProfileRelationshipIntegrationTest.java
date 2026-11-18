@@ -69,15 +69,15 @@ class FamilyProfileRelationshipIntegrationTest {
         for (String label : new String[]{"  ", "가".repeat(101)}) {
             call(patch("/api/v1/users/me"), family, Map.of("nickname", "바뀌면 안 됨", "relationLabel", label), 400);
             JsonNode profile = call(get("/api/v1/users/me"), family, null, 200);
-            assertEquals("하루", profile.get("nickname").asText());
+            assertEquals(family.get("nickname").asText(), profile.get("nickname").asText());
             assertEquals("엄마", profile.get("relationLabel").asText());
         }
-        call(patch("/api/v1/users/me"), child, Map.of("nickname", "하루", "relationLabel", "고모"), 400);
+        call(patch("/api/v1/users/me"), child, Map.of("nickname", TestNicknames.unique("하루"), "relationLabel", "고모"), 400);
         assertTrue(call(get("/api/v1/users/me"), child, null, 200).get("relationLabel").isNull());
     }
 
     private JsonNode signup(String role) throws Exception {
-        var body = new HashMap<String, Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", "하루"));
+        var body = new HashMap<String, Object>(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", TestNicknames.unique("하루")));
         if (role.equals("family")) { body.put("familyRelation", "MOTHER"); body.put("relationLabel", "엄마"); }
         return call(post("/api/v1/auth/signup/" + role), null, body, 201);
     }

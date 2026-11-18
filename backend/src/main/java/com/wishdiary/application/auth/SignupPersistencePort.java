@@ -8,6 +8,8 @@ public interface SignupPersistencePort {
 
     boolean existsUserByLoginId(String loginId);
 
+    boolean existsUserByNickname(String nickname);
+
     User saveUser(User user, String encodedPassword);
 
     Group saveGroup(Group group);

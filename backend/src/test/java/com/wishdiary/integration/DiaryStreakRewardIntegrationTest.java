@@ -116,7 +116,7 @@ class DiaryStreakRewardIntegrationTest {
     private void create(JsonNode child, LocalDate date) throws Exception { assertEquals(201, createStatus(child, date)); }
     private JsonNode signup() throws Exception {
         var response = mvc.perform(post("/api/v1/auth/signup/child").contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", "연속 기록 확인"))))
+                .content(json.writeValueAsString(Map.of("loginId", UUID.randomUUID().toString(), "password", "password", "nickname", TestNicknames.unique("연속 기록 확인")))))
                 .andReturn().getResponse();
         assertEquals(201, response.getStatus());
         return json.readTree(response.getContentAsByteArray()).get("data");

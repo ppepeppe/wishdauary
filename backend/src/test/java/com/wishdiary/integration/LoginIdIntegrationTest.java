@@ -89,10 +89,11 @@ class LoginIdIntegrationTest {
     void signupTrimsNamesAndFamilyLabelsLikeProfileEditing() throws Exception {
         for (String role : new String[]{"child", "family"}) {
             var body = signupBody("loginId", UUID.randomUUID().toString(), role);
-            body.put("nickname", " 하루 ");
+            String nickname = TestNicknames.unique("하루");
+            body.put("nickname", " " + nickname + " ");
             if (role.equals("family")) body.put("relationLabel", " 고모 ");
             JsonNode account = call(post("/api/v1/auth/signup/" + role), body, 201).get("data");
-            assertEquals("하루", account.get("nickname").asText());
+            assertEquals(nickname, account.get("nickname").asText());
             if (role.equals("family")) assertEquals("고모", account.get("relationLabel").asText());
         }
     }
@@ -115,7 +116,7 @@ class LoginIdIntegrationTest {
 
     private Map<String, Object> signupBody(String key, String loginId, String role) {
         var body = new HashMap<String, Object>(Map.of(key, loginId,
-                "password", "password", "nickname", "가입 확인"));
+                "password", "password", "nickname", TestNicknames.unique("가입 확인")));
         if (role.equals("family")) {
             body.put("familyRelation", "MOTHER"); body.put("relationLabel", "엄마");
         }

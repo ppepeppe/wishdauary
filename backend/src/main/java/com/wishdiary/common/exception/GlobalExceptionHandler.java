@@ -55,6 +55,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(CommonResponse.fail("INVALID_FAMILY_RELATIONSHIP", exception.getMessage()));
     }
 
+    @ExceptionHandler(com.wishdiary.domain.user.DuplicateNicknameException.class)
+    public ResponseEntity<CommonResponse<Void>> handleDuplicateNickname(RuntimeException exception) {
+        return ResponseEntity.status(409).body(CommonResponse.fail("DUPLICATE_NICKNAME", exception.getMessage()));
+    }
+
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<CommonResponse<Void>> handleDuplicateConstraint(org.springframework.dao.DataIntegrityViolationException exception) {
+        String detail = exception.getMostSpecificCause().getMessage();
+        if (detail != null && detail.toLowerCase(java.util.Locale.ROOT).contains("uk_users_nickname")) {
+            return ResponseEntity.status(409).body(CommonResponse.fail("DUPLICATE_NICKNAME", "이미 사용 중인 닉네임이에요."));
+        }
+        if (detail != null && detail.toLowerCase(java.util.Locale.ROOT).contains("users_email")) {
+            return ResponseEntity.status(409).body(CommonResponse.fail("DUPLICATE_LOGIN_ID", "이미 사용 중인 아이디예요."));
+        }
+        return ResponseEntity.status(409).body(CommonResponse.fail("DATA_CONFLICT", "다른 요청과 충돌했어요. 다시 확인해 주세요."));
+    }
+
     @ExceptionHandler(com.wishdiary.domain.user.DuplicateLoginIdException.class)
     public ResponseEntity<CommonResponse<Void>> handleDuplicateLoginId(RuntimeException exception) {
         return ResponseEntity.status(409).body(CommonResponse.fail("DUPLICATE_LOGIN_ID", exception.getMessage()));

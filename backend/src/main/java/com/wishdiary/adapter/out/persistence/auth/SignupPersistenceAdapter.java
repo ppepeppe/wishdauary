@@ -35,6 +35,11 @@ public class SignupPersistenceAdapter implements SignupPersistencePort {
     }
 
     @Override
+    public boolean existsUserByNickname(String nickname) {
+        return userJpaRepository.existsByNickname(nickname);
+    }
+
+    @Override
     public User saveUser(User user, String encodedPassword) {
         UserJpaEntity savedEntity = userJpaRepository.save(new UserJpaEntity(
                 user.id(),
