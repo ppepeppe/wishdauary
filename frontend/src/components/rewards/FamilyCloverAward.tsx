@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import Button from '../common/Button';
 import { Link } from 'react-router-dom';
 import CloverIcon from '../common/CloverIcon';
@@ -7,7 +7,9 @@ import { awardClovers } from '../../services/api/rewardApi';
 import type { CloverAwardPayload } from '../../types/rewards';
 import styles from './Rewards.module.css';
 
-export default function FamilyCloverAward({ childId, childName, diaryPath }: { childId: number; childName: string; diaryPath: string }) {
+export default function FamilyCloverAward({ childId, childName, diaryPath, onAwarded }: { childId: number; childName: string; diaryPath?: string; onAwarded?: () => Promise<void> }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState('1');
   const [reason, setReason] = useState('');
@@ -16,6 +18,11 @@ export default function FamilyCloverAward({ childId, childName, diaryPath }: { c
   const attempt = useRef<CloverAwardPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (open && !dialog.current?.open) dialog.current?.showModal();
+    if (!open && dialog.current?.open) dialog.current?.close();
+  }, [open]);
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -29,26 +36,32 @@ export default function FamilyCloverAward({ childId, childName, diaryPath }: { c
       await awardClovers(attempt.current);
       setMessage(`${childName}에게 클로버 ${count}개를 줬어요.`);
       attempt.current = null; setOpen(false); setReason(''); setAmount('1');
+      if (onAwarded) await onAwarded();
     } catch (caught) { setError(caught instanceof Error ? caught.message : '클로버를 주지 못했어요.'); }
     finally { pending.current = false; setBusy(false); }
   }
 
   return <div className={styles.award}>
-    <div className={styles.heading}><h3><Link to={diaryPath}>최근 일기 <span aria-hidden="true">→</span></Link></h3>
+    <div className={styles.heading}><h3>{diaryPath ? <Link to={diaryPath}>최근 일기 <span aria-hidden="true">→</span></Link> : '클로버 선물'}</h3>
       <Button variant="secondary" size="sm" onClick={() => { setOpen(!open); setError(null); setMessage(null); }} disabled={busy}>
         <CloverIcon /> {open ? '닫기' : '클로버 주기'}
       </Button>
     </div>
     {message ? <StatusMessage kind="success" message={message} /> : null}
-    {open ? <form className={styles.form} onSubmit={(event) => void submit(event)} aria-label={`${childName}에게 클로버 주기`}>
+    <dialog ref={dialog} className={styles.awardDialog} aria-labelledby={titleId}
+      onCancel={event => { if (pending.current) event.preventDefault(); else setOpen(false); }}
+      onClose={() => setOpen(false)}>
+      <h2 id={titleId}>{childName}에게 클로버 지급</h2>
+      <form className={styles.form} onSubmit={(event) => void submit(event)} aria-label={`${childName}에게 클로버 주기`}>
       {error ? <StatusMessage kind="error" message={error} /> : null}
       <fieldset disabled={busy}>
-        <label>클로버 개수<input type="number" inputMode="numeric" min="1" max="1000" step="1" required value={amount} onChange={event => setAmount(event.target.value)} /></label>
-        <label>칭찬하는 이유<textarea rows={2} maxLength={300} required value={reason} placeholder="장난감을 스스로 정리했어요" onChange={event => setReason(event.target.value)} /></label>
+        <label>지급 개수<input type="number" inputMode="numeric" min="1" max="1000" step="1" required value={amount} onChange={event => setAmount(event.target.value)} /></label>
+        <label>지급 사유<textarea rows={2} maxLength={300} required value={reason} placeholder="장난감을 스스로 정리했어요" onChange={event => setReason(event.target.value)} /></label>
         <p className={styles.hint}>이유는 아이의 적립 내역에도 남아요.</p>
         <div className={styles.actions}><Button type="button" variant="neutral" onClick={() => setOpen(false)}>취소</Button>
           <Button type="submit" disabled={busy || !reason.trim()}>{busy ? '지급 중…' : '클로버 주기'}</Button></div>
       </fieldset>
-    </form> : null}
+    </form>
+    </dialog>
   </div>;
 }

@@ -12,7 +12,7 @@ export default function ConnectedPeopleCards({ people, isFamily }: { people: Fam
         <h3>{person.nickname}</h3>
         {!isFamily ? <p>{person.relationLabel || '가족'}</p> : null}
       </div>
-      {isFamily ? <Link to={`/family-feed?child=${person.userId}`} aria-label={`${person.nickname} 아이 일기 보기`}>일기 보기 <span aria-hidden="true">→</span></Link> : null}
+      {isFamily ? <Link to={`/family/children/${person.userId}`} aria-label={`${person.nickname} 아이 프로필 보기`}>프로필 보기 <span aria-hidden="true">→</span></Link> : null}
     </article>)}
   </div>;
 }

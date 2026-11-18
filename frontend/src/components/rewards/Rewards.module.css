@@ -23,3 +23,6 @@
 .reviews { display: grid; gap: var(--s-3); min-width: 0; }
 .reviewActions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2); }
 .inlineLink { display: inline-flex; align-items: center; min-height: 44px; width: fit-content; color: var(--brand-ink); font-size: var(--text-xs); }
+.awardDialog { width: min(100% - var(--s-8), 480px); max-height: calc(100dvh - var(--s-8)); overflow-y: auto; padding: var(--s-5); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--surface); color: var(--ink-strong); }
+.awardDialog::backdrop { background: rgb(0 0 0 / .4); }
+.awardDialog h2 { margin: 0 0 var(--s-4); font-size: var(--text-lg); }

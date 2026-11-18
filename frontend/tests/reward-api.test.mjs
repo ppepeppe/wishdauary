@@ -50,3 +50,16 @@ test('role-specific reward calls reject the wrong client role before sending', (
   login('family'); assert.throws(()=>api.fetchTodayEnglish(),/아이/); assert.throws(()=>api.requestEnglishReview(1,'2026-11-17',15,0),/아이/);
   storage.clear(); assert.throws(()=>api.fetchTodayEnglish(),/로그인/);
 });
+
+test('child profile requests target the selected child and require a family session', async () => {
+  const { fetchChildProfile } = await import('../src/services/api/childProfileApi.ts');
+  login('family');
+  globalThis.fetch = async (url, init) => {
+    assert.equal(new URL(url).pathname, '/api/v1/family/children/10');
+    assert.equal(new Headers(init.headers).get('Authorization'), 'Bearer fixture');
+    return Response.json({ childId: 10, clovers: { balance: 7 }, history: { entries: [] }, giftRequests: [] });
+  };
+  assert.equal((await fetchChildProfile(10)).clovers.balance, 7);
+  assert.throws(() => fetchChildProfile(NaN), /아이/);
+  login('child'); assert.throws(() => fetchChildProfile(10), /가족/);
+});

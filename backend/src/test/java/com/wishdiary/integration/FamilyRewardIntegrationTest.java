@@ -25,6 +25,39 @@ class FamilyRewardIntegrationTest {
     @Autowired org.springframework.jdbc.core.JdbcTemplate database;
 
     @Test
+    void childProfileRequiresConnectionAndRefreshesAwardHistory() throws Exception {
+        JsonNode child = signup("child"), adult = signup("family"), stranger = signup("family");
+        String path = "/api/v1/family/children/" + child.get("userId").asLong();
+        call(get(path), null, null, 401);
+        call(get(path), adult, null, 403);
+        call(get(path), child, null, 403);
+        connect(child, adult);
+        JsonNode profile = call(get(path), adult, null, 200);
+        assertEquals(child.get("userId"), profile.get("childId"));
+        assertEquals(0, profile.get("clovers").get("balance").asInt());
+        assertTrue(profile.get("giftRequests").isArray());
+        call(post("/api/v1/clovers/awards"), adult, award(child, 7, "스스로 정리했어요"), 200);
+        profile = call(get(path), adult, null, 200);
+        assertEquals(7, profile.get("clovers").get("balance").asInt());
+        assertEquals("스스로 정리했어요", profile.get("history").get("entries").get(0).get("note").asText());
+        long productId = call(post("/api/v1/shop/products"), child,
+                Map.of("title", "프로필 테스트 선물", "description", "선물 내역 확인", "productUrl", "https://example.com/gift"), 201).get("productId").asLong();
+        call(patch("/api/v1/shop/products/" + productId + "/price"), adult,
+                Map.of("cloverPrice", 1, "purchasePriceWon", 1000), 200);
+        call(post("/api/v1/shop/gift-requests"), child, Map.of("productId", productId,
+                "receiverFamilyUserId", adult.get("userId").asLong(), "message", "부탁해요"), 201);
+        profile = call(get(path), adult, null, 200);
+        assertEquals(6, profile.get("clovers").get("balance").asInt());
+        assertEquals("프로필 테스트 선물", profile.get("giftRequests").get(0).get("productTitle").asText());
+        assertEquals("pending", profile.get("giftRequests").get(0).get("status").asText());
+        assertFalse(profile.has("loginId"));
+        call(get(path), stranger, null, 403);
+        long groupId = call(get("/api/v1/sharing-groups"), child, null, 200).get(0).get("id").asLong();
+        call(delete("/api/v1/sharing-groups/" + groupId), child, null, 200);
+        call(get(path), adult, null, 403);
+    }
+
+    @Test
     void familyAwardsRequireAConnectionAndPreserveTheReasonWithoutDuplicateCredits() throws Exception {
         JsonNode child = signup("child"), adult = signup("family"), stranger = signup("family");
         connect(child, adult);

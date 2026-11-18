@@ -1,3 +1,4 @@
+import ChildProfilePage from './pages/ChildProfilePage';
 import SharingGroupsPage from './pages/SharingGroupsPage';
 import SharedDiaryFeedPage from './pages/SharedDiaryFeedPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -62,6 +63,7 @@ function App() {
         </Route>
 
         <Route element={<RequireAppRole allowedRole="family" />}>
+          <Route path="/family/children/:childId" element={<ChildProfilePage />} />
           <Route path="/family-home" element={<FamilyHomePage />} />
           <Route path="/family-feed" element={<FamilyFeedPage />} />
           <Route path="/family-settings" element={<FamilySettingsPage />} />
