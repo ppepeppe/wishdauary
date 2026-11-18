@@ -60,10 +60,9 @@ function FamilyConnectionsPage() {
     <PageSection title={isFamily ? '아이와 연결하기' : '가족 연결 요청'} description={isFamily
       ? '아이의 승인 후 가족으로 연결됩니다.'
       : '아는 가족의 요청만 승인해 주세요.'}>
-      {isFamily ? <Link to="/me" className={styles.backLink}>← 마이페이지</Link> : null}
       <div className={styles.container}>
         <div className={styles.toolbar}>
-          {!isFamily ? <Link to="/sharing-groups" className={styles.backLink}>← 그룹 관리</Link> : null}
+          <Link to="/me" className={styles.backLink}>← 마이페이지</Link>
           <Button type="button" variant="ghost" disabled={isLoading || busy} onClick={() => void refetch()}>새로고침</Button>
         </div>
         {isLoading ? <StatusMessage kind="loading" message="가족 연결을 확인하고 있어요." /> : null}
