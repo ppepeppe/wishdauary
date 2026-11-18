@@ -115,10 +115,12 @@ function FamilyConnectionsPage() {
               <ConnectedPeopleCards people={data.connections} isFamily={isFamily} />}
             {!isFamily ? <p className={styles.hint}>모든 그룹에서 가족을 제외하면 연결이 해제됩니다.</p> : null}
           </section>
-          {history.length > 0 ? <section className={styles.section}><CardCarousel title="처리한 요청" itemLabel="요청">{history.map((item) => {
+          {history.length > 0 ? <section className={styles.section}>
+            <h2>처리한 요청</h2>
+            <ul className={styles.historyList}>{history.map((item) => {
             const connected = connectedIds.has(isFamily ? item.childUserId : item.familyUserId);
-            return <div key={item.requestId} className={styles.row}><span>{isFamily ? item.childNickname : item.familyNickname}</span><small>{item.status === 'rejected' ? '거절됨' : connected ? '승인됨' : '연결 해제됨'}</small></div>;
-          })}</CardCarousel></section> : null}
+            return <li key={item.requestId} className={styles.historyRow}><span>{isFamily ? item.childNickname : item.familyNickname}</span><small>{item.status === 'rejected' ? '거절됨' : connected ? '승인됨' : '연결 해제됨'}</small></li>;
+          })}</ul></section> : null}
         </> : null}
       </div>
     </PageSection>

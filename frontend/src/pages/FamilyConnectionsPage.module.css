@@ -26,6 +26,11 @@
 .actions { display: flex; flex-shrink: 0; gap: var(--s-2); }
 .actions button { min-height: 44px; }
 .status { color: var(--brand-ink); font-size: var(--text-xs); }
+.historyList { margin: 0; padding: 0; list-style: none; }
+.historyRow { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); padding: var(--s-3) 0; font-size: var(--text-sm); }
+.historyRow + .historyRow { border-top: 1px solid var(--line); }
+.historyRow > span { min-width: 0; overflow-wrap: anywhere; }
+.historyRow > small { flex-shrink: 0; color: var(--ink-muted); font-size: var(--text-xs); }
 @media (max-width: 370px) {
   .section { padding: var(--s-4); }
   .search { flex-wrap: wrap; }
