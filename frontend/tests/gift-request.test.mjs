@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { getGiftRecipient, getGiftRequestBlockReason, getPendingGoalRequest } from '../src/utils/giftRequest.ts';
+import { getGiftRecipient, getGiftRequestBlockReason, getPendingGoalRequest, getPendingGiftReviewCount } from '../src/utils/giftRequest.ts';
+
+test('gift review count includes unpriced wishes and pending redemptions, excluding completed requests', () => {
+  const requests = [{ status: 'pending' }, { status: 'approved' }, { status: 'rejected' }, { status: 'received' }];
+  const products = [{ cloverPrice: 0 }, { cloverPrice: 10 }];
+  assert.equal(getPendingGiftReviewCount(requests, products), 2);
+  assert.equal(getPendingGiftReviewCount([{ status: 'approved' }], [{ cloverPrice: 10 }]), 0);
+  assert.equal(getPendingGiftReviewCount([], []), 0);
+});
 
 const recipients = [{ userId: 1, nickname: '엄마' }, { userId: 2, nickname: '아빠' }];
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from '../common/Button';
 import CardCarousel from '../common/CardCarousel';
 import StatusMessage from '../common/StatusMessage';
@@ -7,8 +7,14 @@ import { fetchEnglishReviews, reviewEnglish } from '../../services/api/rewardApi
 import styles from './Rewards.module.css';
 import { GIFT_REQUESTS_CHANGED_EVENT } from '../../constants/events';
 
-export default function FamilyEnglishReviews({ onChanged }: { onChanged?: () => Promise<void> }) {
+export default function FamilyEnglishReviews({ onChanged, onPendingCountChange }: {
+  onChanged?: () => Promise<void>;
+  onPendingCountChange?: (count: number | undefined) => void;
+}) {
   const { data, isLoading, error, refetch } = useAsyncData(fetchEnglishReviews, true);
+  useEffect(() => {
+    onPendingCountChange?.(data ? data.filter(study => study.status === 'pending').length : undefined);
+  }, [data, onPendingCountChange]);
   const pending = useRef(new Set<number>());
   const [busyIds, setBusyIds] = useState<number[]>([]);
   const [actionError, setActionError] = useState<string | null>(null);

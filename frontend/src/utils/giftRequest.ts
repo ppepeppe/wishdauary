@@ -1,5 +1,10 @@
 import type { ReceivedGiftRequest, ShopFamilyRecipient, ShopProduct } from '../types/shop';
 
+export function getPendingGiftReviewCount(requests: Pick<ReceivedGiftRequest, 'status'>[], pricingRequests: Pick<ShopProduct, 'cloverPrice'>[]) {
+  return requests.filter(request => request.status === 'pending').length
+    + pricingRequests.filter(product => product.cloverPrice <= 0).length;
+}
+
 export function getPendingGoalRequest(requests: ReceivedGiftRequest[], productId?: number, childUserId?: number) {
   return requests.find((request) => request.productId === productId
     && request.requesterChildUserId === childUserId && request.status === 'pending');

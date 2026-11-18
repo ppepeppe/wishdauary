@@ -3,7 +3,7 @@ import styles from './Tabs.module.css';
 
 interface TabsProps {
   label: string;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; count?: number }[];
   value: string;
   onChange: (value: string) => void;
   children: ReactNode;
@@ -24,7 +24,7 @@ export default function Tabs({ label, options, value, onChange, children }: Tabs
     <div role="tablist" aria-label={label} className={styles.tabs} onKeyDown={handleKey}>
       {options.map(option => <button key={option.value} id={`${id}-${option.value}`} type="button" role="tab"
         aria-selected={value === option.value} aria-controls={`${id}-panel`} tabIndex={value === option.value ? 0 : -1}
-        onClick={() => onChange(option.value)}>{option.label}</button>)}
+        onClick={() => onChange(option.value)}>{option.label}{option.count !== undefined ? <span className={styles.count} aria-label={`${option.count}개 대기`}>{option.count}</span> : null}</button>)}
     </div>
     <div id={`${id}-panel`} role="tabpanel" aria-labelledby={`${id}-${value}`} className={styles.panel}>{children}</div>
   </div>;

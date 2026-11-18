@@ -11,7 +11,7 @@ import { useGiftRequests } from '../hooks/useGiftRequests';
 import { fetchChildrenWishGoals } from '../services/api/wishGoalApi';
 import { formatWon } from '../utils/currency';
 import { getProductUrlHost } from '../utils/productUrl';
-import { getPendingGoalRequest } from '../utils/giftRequest';
+import { getPendingGoalRequest, getPendingGiftReviewCount } from '../utils/giftRequest';
 import styles from './FamilySettingsPage.module.css';
 
 function formatDate(value: string) {
@@ -26,6 +26,7 @@ function formatDate(value: string) {
 
 function FamilySettingsPage() {
   const [requestTab, setRequestTab] = useState('gifts');
+  const [englishPendingCount, setEnglishPendingCount] = useState<number>();
   const { data, isLoading, error, processRequest, priceProduct } = useGiftRequests();
   const [processingId, setProcessingId] = useState<number | null>(null);
   const [pricingId, setPricingId] = useState<number | null>(null);
@@ -84,8 +85,9 @@ function FamilySettingsPage() {
   return (
     <PageSection title="받은 요청">
       <Tabs label="받은 요청 종류" value={requestTab} onChange={setRequestTab}
-        options={[{ value: 'gifts', label: '선물 요청' }, { value: 'english', label: '영어 확인 요청' }]}>
-      <div hidden={requestTab !== 'english'}><FamilyEnglishReviews /></div>
+        options={[{ value: 'gifts', label: '선물 요청', count: data ? getPendingGiftReviewCount(giftRequests, productPricingRequests) : undefined },
+          { value: 'english', label: '영어 확인 요청', count: englishPendingCount }]}>
+      <div hidden={requestTab !== 'english'}><FamilyEnglishReviews onPendingCountChange={setEnglishPendingCount} /></div>
       <div hidden={requestTab !== 'gifts'}>
       {isLoading ? <StatusMessage kind="loading" message="받은 요청을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="선물 요청을 불러오지 못했어요. 잠시 후 다시 확인해 주세요." /> : null}
