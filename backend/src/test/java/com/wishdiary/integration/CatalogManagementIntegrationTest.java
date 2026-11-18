@@ -117,7 +117,11 @@ class CatalogManagementIntegrationTest {
         call(put("/api/v1/wish-goals/me"), child, Map.of("productId", id), 200);
         JsonNode gift = call(post("/api/v1/shop/gift-requests"), child,
                 Map.of("productId", id, "receiverFamilyUserId", family.get("userId").asLong(), "message", "부탁해요"), 201);
-        call(patch(endpoint), family, Map.of("cloverPrice", 10), 200);
+        call(put(endpoint), family, Map.of("title", "새 상품", "description", "새 설명", "cloverPrice", 10, "removeImage", true), 200);
+        JsonNode priorRequest = call(get("/api/v1/shop/gift-requests"), family, null, 200).get(0);
+        assertEquals(original.get("title"), priorRequest.get("productTitle"));
+        assertEquals(original.get("imageUrl"), priorRequest.get("productImageUrl"));
+        assertEquals(original.get("productUrl"), priorRequest.get("productUrl"));
         call(delete(endpoint), family, null, 200);
         assertFalse(contains(call(get("/api/v1/shop/products"), child, null, 200), id));
         assertFalse(contains(call(get("/api/v1/admin/shop/products"), family, null, 200), id));
@@ -173,6 +177,83 @@ class CatalogManagementIntegrationTest {
         entities.clear();
         for (JsonNode item : call(get("/api/v1/shop/products"), child, null, 200)) {
             if (item.get("productId").asLong() == productId) assertTrue(item.get("postedByName").isNull());
+        }
+    }
+
+    @Test
+    void fullCatalogEditsPersistAllFieldsWithoutChangingIdentityOrAttribution() throws Exception {
+        JsonNode family = signup("family"), child = signup("child"), editor = signup("family");
+        JsonNode original = call(post("/api/v1/admin/shop/products"), family, productBody(), 201);
+        long id = original.get("productId").asLong();
+        var body = new HashMap<String, Object>(Map.of("title", " 새 상품 ", "description", " 새 설명 ",
+                "cloverPrice", 12, "purchasePriceWon", 24000, "productUrl", "https://example.com/new"));
+        JsonNode saved = call(put("/api/v1/admin/shop/products/" + id), editor, body, 200);
+        assertEquals("새 상품", saved.get("title").asText());
+        assertEquals("새 설명", saved.get("description").asText());
+        assertEquals(12, saved.get("cloverPrice").asInt());
+        assertEquals(24000, saved.get("purchasePriceWon").asInt());
+        assertEquals("https://example.com/new", saved.get("productUrl").asText());
+        for (String field : new String[]{"productId", "imageUrl", "source", "createdAt", "postedByName"}) {
+            assertEquals(original.get(field), saved.get(field));
+        }
+        entities.flush(); entities.clear();
+        assertEquals(family.get("userId").asLong(), database.queryForObject(
+                "select created_by_user_id from shop_products where id = ?", Long.class, id));
+        JsonNode listed = call(get("/api/v1/admin/shop/products"), editor, null, 200);
+        assertTrue(contains(listed, id));
+        JsonNode childCatalog = call(get("/api/v1/shop/products"), child, null, 200);
+        assertTrue(contains(childCatalog, id));
+        for (JsonNode item : childCatalog) {
+            if (item.get("productId").asLong() == id) assertEquals(saved, item);
+        }
+    }
+
+    @Test
+    void fullCatalogEditsCanReplaceAndRemovePhotosAndClearOptionalDetails() throws Exception {
+        JsonNode user = signup("family");
+        JsonNode original = call(post("/api/v1/admin/shop/products"), user, productBody(), 201);
+        long id = original.get("productId").asLong();
+        String endpoint = "/api/v1/admin/shop/products/" + id;
+        var body = new HashMap<String, Object>(productBody());
+        var image = new BufferedImage(24, 24, BufferedImage.TYPE_INT_RGB);
+        image.setRGB(0, 0, 0xffffff);
+        var bytes = new ByteArrayOutputStream(); ImageIO.write(image, "png", bytes);
+        body.put("imageData", "data:image/png;base64," + Base64.getEncoder().encodeToString(bytes.toByteArray()));
+        JsonNode changed = call(put(endpoint), user, body, 200);
+        entities.flush(); entities.clear();
+        assertTrue(changed.get("imageUrl").asText().startsWith("data:image/jpeg;base64,"));
+        assertNotEquals(original.get("imageUrl"), changed.get("imageUrl"));
+        body.remove("imageData"); body.put("removeImage", true);
+        body.put("productUrl", null); body.put("purchasePriceWon", null);
+        database.update("update shop_products set image_url = 'https://example.com/legacy.jpg' where id = ?", id);
+        entities.clear();
+        JsonNode removed = call(put(endpoint), user, body, 200);
+        assertTrue(removed.get("imageUrl").isNull());
+        assertTrue(removed.get("productUrl").isNull());
+        assertTrue(removed.get("purchasePriceWon").isNull());
+        entities.flush(); entities.clear();
+        assertNull(database.queryForObject("select image_data from shop_products where id = ?", byte[].class, id));
+        assertNull(database.queryForObject("select image_url from shop_products where id = ?", String.class, id));
+    }
+
+    @Test
+    void fullCatalogEditsRejectInvalidInputAndNonCatalogProductsWithoutModifyingThem() throws Exception {
+        JsonNode user = signup("family"), child = signup("child");
+        JsonNode original = call(post("/api/v1/admin/shop/products"), user, productBody(), 201);
+        String endpoint = "/api/v1/admin/shop/products/" + original.get("productId").asLong();
+        for (var invalid : Map.<String, Object>of("title", " ", "description", " ", "cloverPrice", 1.5,
+                "purchasePriceWon", -1, "productUrl", "javascript:alert(1)", "imageData", "invalid").entrySet()) {
+            var body = new HashMap<String, Object>(productBody()); body.put(invalid.getKey(), invalid.getValue());
+            call(put(endpoint), user, body, 400);
+        }
+        call(put(endpoint), user, Map.of("cloverPrice", 3), 400);
+        call(put(endpoint), null, productBody(), 401);
+        database.update("insert into shop_products (child_user_id,title,description,clover_price,source,created_at) values (?, '개인 선물','개인 상품',1,'CUSTOM',current_timestamp)", child.get("userId").asLong());
+        long privateId = database.queryForObject("select max(id) from shop_products", Long.class);
+        call(put("/api/v1/admin/shop/products/" + privateId), user, productBody(), 404);
+        entities.flush(); entities.clear();
+        for (JsonNode item : call(get("/api/v1/admin/shop/products"), user, null, 200)) {
+            if (item.get("productId").equals(original.get("productId"))) assertEquals(original, item);
         }
     }
 

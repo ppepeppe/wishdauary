@@ -146,6 +146,14 @@ public class ShopProduct {
         return new ShopProduct(id, childUserId, title, description, imageUrl, productUrl, cloverPrice, purchasePriceWon, source, createdAt, receiverFamilyUserId, photo, createdByUserId);
     }
 
+    public ShopProduct revise(String title, String description, String productUrl, int cloverPrice,
+            Integer purchasePriceWon, ShopPhoto replacementPhoto, boolean removeImage) {
+        ShopPhoto nextPhoto = removeImage ? null : replacementPhoto == null ? photo : replacementPhoto;
+        String nextImageUrl = removeImage || replacementPhoto != null ? null : imageUrl;
+        return new ShopProduct(id, childUserId, title, description, nextImageUrl, productUrl, cloverPrice,
+                purchasePriceWon, source, createdAt, receiverFamilyUserId, nextPhoto, createdByUserId);
+    }
+
     public static ShopProduct createWish(Long childId, Long receiverId, String title, String description,
             String imageUrl, String productUrl) {
         return new ShopProduct(null, childId, title, description, imageUrl, productUrl, 0, null,

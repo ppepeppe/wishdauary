@@ -52,6 +52,17 @@ public class CatalogProductService implements ManageCatalogProductsUseCase {
 
     @Override
     @Transactional
+    public ShopProductResponse update(Long productId, UpdateCatalogProductRequest request) {
+        ShopProduct product = requireCatalogProduct(productId);
+        ShopProduct updated = product.revise(request.title().trim(), request.description().trim(),
+                request.productUrl(), request.cloverPrice().intValueExact(),
+                request.purchasePriceWon() == null ? null : request.purchasePriceWon().intValueExact(),
+                photos.decode(request.imageData()), request.removeImage());
+        return mapper.toResponse(saveProducts.save(updated));
+    }
+
+    @Override
+    @Transactional
     public void delete(Long productId) {
         requireCatalogProduct(productId);
         archive.archive(productId);

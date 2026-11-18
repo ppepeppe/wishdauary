@@ -8,6 +8,7 @@ import StatusMessage from '../components/common/StatusMessage';
 import Button from '../components/common/Button';
 import ShopPhotoPicker from '../components/shop/ShopPhotoPicker';
 import FamilyShopProductRow from '../components/shop/FamilyShopProductRow';
+import CatalogPreview from '../components/shop/CatalogPreview';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { fetchFamilyConnections } from '../services/api/familyConnectionApi';
 import { createFamilyShopProduct, fetchManagedShopProducts } from '../services/api/shopApi';
@@ -22,7 +23,7 @@ async function loadShop() {
 function FamilyShopPage() {
   const { data, isLoading, error, refetch } = useAsyncData(loadShop);
   const [showForm, setShowForm] = useState(false);
-  const [category, setCategory] = useState('custom');
+  const [category, setCategory] = useState('catalog');
   const [childId, setChildId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -80,7 +81,7 @@ function FamilyShopPage() {
         {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => void refetch()}>다시 불러오기</Button></div> : null}
         {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
         {message ? <StatusMessage kind="success" message={message} /> : null}
-        {data && data.children.length === 0 ? <div className={styles.empty}>
+        {category !== 'catalog' && data && data.children.length === 0 ? <div className={styles.empty}>
           <p>아이의 연결 승인을 받은 뒤 선물을 등록할 수 있어요.</p><Link to="/family-connections">아이 찾고 연결 요청하기 →</Link>
         </div> : null}
         {data && data.children.length > 0 ? <>
@@ -99,18 +100,21 @@ function FamilyShopPage() {
               <div className={styles.actions}><Button type="submit" disabled={busy || photoBusy || !title.trim() || !description.trim()}>{busy ? '등록 중…' : '선물 등록하기'}</Button><Button type="button" variant="secondary" disabled={photoBusy} onClick={() => setShowForm(false)}>취소</Button></div>
             </fieldset>
           </form> : null}
+        </> : null}
           <Tabs label="상품 구분" value={category} onChange={setCategory} options={[
+            { value: 'catalog', label: '공통 상점' },
             { value: 'custom', label: `아이가 올린 상품 ${childProducts.length}` },
             { value: 'family', label: `가족이 등록한 선물 ${familyProducts.length}` },
           ]}>
+            {category === 'catalog' ? <CatalogPreview /> : <>
             {category === 'custom' ? <p className={styles.hint}>클로버를 정한 선물은 아이의 목록에 표시됩니다.</p> : null}
             {(category === 'custom' ? childProducts : familyProducts).length === 0 ? <p className={styles.hint}>{category === 'custom' ? '아이가 요청한 상품이 없어요.' : '가족이 등록한 선물이 없어요.'}</p> :
               <CardCarousel key={category} label={category === 'custom' ? '아이가 올린 상품' : '가족이 등록한 선물'} itemLabel="상품">
                 {(category === 'custom' ? childProducts : familyProducts).map(product => <FamilyShopProductRow key={product.productId} product={product}
-                  childName={data.children.find(child => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />)}
+                  childName={data?.children.find(child => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />)}
               </CardCarousel>}
+            </>}
           </Tabs>
-        </> : null}
         <div className={styles.footer}>
           <Link to="/family-settings" className={styles.link}>아이가 보낸 선물 요청 보기 →</Link>
           <Button type="button" variant="ghost" disabled={isLoading || busy} onClick={() => void refetch()}>새로고침</Button>

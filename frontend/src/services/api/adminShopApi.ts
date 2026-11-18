@@ -31,6 +31,17 @@ export function updateCatalogPrice(productId: number, cloverPrice: number) {
   });
 }
 
+export interface UpdateCatalogProductPayload extends CreateCatalogProductPayload {
+  removeImage: boolean;
+}
+
+export function updateCatalogProduct(productId: number, payload: UpdateCatalogProductPayload) {
+  getCurrentUserIdOrThrow();
+  return request<ShopProduct>(`/api/v1/admin/shop/products/${productId}`, {
+    method: 'PUT', body: JSON.stringify(payload),
+  });
+}
+
 export function deleteCatalogProduct(productId: number) {
   getCurrentUserIdOrThrow();
   return request<void>(`/api/v1/admin/shop/products/${productId}`, { method: 'DELETE' });

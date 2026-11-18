@@ -4,7 +4,7 @@ import { beforeEach, test } from 'node:test';
 const storage = new Map();
 globalThis.localStorage = { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value), removeItem: key => storage.delete(key) };
 globalThis.window = { location: { origin: 'http://localhost:5187' } };
-const { fetchCatalogProducts, createCatalogProduct, updateCatalogPrice, deleteCatalogProduct } = await import('../src/services/api/adminShopApi.ts');
+const { fetchCatalogProducts, createCatalogProduct, updateCatalogPrice, updateCatalogProduct, deleteCatalogProduct } = await import('../src/services/api/adminShopApi.ts');
 const { fetchMyProfile } = await import('../src/services/api/userApi.ts');
 beforeEach(() => storage.set('wishdiary.auth.session', JSON.stringify({ userId: 1, groupId: 1, appRole: 'family', accessToken: 'fixture' })));
 
@@ -56,4 +56,23 @@ test('price-only updates preserve product metadata and deletion addresses the se
     { path: '/api/v1/admin/shop/products/12', method: 'PATCH', body: JSON.stringify({ cloverPrice: 15 }) },
     { path: '/api/v1/admin/shop/products/12', method: 'DELETE', body: undefined },
   ]);
+});
+
+test('full catalog updates send every editable field and distinguish keeping, replacing and deleting photos', async () => {
+  const details = { title: '새 보드게임', description: '수정한 설명', cloverPrice: 12,
+    purchasePriceWon: null, productUrl: null };
+  for (const photo of [{ removeImage: false }, { imageData: 'data:image/jpeg;base64,aGVsbG8=', removeImage: false },
+    { imageData: null, removeImage: true }]) {
+    const payload = { ...details, ...photo };
+    globalThis.fetch = async (url, init) => {
+      assert.equal(new URL(url).pathname, '/api/v1/admin/shop/products/12');
+      assert.equal(init.method, 'PUT');
+      assert.equal(new Headers(init.headers).get('Authorization'), 'Bearer fixture');
+      assert.deepEqual(JSON.parse(init.body), payload);
+      return Response.json({ productId: 12, ...details, source: 'preset' });
+    };
+    assert.equal((await updateCatalogProduct(12, payload)).title, details.title);
+  }
+  storage.clear();
+  assert.throws(() => updateCatalogProduct(12, { ...details, removeImage: false }), /로그인/);
 });

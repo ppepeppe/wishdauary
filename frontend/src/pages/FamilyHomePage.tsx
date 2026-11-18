@@ -99,7 +99,7 @@ function FamilyHomePage() {
       </section>
 
       <Link to="/family-shop" className={styles.shopLink}>
-        <NavIcon name="store" /><span><strong>상점 관리</strong><small>선물 등록 · 클로버 수정</small></span><span aria-hidden="true">→</span>
+        <NavIcon name="store" /><span><strong>상점 관리</strong><small>공통 상점 · 선물 관리</small></span><span aria-hidden="true">→</span>
       </Link>
     </div>
   );

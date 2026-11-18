@@ -4,6 +4,7 @@ import com.wishdiary.adapter.in.web.auth.Authenticated;
 import com.wishdiary.application.auth.AuthenticatedSession;
 import com.wishdiary.application.shop.CreateCatalogProductRequest;
 import com.wishdiary.application.shop.UpdateCatalogPriceRequest;
+import com.wishdiary.application.shop.UpdateCatalogProductRequest;
 import com.wishdiary.application.shop.ManageCatalogProductsUseCase;
 import com.wishdiary.application.shop.ShopProductResponse;
 import com.wishdiary.common.response.CommonResponse;
@@ -36,6 +37,12 @@ public class AdminShopController {
     public CommonResponse<ShopProductResponse> updatePrice(@Authenticated AuthenticatedSession session,
             @PathVariable Long productId, @Valid @RequestBody UpdateCatalogPriceRequest request) {
         return CommonResponse.success("Catalog price updated.", catalog.updatePrice(productId, request));
+    }
+
+    @PutMapping("/{productId}")
+    public CommonResponse<ShopProductResponse> update(@Authenticated AuthenticatedSession session,
+            @PathVariable Long productId, @Valid @RequestBody UpdateCatalogProductRequest request) {
+        return CommonResponse.success("Catalog product updated.", catalog.update(productId, request));
     }
 
     @DeleteMapping("/{productId}")

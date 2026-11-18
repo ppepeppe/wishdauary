@@ -9,5 +9,7 @@ public interface ManageCatalogProductsUseCase {
 
     ShopProductResponse updatePrice(Long productId, UpdateCatalogPriceRequest request);
 
+    ShopProductResponse update(Long productId, UpdateCatalogProductRequest request);
+
     void delete(Long productId);
 }
