@@ -1,5 +1,4 @@
 .container { display: grid; gap: var(--s-6); min-width: 0; }
-.backLink { color: var(--brand-ink); font-size: var(--text-xs); width: fit-content; }
 .heading { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); flex-wrap: wrap; }
 .heading h2, .form h2 { margin: 0; font-size: var(--text-md); }
 .heading small { color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }

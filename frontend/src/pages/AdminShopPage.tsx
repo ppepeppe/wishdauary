@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import PageSection from '../components/common/PageSection';
-import AdminNavigation from '../components/common/AdminNavigation';
+import FamilyShopNavigation from '../components/shop/FamilyShopNavigation';
 import StatusMessage from '../components/common/StatusMessage';
 import CatalogProductManager from '../components/shop/CatalogProductManager';
 import ShopPhotoPicker from '../components/shop/ShopPhotoPicker';
@@ -52,9 +51,8 @@ export default function AdminShopPage() {
   }
 
   return <PageSection title="공통 상점 상품 관리">
-    <AdminNavigation />
+    <FamilyShopNavigation />
     <div className={styles.container}>
-      <Link to="/family-shop" className={styles.backLink}>← 상점 관리</Link>
       {isLoading ? <StatusMessage kind="loading" message="공통 상점 상품을 불러오고 있어요." /> : null}
       {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => void refetch()}>다시 불러오기</Button></div> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
@@ -81,7 +79,7 @@ export default function AdminShopPage() {
       </form> : null}
       {products?.length === 0 ? <StatusMessage kind="empty" message="첫 공통 상품을 등록해 보세요." /> : null}
       <Tabs label="공통 상품 보기" value={view} onChange={setView} options={[
-        { value: 'manage', label: '상품 관리' }, { value: 'preview', label: '상점 미리보기' },
+        { value: 'manage', label: '등록 상품' }, { value: 'preview', label: '상점 미리보기' },
       ]}>
         {view === 'preview' ? <CatalogPreviewProducts products={products ?? []} /> :
           <div className={styles.products} aria-label="공통 상품 목록" role="region">

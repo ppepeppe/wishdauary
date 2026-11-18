@@ -1,12 +1,11 @@
 import CardCarousel from '../components/common/CardCarousel';
 import FamilyEnglishReviews from '../components/rewards/FamilyEnglishReviews';
-import { Link } from 'react-router-dom';
 import ProductArtwork from '../components/shop/ProductArtwork';
 import { useState } from 'react';
 import { useAsyncData } from '../hooks/useAsyncData';
 import HoverHint from '../components/common/HoverHint';
 import PageSection from '../components/common/PageSection';
-import PageNavigation from '../components/common/PageNavigation';
+import FamilyShopNavigation from '../components/shop/FamilyShopNavigation';
 import StatusMessage from '../components/common/StatusMessage';
 import { useGiftRequests } from '../hooks/useGiftRequests';
 import { fetchChildrenWishGoals } from '../services/api/wishGoalApi';
@@ -83,7 +82,7 @@ function FamilySettingsPage() {
 
   return (
     <PageSection title="받은 요청">
-      <PageNavigation><Link to="/family-shop">상점 관리 →</Link><Link to="/family-connections">아이 연결 →</Link></PageNavigation>
+      <FamilyShopNavigation />
       {isLoading ? <StatusMessage kind="loading" message="받은 요청을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="선물 요청을 불러오지 못했어요. 잠시 후 다시 확인해 주세요." /> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
@@ -129,7 +128,7 @@ function FamilySettingsPage() {
       ) : null}
       {productPricingRequests.length > 0 ? (
         <div className={styles.pricingSection}>
-          <CardCarousel title="가격 정하기" itemLabel="상품">
+          <CardCarousel title="선물 신청 · 클로버 정하기" itemLabel="상품">
             {productPricingRequests.map((product) => (
               <article key={product.productId} className={styles.requestCard}>
                 <div className={styles.requestHeader}>

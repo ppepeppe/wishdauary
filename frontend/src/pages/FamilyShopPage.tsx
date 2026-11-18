@@ -3,7 +3,7 @@ import Tabs from '../components/common/Tabs';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
-import PageNavigation from '../components/common/PageNavigation';
+import FamilyShopNavigation from '../components/shop/FamilyShopNavigation';
 import StatusMessage from '../components/common/StatusMessage';
 import Button from '../components/common/Button';
 import ShopPhotoPicker from '../components/shop/ShopPhotoPicker';
@@ -75,7 +75,7 @@ function FamilyShopPage() {
 
   return (
     <PageSection title="상점 관리" actions={data && data.children.length > 0 ? <Button onClick={() => { setShowForm(true); setMessage(null); }}>+ 선물 등록</Button> : null}>
-      <PageNavigation><Link to="/admin/shop">공통 상점 상품 관리 →</Link><Link to="/family-settings">받은 선물 요청 →</Link></PageNavigation>
+      <FamilyShopNavigation />
       <div className={styles.container}>
         {isLoading ? <StatusMessage kind="loading" message="상점을 불러오고 있어요." /> : null}
         {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => void refetch()}>다시 불러오기</Button></div> : null}
@@ -103,20 +103,21 @@ function FamilyShopPage() {
         </> : null}
           <Tabs label="상품 구분" value={category} onChange={setCategory} options={[
             { value: 'catalog', label: '공통 상점' },
-            { value: 'custom', label: `아이가 올린 상품 ${childProducts.length}` },
-            { value: 'family', label: `가족이 등록한 선물 ${familyProducts.length}` },
+            { value: 'custom', label: `아이의 선물 신청 ${childProducts.length}` },
+            { value: 'family', label: `가족이 제안한 선물 ${familyProducts.length}` },
           ]}>
             {category === 'catalog' ? <CatalogPreview /> : <>
-            {category === 'custom' ? <p className={styles.hint}>클로버를 정한 선물은 아이의 목록에 표시됩니다.</p> : null}
+            <p className={styles.hint}>{category === 'custom'
+              ? '아이가 신청한 선물이에요. 클로버를 정하면 아이의 갖고 싶은 선물에 표시돼요.'
+              : '가족이 특정 아이에게 골라준 선물이에요. 해당 아이의 갖고 싶은 선물에 표시돼요.'}</p>
             {(category === 'custom' ? childProducts : familyProducts).length === 0 ? <p className={styles.hint}>{category === 'custom' ? '아이가 요청한 상품이 없어요.' : '가족이 등록한 선물이 없어요.'}</p> :
-              <CardCarousel key={category} label={category === 'custom' ? '아이가 올린 상품' : '가족이 등록한 선물'} itemLabel="상품">
+              <CardCarousel key={category} label={category === 'custom' ? '아이의 선물 신청' : '가족이 제안한 선물'} itemLabel="상품">
                 {(category === 'custom' ? childProducts : familyProducts).map(product => <FamilyShopProductRow key={product.productId} product={product}
                   childName={data?.children.find(child => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />)}
               </CardCarousel>}
             </>}
           </Tabs>
         <div className={styles.footer}>
-          <Link to="/family-settings" className={styles.link}>아이가 보낸 선물 요청 보기 →</Link>
           <Button type="button" variant="ghost" disabled={isLoading || busy} onClick={() => void refetch()}>새로고침</Button>
         </div>
       </div>
