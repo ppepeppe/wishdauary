@@ -31,3 +31,26 @@ test('family calendar shows all entries for the selected child and written date'
   assert.deepEqual(getChildDiaries(diaries, 10, '2026-11-15'), []);
   assert.deepEqual(getChildDiaries(diaries, undefined, '2026-11-13'), []);
 });
+
+test('shared child selection restores remembered children and recovers after disconnection', () => {
+  assert.equal(getSelectedChildId(children, null, '20'), 20);
+  assert.equal(getSelectedChildId(children, '10', '20'), 10);
+  assert.equal(getSelectedChildId(children, '999', '20'), 20);
+  assert.equal(getSelectedChildId([{ userId: 10 }], null, '20'), 10);
+  assert.equal(getSelectedChildId(children, null, 'broken'), 10);
+  assert.equal(getSelectedChildId([], null, '20'), undefined);
+});
+
+test('remembered selection is scoped to the adult account and tolerates unavailable storage', async () => {
+  const { readSelectedChild, saveSelectedChild } = await import('../src/services/session/selectedChildSession.ts');
+  const values = new Map();
+  globalThis.localStorage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
+  saveSelectedChild(1, 20);
+  saveSelectedChild(2, 10);
+  assert.equal(readSelectedChild(1), '20');
+  assert.equal(readSelectedChild(2), '10');
+  assert.equal(readSelectedChild(3), null);
+  globalThis.localStorage = { getItem() { throw new Error('disabled'); }, setItem() { throw new Error('disabled'); } };
+  assert.equal(readSelectedChild(1), null);
+  assert.doesNotThrow(() => saveSelectedChild(1, 10));
+});
