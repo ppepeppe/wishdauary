@@ -69,3 +69,16 @@ test('family feed preserves author identity and group visibility', async () => {
   assert.equal(item.actorNickname, '별이');
   assert.equal(item.visibilityScope, 'group');
 });
+
+test('group members retain their individual character, background and uploaded profile photo', async () => {
+  const members = [
+    { userId: 2, nickname: '별이', appRole: 'child', avatarPreset: 'mint', avatarCharacter: 'kuromi', avatarImage: null },
+    { userId: 3, nickname: '가족', appRole: 'family', avatarPreset: 'sky', avatarCharacter: 'cinnamoroll', avatarImage: 'data:image/png;base64,photo' },
+  ];
+  globalThis.fetch = async (url, init) => {
+    assert.equal(new URL(url).pathname, '/api/v1/sharing-groups');
+    assert.equal(new Headers(init.headers).get('Authorization'), 'Bearer token');
+    return respond([{ id: 1, name: '우리 가족', memberIds: [2, 3], members, defaultGroup: true }]);
+  };
+  assert.deepEqual((await fetchSharingGroups())[0].members, members);
+});

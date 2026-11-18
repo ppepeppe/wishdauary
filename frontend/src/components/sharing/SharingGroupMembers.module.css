@@ -4,7 +4,6 @@
 .actions { display: flex; align-items: center; gap: var(--s-2); }
 .members { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
 .member { display: grid; align-content: start; justify-items: start; gap: var(--s-2); min-width: 0; padding: var(--s-4); border: 1px solid var(--card-border); border-radius: var(--radius-card); background: var(--card-bg); box-shadow: var(--card-shadow); }
-.initial { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: var(--s-1); border-radius: var(--r-pill); background: var(--brand-tint); color: var(--brand-ink); font-size: var(--text-md); font-weight: 600; }
 .member h2 { margin: 0; color: var(--ink-strong); font-size: var(--text-sm); font-weight: 600; overflow-wrap: anywhere; }
 .member p { margin: 0; color: var(--ink-muted); font-size: var(--text-2xs); }
 @media (min-width: 768px) { .members { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

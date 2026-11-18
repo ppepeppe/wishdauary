@@ -230,6 +230,38 @@ class DiarySharingIntegrationTest {
         call(get("/api/v1/diaries/shared-feed/groups"), null, null, 401);
     }
 
+    @Test
+    @Transactional
+    void groupMembersUseEachUsersCurrentProfileWithoutCopyingItIntoTheGroup() throws Exception {
+        var owner = child("프로필 주인"); var member = child("프로필 구성원"); var adult = family(owner);
+        call(patch("/api/v1/users/me"), member, Map.of("nickname", "프로필 구성원", "avatarPreset", "mint", "avatarCharacter", "kuromi"), 200);
+        String image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a47sAAAAASUVORK5CYII=";
+        call(patch("/api/v1/users/me"), adult, Map.of("nickname", "프로필 가족", "avatarPreset", "sky", "avatarCharacter", "cinnamoroll", "avatarImage", image), 200);
+        JsonNode created = call(post("/api/v1/sharing-groups"), owner,
+                Map.of("name", "프로필 그룹", "memberIds", List.of(member.userId(), adult.userId())), 201);
+        assertEquals(2, created.get("members").size());
+        for (JsonNode person : created.get("members")) {
+            if (person.get("userId").asLong() == member.userId()) {
+                assertEquals("kuromi", person.path("avatarCharacter").asText());
+                assertEquals("mint", person.path("avatarPreset").asText());
+                assertTrue(person.path("avatarImage").isNull());
+            } else {
+                assertEquals("cinnamoroll", person.path("avatarCharacter").asText());
+                assertEquals(image, person.path("avatarImage").asText());
+            }
+            assertFalse(person.has("loginId")); assertFalse(person.has("passwordHash"));
+        }
+        call(patch("/api/v1/users/me"), adult, Map.of("nickname", "새 프로필 가족", "avatarPreset", "rose", "avatarCharacter", "my-melody"), 200);
+        for (JsonNode group : call(get("/api/v1/sharing-groups"), owner, null, 200)) {
+            for (JsonNode person : group.get("members")) if (person.get("userId").asLong() == adult.userId()) {
+                assertEquals("새 프로필 가족", person.get("nickname").asText());
+                assertEquals("my-melody", person.path("avatarCharacter").asText());
+                assertEquals("rose", person.path("avatarPreset").asText());
+                assertTrue(person.path("avatarImage").isNull());
+            }
+        }
+    }
+
     private SignupResponse child(String nickname) {
         return signup.signup(new ChildSignupRequest(UUID.randomUUID() + "@test.com", "password", nickname));
     }

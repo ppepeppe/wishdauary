@@ -4,6 +4,9 @@ export interface SharingUser {
   userId: number;
   nickname: string;
   appRole: AppRole;
+  avatarPreset?: string | null;
+  avatarCharacter?: string | null;
+  avatarImage?: string | null;
 }
 
 export interface SharingGroup {

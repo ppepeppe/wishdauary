@@ -20,7 +20,7 @@ public class SharingUserDirectoryAdapter implements SharingUserDirectoryPort {
     }
 
     public List<SharingUser> findByIds(Set<Long> userIds) {
-        return users.findAllByIdIn(List.copyOf(userIds)).stream().map(this::toResponse).toList();
+        return users.findAllByIdIn(List.copyOf(userIds)).stream().map(this::toMemberResponse).toList();
     }
 
     public List<SharingUser> searchChildren(String nickname) {
@@ -34,5 +34,10 @@ public class SharingUserDirectoryAdapter implements SharingUserDirectoryPort {
 
     private SharingUser toResponse(UserJpaEntity user) {
         return new SharingUser(user.getId(), user.getNickname(), user.getAppRole().name().toLowerCase());
+    }
+
+    private SharingUser toMemberResponse(UserJpaEntity user) {
+        return new SharingUser(user.getId(), user.getNickname(), user.getAppRole().name().toLowerCase(),
+                user.getAvatarPreset(), user.getAvatarCharacter(), user.getAvatarImage());
     }
 }

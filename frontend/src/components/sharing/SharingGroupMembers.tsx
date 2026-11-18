@@ -1,5 +1,6 @@
 import Button from '../common/Button';
 import StatusMessage from '../common/StatusMessage';
+import ProfileAvatar from '../common/ProfileAvatar';
 import type { SharingGroup } from '../../types/sharing';
 import styles from './SharingGroupMembers.module.css';
 
@@ -17,7 +18,8 @@ export default function SharingGroupMembers({ group, busy, onEdit, onDelete }: {
     {group.members.length === 0 ? <StatusMessage kind="empty" message="아직 구성원이 없어요." /> :
       <div className={styles.members}>
         {group.members.map(member => <article key={member.userId} className={styles.member}>
-          <span className={styles.initial} aria-hidden="true">{Array.from(member.nickname.trim())[0] || '?'}</span>
+          <ProfileAvatar preset={member.avatarPreset} character={member.avatarCharacter}
+            imageUrl={member.avatarImage} size="md" alt={`${member.nickname} 프로필`} />
           <h2>{member.nickname}</h2>
           <p>{member.appRole === 'child' ? '아이' : '가족'}</p>
         </article>)}

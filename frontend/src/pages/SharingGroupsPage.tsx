@@ -46,7 +46,12 @@ export default function SharingGroupsPage() {
     catch (caught) { setLoadError(caught instanceof Error ? caught.message : '그룹을 불러오지 못했어요.'); }
     finally { setLoading(false); }
   }
-  useEffect(() => { void load(); return () => { searchVersion.current += 1; }; }, []);
+  useEffect(() => {
+    const refresh = () => { if (!busyRef.current) void load(); };
+    refresh();
+    window.addEventListener('focus', refresh);
+    return () => { searchVersion.current += 1; window.removeEventListener('focus', refresh); };
+  }, []);
 
   function openForm(group?: SharingGroup) {
     setEditingId(group?.id);
