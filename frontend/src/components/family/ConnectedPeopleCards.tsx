@@ -8,9 +8,11 @@ export default function ConnectedPeopleCards({ people, isFamily }: { people: Fam
     {people.map(person => <article key={person.userId} className={styles.card}>
       <ProfileAvatar preset={person.avatarPreset} character={person.avatarCharacter} imageUrl={person.avatarImage}
         size="md" alt={`${person.nickname} 프로필`} />
-      <h3>{person.nickname}</h3>
-      <p>{isFamily ? '연결된 아이' : person.relationLabel || '연결된 가족'}</p>
-      {isFamily ? <Link to={`/family-feed?child=${person.userId}`}>아이 일기 보기 →</Link> : null}
+      <div className={styles.identity}>
+        <h3>{person.nickname}</h3>
+        {!isFamily ? <p>{person.relationLabel || '가족'}</p> : null}
+      </div>
+      {isFamily ? <Link to={`/family-feed?child=${person.userId}`} aria-label={`${person.nickname} 아이 일기 보기`}>일기 보기 <span aria-hidden="true">→</span></Link> : null}
     </article>)}
   </div>;
 }

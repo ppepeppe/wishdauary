@@ -27,6 +27,8 @@
 .actions button { min-height: 44px; }
 .status { color: var(--brand-ink); font-size: var(--text-xs); }
 .historyList { margin: 0; padding: 0; list-style: none; }
+.historySection { min-width: 0; padding-top: var(--s-4); border-top: 1px solid var(--line); }
+.historySection > h2 { margin: 0 0 var(--s-2); color: var(--ink-muted); font-size: var(--text-sm); font-weight: 600; }
 .historyRow { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); padding: var(--s-3) 0; font-size: var(--text-sm); }
 .historyRow + .historyRow { border-top: 1px solid var(--line); }
 .historyRow > span { min-width: 0; overflow-wrap: anywhere; }

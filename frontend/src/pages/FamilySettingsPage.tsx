@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useAsyncData } from '../hooks/useAsyncData';
 import HoverHint from '../components/common/HoverHint';
 import PageSection from '../components/common/PageSection';
-import FamilyShopNavigation from '../components/shop/FamilyShopNavigation';
 import StatusMessage from '../components/common/StatusMessage';
 import { useGiftRequests } from '../hooks/useGiftRequests';
 import { fetchChildrenWishGoals } from '../services/api/wishGoalApi';
@@ -82,7 +81,6 @@ function FamilySettingsPage() {
 
   return (
     <PageSection title="받은 요청">
-      <FamilyShopNavigation />
       {isLoading ? <StatusMessage kind="loading" message="받은 요청을 불러오고 있어요." /> : null}
       {error ? <StatusMessage kind="error" message="선물 요청을 불러오지 못했어요. 잠시 후 다시 확인해 주세요." /> : null}
       {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
@@ -248,7 +246,10 @@ function FamilySettingsPage() {
         </CardCarousel>
       ) : null}
       {data && giftRequests.length === 0 && productPricingRequests.length === 0 ? (
-        <StatusMessage kind="empty" message="지금은 확인할 선물 요청이 없어요. 클로버를 정한 선물은 상점 관리에서 확인할 수 있어요." />
+        <section className={styles.emptyRequests} aria-labelledby="empty-gift-requests-title">
+          <h2 id="empty-gift-requests-title">선물 요청</h2>
+          <p>확인을 기다리는 선물 요청이 없어요.</p>
+        </section>
       ) : null}
     </PageSection>
   );

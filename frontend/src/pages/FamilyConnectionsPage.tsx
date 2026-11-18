@@ -115,7 +115,7 @@ function FamilyConnectionsPage() {
               <ConnectedPeopleCards people={data.connections} isFamily={isFamily} />}
             {!isFamily ? <p className={styles.hint}>모든 그룹에서 가족을 제외하면 연결이 해제됩니다.</p> : null}
           </section>
-          {history.length > 0 ? <section className={styles.section}>
+          {history.length > 0 ? <section className={styles.historySection}>
             <h2>처리한 요청</h2>
             <ul className={styles.historyList}>{history.map((item) => {
             const connected = connectedIds.has(isFamily ? item.childUserId : item.familyUserId);
