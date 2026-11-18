@@ -31,6 +31,20 @@ public class SharedDiaryFeedService implements GetSharedDiaryFeedUseCase {
         if (groupId != null && groupId < -1) throw new InvalidSharingGroupException("그룹을 확인해 주세요.");
         if (page < 0 || page > 10000) throw new InvalidSharingGroupException("페이지 번호를 확인해 주세요.");
         List<Diary> items = groupId == null ? diaries.loadSharedFeed(viewerId, page) : diaries.loadSharedFeed(viewerId, page, groupId);
+        return responses(items);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SharedDiaryResponse> getGroupedFeed(Long viewerId, int page, List<Long> groupIds) {
+        if (page < 0 || page > 10000) throw new InvalidSharingGroupException("페이지 번호를 확인해 주세요.");
+        if (groupIds == null || groupIds.isEmpty() || groupIds.size() > 100
+                || groupIds.stream().anyMatch(id -> id == null || id <= 0)) {
+            throw new InvalidSharingGroupException("그룹을 확인해 주세요.");
+        }
+        return responses(diaries.loadGroupedFeed(viewerId, page, groupIds.stream().distinct().toList()));
+    }
+
+    private List<SharedDiaryResponse> responses(List<Diary> items) {
         Map<Long, String> nicknames = users.findByIds(items.stream().map(Diary::getAuthorId).collect(Collectors.toSet()))
                 .stream().collect(Collectors.toMap(SharingUser::userId, SharingUser::nickname));
         return items.stream().map(diary -> new SharedDiaryResponse(diary.getId(),

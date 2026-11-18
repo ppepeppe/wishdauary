@@ -2,6 +2,9 @@ export interface FamilyConnection {
   userId: number;
   nickname: string;
   relationLabel?: string | null;
+  avatarPreset?: string | null;
+  avatarCharacter?: string | null;
+  avatarImage?: string | null;
 }
 export interface FamilyConnectionRequest {
   requestId: number;

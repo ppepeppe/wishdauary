@@ -35,8 +35,15 @@ public class FamilyConnectionService implements ManageFamilyConnectionsUseCase {
     public List<FamilyConnectionUserResponse> listConnections(Long userId) {
         LoadedUser user = users.loadById(userId);
         List<Long> ids = user.isFamily() ? connections.findChildUserIds(userId) : connections.findFamilyUserIds(userId);
+        var profiles = directory.findByIds(new HashSet<>(ids)).stream()
+                .collect(java.util.stream.Collectors.toMap(SharingUser::userId, person -> person));
         return ids.stream().map(users.loadByIds(ids)::get)
-                .map(person -> new FamilyConnectionUserResponse(person.id(), person.nickname(), person.relationLabel())).toList();
+                .map(person -> connectionResponse(person, profiles.get(person.id()))).toList();
+    }
+    private FamilyConnectionUserResponse connectionResponse(LoadedUser person, SharingUser profile) {
+        return new FamilyConnectionUserResponse(person.id(), person.nickname(), person.relationLabel(),
+                profile == null ? null : profile.avatarPreset(), profile == null ? null : profile.avatarCharacter(),
+                profile == null ? null : profile.avatarImage());
     }
     public List<FamilyConnectionRequestResponse> listRequests(Long userId) {
         LoadedUser user = users.loadById(userId);

@@ -1,4 +1,6 @@
 import CardCarousel from '../components/common/CardCarousel';
+import ConnectedPeopleCards from '../components/family/ConnectedPeopleCards';
+import FamilyDiaryNavigation from '../components/diary/FamilyDiaryNavigation';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
@@ -60,9 +62,10 @@ function FamilyConnectionsPage() {
     <PageSection title={isFamily ? '아이와 연결하기' : '가족 연결 요청'} description={isFamily
       ? '아이의 승인 후 가족으로 연결됩니다.'
       : '아는 가족의 요청만 승인해 주세요.'}>
+      {isFamily ? <FamilyDiaryNavigation /> : null}
       <div className={styles.container}>
         <div className={styles.toolbar}>
-          <Link to={isFamily ? '/family-home' : '/sharing-groups'} className={styles.backLink}>{isFamily ? '← 홈' : '← 그룹 관리'}</Link>
+          {!isFamily ? <Link to="/sharing-groups" className={styles.backLink}>← 그룹 관리</Link> : null}
           <Button type="button" variant="ghost" disabled={isLoading || busy} onClick={() => void refetch()}>새로고침</Button>
         </div>
         {isLoading ? <StatusMessage kind="loading" message="가족 연결을 확인하고 있어요." /> : null}
@@ -106,11 +109,10 @@ function FamilyConnectionsPage() {
               </article>
             ))}</CardCarousel>}
           </section>
-          <section className={styles.section}>
+          <section className={styles.connectionsSection}>
             <h2>{isFamily ? '연결된 아이' : '연결된 가족'} <small>{data.connections.length}</small></h2>
-            {data.connections.length === 0 ? <p className={styles.hint}>{isFamily ? '아직 연결된 아이가 없어요.' : '아직 연결된 가족이 없어요.'}</p> : <CardCarousel label={isFamily ? '연결된 아이' : '연결된 가족'} itemLabel="구성원">{data.connections.map((person) => (
-              <div key={person.userId} className={styles.row}><span><strong>{person.nickname}</strong><small>#{person.userId}{person.relationLabel ? ` · ${person.relationLabel}` : ''}</small></span><span className={styles.status}>연결됨</span></div>
-            ))}</CardCarousel>}
+            {data.connections.length === 0 ? <p className={styles.hint}>{isFamily ? '아직 연결된 아이가 없어요.' : '아직 연결된 가족이 없어요.'}</p> :
+              <ConnectedPeopleCards people={data.connections} isFamily={isFamily} />}
             {!isFamily ? <p className={styles.hint}>모든 그룹에서 가족을 제외하면 연결이 해제됩니다.</p> : null}
           </section>
           {history.length > 0 ? <section className={styles.section}><CardCarousel title="처리한 요청" itemLabel="요청">{history.map((item) => {

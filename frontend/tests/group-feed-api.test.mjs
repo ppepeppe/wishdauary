@@ -18,3 +18,10 @@ test('visible group tabs preserve their identity and owner name',async()=>{
  assert.deepEqual(await fetchSharedFeedGroups(),groups);
  storage.clear();assert.throws(()=>fetchSharedFeedGroups(),/로그인/);
 });
+test('combined group tabs send all group IDs and one server-side page without the single-group filter',async()=>{
+ login();globalThis.fetch=async(url,init)=>{
+  const parsed=new URL(url);assert.equal(parsed.searchParams.get('groupIds'),'14,17');
+  assert.equal(parsed.searchParams.has('groupId'),false);assert.equal(parsed.searchParams.get('page'),'2');
+  assert.equal(new Headers(init.headers).get('Authorization'),'Bearer fixture');return Response.json([]);
+ };assert.deepEqual(await fetchSharedDiaryFeed(2,14,[14,17]),[]);
+});

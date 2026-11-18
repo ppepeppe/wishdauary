@@ -96,7 +96,9 @@ function Layout() {
                 end={item.end}
                 className={({ isActive }) =>
                   [
-                    (isActive || (item.to === '/diaries' && location.pathname === '/shared-feed') || (item.to === '/family-shop' && location.pathname === '/admin/shop')) ? styles.bottomNavItemActive : styles.bottomNavItem,
+                    (isActive || (item.to === '/diaries' && location.pathname === '/shared-feed')
+                      || (item.to === '/family-feed' && ['/shared-feed', '/family-connections'].includes(location.pathname))
+                      || (item.to === '/family-shop' && location.pathname === '/admin/shop')) ? styles.bottomNavItemActive : styles.bottomNavItem,
                     item.isPrimary ? styles.bottomNavPrimary : '',
                   ]
                     .filter(Boolean)

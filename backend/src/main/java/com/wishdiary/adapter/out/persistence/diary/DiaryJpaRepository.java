@@ -53,6 +53,21 @@ public interface DiaryJpaRepository extends JpaRepository<DiaryJpaEntity, Long> 
                                       Pageable pageable);
 
 
+    @Query(value = """
+            select d.* from diaries d
+            where d.visibility_scope = 'GROUP' and exists (
+                select 1 from diary_audience_groups a
+                join diary_sharing_groups g on g.id = a.sharing_group_id
+                where a.diary_id = d.id and g.id in (:groupIds) and g.owner_id = d.author_id and g.slot is not null
+                  and (g.owner_id = :viewerId or exists (
+                    select 1 from diary_sharing_group_members m where m.sharing_group_id = g.id and m.user_id = :viewerId
+                  ))
+            )
+            order by d.created_at desc, d.id desc
+            """, nativeQuery = true)
+    List<DiaryJpaEntity> findGroupedSharedFeed(@Param("viewerId") Long viewerId,
+            @Param("groupIds") List<Long> groupIds, Pageable pageable);
+
     boolean existsByAuthorIdAndWrittenDate(Long authorId, LocalDate writtenDate);
 
     long countByAuthorIdAndWrittenDate(Long authorId, LocalDate writtenDate);

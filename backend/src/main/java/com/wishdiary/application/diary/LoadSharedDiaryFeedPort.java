@@ -6,4 +6,5 @@ import java.util.List;
 public interface LoadSharedDiaryFeedPort {
     List<Diary> loadSharedFeed(Long viewerId, int page);
     List<Diary> loadSharedFeed(Long viewerId, int page, Long groupId);
+    List<Diary> loadGroupedFeed(Long viewerId, int page, List<Long> groupIds);
 }

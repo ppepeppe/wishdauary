@@ -1,5 +1,9 @@
 .container { display: grid; gap: var(--s-5); }
 .toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+.toolbar > button:last-child { margin-left: auto; }
+.connectionsSection { display: grid; min-width: 0; gap: var(--s-4); }
+.connectionsSection > h2 { margin: 0; font-size: var(--text-md); }
+.connectionsSection h2 small { margin-left: var(--s-2); color: var(--ink-muted); font-size: var(--text-sm); font-weight: 400; }
 .backLink { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink-muted); font-size: var(--text-xs); }
 .section {
   padding: var(--card-padding);

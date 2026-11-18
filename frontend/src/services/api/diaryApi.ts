@@ -268,9 +268,11 @@ export interface SharedDiaryItem {
   createdAt: string;
 }
 
-export function fetchSharedDiaryFeed(page = 0, groupId?: number) {
+export function fetchSharedDiaryFeed(page = 0, groupId?: number, groupIds?: number[]) {
   getCurrentUserIdOrThrow();
-  return request<SharedDiaryItem[]>('/api/v1/diaries/shared-feed', { query: { page, groupId } });
+  return request<SharedDiaryItem[]>('/api/v1/diaries/shared-feed', { query: {
+    page, groupId: groupIds?.length ? undefined : groupId, groupIds: groupIds?.length ? groupIds.join(',') : undefined,
+  } });
 }
 
 export interface SharedFeedGroup { id: number; name: string; ownerName: string }

@@ -30,6 +30,7 @@ class DiarySharingIntegrationTest {
     @Autowired ChildSignupUseCase signup;
     @Autowired FamilySignupUseCase familySignup;
     @Autowired ManageSharingGroupsUseCase groups;
+    @Autowired org.springframework.jdbc.core.JdbcTemplate database;
 
     @Test
     @Transactional
@@ -260,6 +261,53 @@ class DiarySharingIntegrationTest {
                 assertTrue(person.path("avatarImage").isNull());
             }
         }
+    }
+
+    @Test
+    @Transactional
+    void combinedGroupFeedIncludesBothChildrenOnceAndKeepsGroupPermissions() throws Exception {
+        var first = child("첫 아이"); var second = child("둘째 아이"); var viewer = family(first); var outsider = child("외부 아이");
+        long a = group(first, "우리 가족", List.of(viewer.userId()));
+        long overlap = group(first, "겹치는 모임", List.of(viewer.userId()));
+        long b = group(second, "우리 가족", List.of(viewer.userId()));
+        long secret = group(second, "비공개 모임", List.of());
+        long firstDiary = write(first, "group", List.of(a, overlap));
+        long secondDiary = write(second, "group", List.of(b));
+        write(second, "group", List.of(secret)); write(second, "public", List.of());
+        String selected = a + "," + overlap + "," + b + "," + secret;
+        JsonNode items = call(get("/api/v1/diaries/shared-feed").param("groupIds", selected), viewer, null, 200);
+        assertEquals(Set.of(firstDiary, secondDiary), feedIds(items)); assertEquals(2, items.size());
+        assertEquals(0, call(get("/api/v1/diaries/shared-feed").param("groupIds", "" + secret), viewer, null, 200).size());
+        assertEquals(0, call(get("/api/v1/diaries/shared-feed").param("groupIds", selected), outsider, null, 200).size());
+        call(get("/api/v1/diaries/shared-feed").param("groupIds", "0,-1"), viewer, null, 400);
+        call(get("/api/v1/diaries/shared-feed").param("groupIds", selected).param("groupId", "0"), viewer, null, 400);
+        call(get("/api/v1/diaries/shared-feed").param("groupIds", selected), null, null, 401);
+        String prefix = "pagination-" + UUID.randomUUID();
+        for (int index = 0; index < 31; index++) database.update(
+                "insert into diaries(author_id,content,visibility_scope,written_date,created_at) values(?,?,'GROUP',?,?)",
+                first.userId(), prefix + index, LocalDate.now().minusDays(100 + index), java.time.LocalDateTime.now().plusDays(1).plusSeconds(index));
+        database.update("insert into diary_audience_groups(diary_id,sharing_group_id) select id,? from diaries where content like ?", a, prefix + "%");
+        JsonNode pageOne = call(get("/api/v1/diaries/shared-feed").param("groupIds", selected), viewer, null, 200);
+        JsonNode pageTwo = call(get("/api/v1/diaries/shared-feed").param("groupIds", selected).param("page", "1"), viewer, null, 200);
+        assertEquals(30, pageOne.size()); assertEquals(3, pageTwo.size());
+        Set<Long> all = feedIds(pageOne); all.addAll(feedIds(pageTwo)); assertEquals(33, all.size());
+        assertTrue(all.contains(firstDiary)); assertTrue(all.contains(secondDiary));
+    }
+
+    @Test
+    @Transactional
+    void connectedChildCardsReadTheChildsCurrentProfile() throws Exception {
+        var owner = child("프로필 아이"); var adult = family(owner);
+        call(patch("/api/v1/users/me"), owner, Map.of("nickname", "프로필 아이", "avatarPreset", "mint", "avatarCharacter", "kuromi"), 200);
+        JsonNode people = call(get("/api/v1/family-connections"), adult, null, 200);
+        assertEquals(1, people.size()); assertEquals(owner.userId(), people.get(0).get("userId").asLong());
+        assertEquals("kuromi", people.get(0).path("avatarCharacter").asText());
+        assertEquals("mint", people.get(0).path("avatarPreset").asText());
+        assertTrue(people.get(0).path("avatarImage").isNull());
+    }
+
+    private Set<Long> feedIds(JsonNode items) {
+        Set<Long> ids = new HashSet<>(); items.forEach(item -> ids.add(item.get("diaryId").asLong())); return ids;
     }
 
     private SignupResponse child(String nickname) {

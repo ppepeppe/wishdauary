@@ -2,6 +2,8 @@ import CardCarousel from '../components/common/CardCarousel';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import DiaryNavigation from '../components/diary/DiaryNavigation';
+import FamilyDiaryNavigation from '../components/diary/FamilyDiaryNavigation';
+import { getSharedFeedGroupTabs } from '../utils/sharedFeedGroups';
 import Tabs from '../components/common/Tabs';
 import { useAsyncData } from '../hooks/useAsyncData';
 import Button from '../components/common/Button';
@@ -17,8 +19,11 @@ export default function SharedDiaryFeedPage() {
   const isChild = getAuthSession()?.appRole === 'child';
   const groups = useAsyncData(fetchSharedFeedGroups, true);
   const [params, setParams] = useSearchParams();
+  const groupTabs = getSharedFeedGroupTabs(groups.data ?? []);
   const requested = Number(params.get('group') ?? -1);
-  const groupId = requested === -1 || requested === 0 || groups.data?.some(group => group.id === requested) ? requested : -1;
+  const selectedGroup = groupTabs.find(group => group.groupIds.includes(requested));
+  const groupId = requested === -1 || requested === 0 ? requested : selectedGroup?.id ?? -1;
+  const groupIdsKey = selectedGroup?.groupIds.join(',') ?? '';
   const [page, setPage] = useState(0);
   const [items, setItems] = useState<SharedDiaryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,26 +32,27 @@ export default function SharedDiaryFeedPage() {
   useEffect(() => {
     let active = true;
     setLoading(true); setError(null); setItems([]);
-    fetchSharedDiaryFeed(page, groupId).then((data) => { if (active) setItems(data); })
+    const selectedIds = groupIdsKey ? groupIdsKey.split(',').map(Number) : [];
+    fetchSharedDiaryFeed(page, groupId, selectedIds.length > 1 ? selectedIds : undefined).then((data) => { if (active) setItems(data); })
       .catch((caught: unknown) => { if (active) setError(caught instanceof Error ? caught.message : '일기를 불러오지 못했어요.'); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [page, revision, groupId]);
+  }, [page, revision, groupId, groupIdsKey]);
 
   return (
-    <PageSection title={isChild ? '일기' : '그룹 일기'}>
-      {isChild ? <DiaryNavigation /> : null}
+    <PageSection title={isChild ? '일기' : '공개·그룹 일기'}>
+      {isChild ? <DiaryNavigation /> : <FamilyDiaryNavigation />}
       <div className={styles.container}>
         {groups.error ? <><StatusMessage kind="error" message={groups.error} /><Button onClick={() => void groups.refetch()}>그룹 다시 불러오기</Button></> : null}
         <Tabs label="그룹 선택" value={String(groupId)} onChange={value => { const next = new URLSearchParams(params); next.set('group', value); setParams(next, { replace: true }); setPage(0); }} options={[
           { value: '-1', label: '전체 그룹' },
-          ...(groups.data ?? []).map(group => ({ value: String(group.id), label: group.name })),
+          ...groupTabs.map(group => ({ value: String(group.id), label: group.name })),
           { value: '0', label: '전체 공개' },
         ]}>
         {loading ? <StatusMessage kind="loading" message="이야기를 모으고 있어요." /> : null}
         {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => setRevision((value) => value + 1)}>다시 불러오기</Button></div> : null}
         {!loading && !error && items.length === 0 ? <StatusMessage kind="empty" message="아직 볼 수 있는 일기가 없어요." /> : null}
-        <CardCarousel key={groupId} title="공유된 이야기" itemLabel="일기">{items.map((item) => <article className={styles.card} key={item.diaryId}>
+        <CardCarousel key={`${groupId}:${groupIdsKey}`} title="공유된 이야기" itemLabel="일기">{items.map((item) => <article className={styles.card} key={item.diaryId}>
           <div className={styles.heading}><strong>{item.authorNickname}</strong><span>{getVisibilityScopeLabel(item.visibilityScope)}</span></div>
           <p>{item.contentPreview}</p>
           <div className={styles.heading}><small>{formatKoreanDate(item.writtenDate)}</small><Link to={`/diaries/${item.diaryId}`}>이야기 읽기 →</Link></div>

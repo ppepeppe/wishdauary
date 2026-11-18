@@ -75,7 +75,12 @@ public class DiaryController {
 
     @GetMapping("/shared-feed")
     public CommonResponse<List<SharedDiaryResponse>> sharedFeed(
-            @Authenticated AuthenticatedSession session, @RequestParam(defaultValue = "0") int page, @RequestParam(required = false) Long groupId) {
+            @Authenticated AuthenticatedSession session, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) Long groupId, @RequestParam(required = false) List<Long> groupIds) {
+        if (groupIds != null) {
+            if (groupId != null) throw new com.wishdiary.domain.sharing.InvalidSharingGroupException("그룹 선택을 확인해 주세요.");
+            return CommonResponse.success("Shared diaries retrieved.", sharedFeed.getGroupedFeed(session.userId(), page, groupIds));
+        }
         return CommonResponse.success("Shared diaries retrieved.", sharedFeed.getSharedFeed(session.userId(), page, groupId));
     }
 
