@@ -1,4 +1,4 @@
-import CardCarousel from '../components/common/CardCarousel';
+import Tabs from '../components/common/Tabs';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
@@ -10,6 +10,7 @@ import styles from './SharingGroupsPage.module.css';
 
 export default function SharingGroupsPage() {
   const [groups, setGroups] = useState<SharingGroup[]>([]);
+  const [selectedGroupId, setSelectedGroupId] = useState<number>();
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,6 +28,15 @@ export default function SharingGroupsPage() {
   const busyRef = useRef(false);
   const searchVersion = useRef(0);
   const customGroupCount = groups.filter((group) => !group.defaultGroup).length;
+  const selectedGroup = groups.find(group => group.id === selectedGroupId) ?? groups[0];
+
+  function selectGroup(value: string) {
+    if (busy) return;
+    setSelectedGroupId(Number(value));
+    setShowForm(false);
+    searchVersion.current += 1;
+    setSearching(false); setSearchError(null);
+  }
 
   async function load() {
     setLoading(true);
@@ -65,6 +75,7 @@ export default function SharingGroupsPage() {
     try {
       const saved = await saveSharingGroup({ name: name.trim(), memberIds: members.map((member) => member.userId) }, editingId);
       setGroups((current) => editingId === undefined ? [...current, saved] : current.map((group) => group.id === saved.id ? saved : group));
+      setSelectedGroupId(saved.id);
       setShowForm(false); setMessage('그룹을 저장했어요.');
     } catch (caught) { setError(caught instanceof Error ? caught.message : '그룹을 저장하지 못했어요.'); }
     finally { busyRef.current = false; setBusy(false); }
@@ -119,13 +130,14 @@ export default function SharingGroupsPage() {
             </fieldset>
           </form>
         ) : null}
-        <CardCarousel title="내 그룹" itemLabel="그룹">{groups.map((group) => (
-          <article key={group.id} className={styles.card}>
-            <div className={styles.heading}><h2>{group.name}</h2><span>{group.defaultGroup ? '기본 · ' : ''}{group.memberIds.length}명</span></div>
-            <p>{group.members.map((member) => member.nickname).join(', ') || '아직 구성원이 없어요.'}</p>
-            <div className={styles.actions}><Button variant="secondary" disabled={busy} onClick={() => openForm(group)}>수정</Button><button type="button" disabled={busy} onClick={() => void remove(group)}>그룹 삭제</button></div>
+        {selectedGroup ? <Tabs label="내 그룹" value={String(selectedGroup.id)} onChange={selectGroup}
+          options={groups.map(group => ({ value: String(group.id), label: group.name }))}>
+          <article key={selectedGroup.id} className={styles.card}>
+            <div className={styles.heading}><h2>{selectedGroup.name}</h2><span>{selectedGroup.defaultGroup ? '기본 · ' : ''}{selectedGroup.memberIds.length}명</span></div>
+            <p>{selectedGroup.members.map(member => member.nickname).join(', ') || '아직 구성원이 없어요.'}</p>
+            <div className={styles.actions}><Button variant="secondary" disabled={busy} onClick={() => openForm(selectedGroup)}>수정</Button><button type="button" disabled={busy} onClick={() => void remove(selectedGroup)}>그룹 삭제</button></div>
           </article>
-        ))}</CardCarousel>
+        </Tabs> : null}
       </div>
     </PageSection>
   );
