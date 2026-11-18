@@ -1,4 +1,3 @@
-import CardCarousel from '../components/common/CardCarousel';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import DiaryNavigation from '../components/diary/DiaryNavigation';
@@ -12,7 +11,10 @@ import StatusMessage from '../components/common/StatusMessage';
 import { fetchSharedDiaryFeed, fetchSharedFeedGroups, type SharedDiaryItem } from '../services/api/diaryApi';
 import { getAuthSession } from '../services/session/authSession';
 import DiaryFeedCard from '../components/diary/DiaryFeedCard';
-import styles from './SharedDiaryFeedPage.module.css';
+import styles from './DiaryListPage.module.css';
+import DiaryCalendar from '../components/diary/DiaryCalendar';
+import { formatKoreanDate, getTodayDateInKorea, shiftDiaryDate } from '../constants/date';
+import { getSharedDiariesOnDate, loadSharedDiaryDates } from '../utils/sharedDiaryDates';
 
 export default function SharedDiaryFeedPage() {
   const isChild = getAuthSession()?.appRole === 'child';
@@ -23,7 +25,7 @@ export default function SharedDiaryFeedPage() {
   const selectedGroup = groupTabs.find(group => group.groupIds.includes(requested));
   const groupId = requested === -1 || requested === 0 ? requested : selectedGroup?.id ?? -1;
   const groupIdsKey = selectedGroup?.groupIds.join(',') ?? '';
-  const [page, setPage] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(getTodayDateInKorea);
   const [items, setItems] = useState<SharedDiaryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,33 +34,44 @@ export default function SharedDiaryFeedPage() {
     let active = true;
     setLoading(true); setError(null); setItems([]);
     const selectedIds = groupIdsKey ? groupIdsKey.split(',').map(Number) : [];
-    fetchSharedDiaryFeed(page, groupId, selectedIds.length > 1 ? selectedIds : undefined).then((data) => { if (active) setItems(data); })
+    loadSharedDiaryDates(page => fetchSharedDiaryFeed(page, groupId, selectedIds.length > 1 ? selectedIds : undefined), () => active).then((data) => { if (active) setItems(data); })
       .catch((caught: unknown) => { if (active) setError(caught instanceof Error ? caught.message : '일기를 불러오지 못했어요.'); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [page, revision, groupId, groupIdsKey]);
+  }, [revision, groupId, groupIdsKey]);
+
+  const datedItems = getSharedDiariesOnDate(items, selectedDate);
+  const calendarDiaries = items.map(item => ({ ...item, id: item.diaryId, content: item.contentPreview }));
 
   return (
     <PageSection title={isChild ? '일기' : '공개·그룹 일기'}>
       {isChild ? <DiaryNavigation /> : <FamilyDiaryNavigation />}
-      <div className={styles.container}>
+      <div className={styles.entries}>
         {groups.error ? <><StatusMessage kind="error" message={groups.error} /><Button onClick={() => void groups.refetch()}>그룹 다시 불러오기</Button></> : null}
-        <Tabs label="그룹 선택" value={String(groupId)} onChange={value => { const next = new URLSearchParams(params); next.set('group', value); setParams(next, { replace: true }); setPage(0); }} options={[
+        <Tabs label="그룹 선택" value={String(groupId)} onChange={value => { const next = new URLSearchParams(params); next.set('group', value); setParams(next, { replace: true }); }} options={[
           { value: '-1', label: '전체 그룹' },
           ...groupTabs.map(group => ({ value: String(group.id), label: group.name })),
           { value: '0', label: '전체 공개' },
         ]}>
         {loading ? <StatusMessage kind="loading" message="이야기를 모으고 있어요." /> : null}
         {error ? <div><StatusMessage kind="error" message={error} /><Button onClick={() => setRevision((value) => value + 1)}>다시 불러오기</Button></div> : null}
-        {!loading && !error && items.length === 0 ? <StatusMessage kind="empty" message="아직 볼 수 있는 일기가 없어요." /> : null}
-        <CardCarousel key={`${groupId}:${groupIdsKey}`} title="공유된 이야기" itemLabel="일기">{items.map(item => <DiaryFeedCard
-          key={item.diaryId} diaryId={item.diaryId} author={item.authorNickname} writtenDate={item.writtenDate}
-          visibilityScope={item.visibilityScope} emotion={item.emotion} contentPreview={item.contentPreview} />)}</CardCarousel>
-        <div className={styles.actions}>
-          <Button variant="secondary" disabled={loading || page === 0} onClick={() => setPage((value) => value - 1)}>이전</Button>
-          <span>{page + 1} 페이지</span>
-          <Button variant="secondary" disabled={loading || !!error || items.length < 30} onClick={() => setPage((value) => value + 1)}>다음</Button>
-        </div>
+        {!loading && !error ? <div className={styles.content}>
+          <details className={styles.calendarPicker} open>
+            <summary>달력에서 날짜 선택</summary>
+            <DiaryCalendar diaries={calendarDiaries} selectedDate={selectedDate} onSelectDate={date => { if (date) setSelectedDate(date); }} />
+          </details>
+          <div className={styles.entries}>
+            <nav className={styles.dateNavigation} aria-label="일기 날짜 이동">
+              <button type="button" aria-label="이전 날짜" onClick={() => setSelectedDate(shiftDiaryDate(selectedDate, -1))}>←</button>
+              <label><span className={styles.dateLabel}>일기 날짜</span><input aria-label="일기 날짜" type="date" value={selectedDate} max={getTodayDateInKorea()} onChange={event => { if (event.target.value && event.target.value <= getTodayDateInKorea()) setSelectedDate(event.target.value); }} /></label>
+              <button type="button" aria-label="다음 날짜" disabled={selectedDate >= getTodayDateInKorea()} onClick={() => setSelectedDate(shiftDiaryDate(selectedDate, 1))}>→</button>
+            </nav>
+            {datedItems.length === 0 ? <StatusMessage kind="empty" message={`${formatKoreanDate(selectedDate)}에는 볼 수 있는 일기가 없어요.`} /> : null}
+            {datedItems.map(item => <DiaryFeedCard
+              key={item.diaryId} diaryId={item.diaryId} author={item.authorNickname} writtenDate={item.writtenDate}
+              visibilityScope={item.visibilityScope} emotion={item.emotion} contentPreview={item.contentPreview} />)}
+          </div>
+        </div> : null}
         </Tabs>
       </div>
     </PageSection>
