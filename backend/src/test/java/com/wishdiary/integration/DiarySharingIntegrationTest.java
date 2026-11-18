@@ -187,6 +187,16 @@ class DiarySharingIntegrationTest {
     }
 
     @Test
+    @Transactional
+    void defaultFamilyGroupCountsTowardFiveGroupLimit() throws Exception {
+        var owner = child("family-limit");
+        database.update("insert into diary_sharing_groups(owner_id,name,slot) values (?, ?, 0)", owner.userId(), "우리 가족");
+        for (int i = 0; i < 4; i++) group(owner, "group" + i, List.of());
+        assertEquals(5, groups.list(owner.userId()).size());
+        call(post("/api/v1/sharing-groups"), owner, Map.of("name", "sixth", "memberIds", List.of()), 400);
+    }
+
+    @Test
     void concurrentCreationCannotExceedFiveGroups() throws Exception {
         var owner = child("concurrent");
         ExecutorService executor = Executors.newFixedThreadPool(6);

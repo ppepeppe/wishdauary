@@ -28,7 +28,7 @@ export default function SharingGroupsPage() {
   const [busy, setBusy] = useState(false);
   const busyRef = useRef(false);
   const searchVersion = useRef(0);
-  const customGroupCount = groups.filter((group) => !group.defaultGroup).length;
+  const groupCount = groups.length;
   const selectedGroup = groups.find(group => group.id === selectedGroupId) ?? groups[0];
 
   function selectGroup(value: string) {
@@ -110,8 +110,8 @@ export default function SharingGroupsPage() {
         {loadError ? <div><StatusMessage kind="error" message={loadError} /><Button onClick={() => void load()}>다시 불러오기</Button></div> : null}
         {error ? <StatusMessage kind="error" message={error} /> : null}
         {message ? <StatusMessage kind="success" message={message} /> : null}
-        <div className={styles.heading}><strong>직접 만든 그룹 {customGroupCount} / 5</strong><Button disabled={loading || !!loadError || busy || customGroupCount >= 5} onClick={() => openForm()}>새 그룹 만들기</Button></div>
-        {customGroupCount >= 5 ? <p className={styles.hint}>5개의 그룹을 모두 만들었어요. 기존 그룹을 수정하거나 삭제할 수 있어요.</p> : null}
+        <div className={styles.heading}><strong>그룹 {groupCount} / 5</strong><Button disabled={loading || !!loadError || busy || groupCount >= 5} onClick={() => openForm()}>새 그룹 만들기</Button></div>
+        {groupCount >= 5 ? <p className={styles.hint}>5개의 그룹을 모두 만들었어요. 기존 그룹을 수정하거나 삭제할 수 있어요.</p> : null}
         {!loading && !loadError && groups.length === 0 ? <StatusMessage kind="empty" message="첫 그룹을 만들어 볼까요? 예: 우리 가족, 친한 친구" /> : null}
         {showForm ? (
           <form onSubmit={(event) => void save(event)} className={styles.editor}>

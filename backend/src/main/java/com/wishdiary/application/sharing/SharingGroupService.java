@@ -43,6 +43,9 @@ public class SharingGroupService implements ManageSharingGroupsUseCase {
         validateChild(childId);
         groups.lockOwner(childId);
         List<Integer> usedSlots = groups.findActiveByOwnerId(childId).stream().map(SharingGroup::slot).toList();
+        if (usedSlots.size() >= SharingGroup.MAX_GROUPS) {
+            throw new InvalidSharingGroupException("그룹은 우리 가족을 포함해 최대 5개까지 만들 수 있어요.");
+        }
         int slot = IntStream.rangeClosed(1, SharingGroup.MAX_GROUPS).filter(value -> !usedSlots.contains(value))
                 .findFirst().orElseThrow(() -> new InvalidSharingGroupException("공개 그룹은 최대 5개까지 만들 수 있어요."));
         validateMembers(childId, request.memberIds());
