@@ -7,14 +7,15 @@ import { fetchEnglishReviews, reviewEnglish } from '../../services/api/rewardApi
 import styles from './Rewards.module.css';
 import { GIFT_REQUESTS_CHANGED_EVENT } from '../../constants/events';
 
-export default function FamilyEnglishReviews({ onChanged, onPendingCountChange }: {
+export default function FamilyEnglishReviews({ onChanged, onPendingCountChange, embedded = false }: {
+  embedded?: boolean;
   onChanged?: () => Promise<void>;
   onPendingCountChange?: (count: number | undefined) => void;
 }) {
   const { data, isLoading, error, refetch } = useAsyncData(fetchEnglishReviews, true);
   useEffect(() => {
-    onPendingCountChange?.(data ? data.filter(study => study.status === 'pending').length : undefined);
-  }, [data, onPendingCountChange]);
+    onPendingCountChange?.(!error && data ? data.filter(study => study.status === 'pending').length : undefined);
+  }, [data, error, onPendingCountChange]);
   const pending = useRef(new Set<number>());
   const [busyIds, setBusyIds] = useState<number[]>([]);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -30,15 +31,16 @@ export default function FamilyEnglishReviews({ onChanged, onPendingCountChange }
     } catch (caught) { setActionError(caught instanceof Error ? caught.message : '확인하지 못했어요.'); }
     finally { pending.current.delete(id); setBusyIds(current => current.filter(value => value !== id)); }
   }
-  return <section className={styles.reviews} aria-labelledby="english-reviews-title">
-    <div className={styles.heading}><h2 id="english-reviews-title">영어 확인 요청 {data?.length ? <span>{data.length}</span> : null}</h2></div>
+  const studies = data?.filter(study => study.status === 'pending');
+  return <section className={styles.reviews} aria-label={embedded ? '영어 확인 요청' : undefined} aria-labelledby={embedded ? undefined : 'english-reviews-title'}>
+    {!embedded ? <div className={styles.heading}><h2 id="english-reviews-title">영어 확인 요청 {studies?.length ? <span>{studies.length}</span> : null}</h2></div> : null}
     {isLoading && !data ? <StatusMessage kind="loading" message="영어 확인 요청을 불러오고 있어요." /> : null}
     {error ? <><StatusMessage kind="error" message={error} /><Button variant="ghost" onClick={() => void refetch()}>다시 불러오기</Button></> : null}
     {actionError ? <StatusMessage kind="error" message={actionError} /> : null}
     {message ? <StatusMessage kind="success" message={message} /> : null}
-    {data?.length === 0 ? <p className={styles.hint}>확인을 기다리는 영어 공부가 없어요.</p> : null}
-    <CardCarousel label="영어 확인 요청" itemLabel="요청">{data?.map(study => <article key={study.requestId} className={styles.reviewCard}>
-      <div className={styles.heading}><strong>{study.childNickname}</strong><time dateTime={study.studyDate}>{new Intl.DateTimeFormat('ko-KR',{month:'long',day:'numeric'}).format(new Date(study.studyDate))}</time></div>
+    {!embedded && studies?.length === 0 ? <p className={styles.hint}>확인을 기다리는 영어 공부가 없어요.</p> : null}
+    <CardCarousel label="영어 확인 요청" itemLabel="요청">{studies?.map(study => <article key={study.requestId} className={styles.reviewCard}>
+      <div className={styles.heading}><strong>{study.childNickname}{embedded ? ' · 영어 확인' : ''}</strong><time dateTime={study.studyDate}>{new Intl.DateTimeFormat('ko-KR',{month:'long',day:'numeric'}).format(new Date(study.studyDate))}</time></div>
       <div className={styles.lesson}><p lang="en">{study.sentence}</p><span>{study.meaning}</span></div>
       <p className={styles.hint}>아이가 읽고 뜻을 이해했는지 확인해 주세요.</p>
       <div className={styles.reviewActions}>

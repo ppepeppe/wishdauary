@@ -2,7 +2,6 @@ import ChildSummaryCard from '../components/family/ChildSummaryCard';
 import CardCarousel from '../components/common/CardCarousel';
 import Tabs from '../components/common/Tabs';
 import FamilyEnglishReviews from '../components/rewards/FamilyEnglishReviews';
-import { fetchEnglishReviews } from '../services/api/rewardApi';
 import { useSelectedChild } from '../hooks/useSelectedChild';
 import { getChildDiaries } from '../utils/childDiaries';
 import { useEffect, useState } from 'react';
@@ -19,12 +18,13 @@ import { getAuthSession } from '../services/session/authSession';
 import styles from './FamilyHomePage.module.css';
 
 async function loadRequests() {
-  const [gifts, pricing, english] = await Promise.all([fetchReceivedGiftRequests(), fetchProductPricingRequests(), fetchEnglishReviews()]);
-  return { gifts: gifts.filter((item) => item.status === 'pending'), pricing, englishCount: english.length };
+  const [gifts, pricing] = await Promise.all([fetchReceivedGiftRequests(), fetchProductPricingRequests()]);
+  return { gifts: gifts.filter((item) => item.status === 'pending'), pricing: pricing.filter(product => product.cloverPrice <= 0) };
 }
 
 function FamilyHomePage() {
   const session = getAuthSession();
+  const [englishPendingCount, setEnglishPendingCount] = useState<number>();
   const [summaryRevision, setSummaryRevision] = useState(0);
   const connections = useAsyncData(fetchFamilyConnectionState);
   const diaries = useAsyncData(fetchFamilyFeed);
@@ -47,7 +47,8 @@ function FamilyHomePage() {
   const pendingConnections = connections.data?.requests.filter((item) => item.status === 'pending') ?? [];
   const todayDiaryCount = diaries.data && !diaries.error
     ? getChildDiaries(diaries.data, childId, getTodayDateInKorea()).length : null;
-  const pendingCount = (requests.data?.gifts.length ?? 0) + (requests.data?.pricing.length ?? 0);
+  const pendingCount = requests.data && !requests.error && englishPendingCount !== undefined
+    ? requests.data.gifts.length + requests.data.pricing.length + englishPendingCount : undefined;
 
   return (
     <div className={styles.container}>
@@ -59,12 +60,6 @@ function FamilyHomePage() {
         <p>{formatKoreanDate(getTodayDateInKorea(), false)}</p>
         <h1 id="family-home-title"><span className={styles.greetingName}>{session?.nickname || session?.relationLabel || '가족'}님, 안녕하세요.</span></h1>
       </section>
-
-      {requests.data ? <Link to="/family-settings" className={styles.requestOverview}>
-        <span className={styles.overviewIcon}><NavIcon name="gift" /></span>
-        <span><strong>받은 요청 <b>{pendingCount + (requests.data.englishCount ?? 0)}</b></strong></span>
-        <NavIcon name="arrowRight" />
-      </Link> : null}
 
       <section className={styles.section} aria-labelledby="family-children-title">
         <div className={styles.heading}><h2 id="family-children-title">함께하는 아이</h2><Link to="/family-connections">연결 관리 →</Link></div>
@@ -80,17 +75,19 @@ function FamilyHomePage() {
         {connections.data && children.length === 0 && pendingConnections.length === 0 ? <Link to="/family-connections" className={styles.primaryLink}>아이 찾아 연결하기 <span aria-hidden="true">→</span></Link> : null}
       </section>
 
-      <FamilyEnglishReviews onChanged={async () => { await refreshRequests(); setSummaryRevision(value => value + 1); }} />
-
-      <section className={styles.section} aria-labelledby="family-gifts-title">
-        <div className={styles.heading}><h2 id="family-gifts-title">확인할 선물 요청 {requests.data ? <span>{pendingCount}</span> : null}</h2><Link to="/family-settings">요청 보기 →</Link></div>
-        {requests.isLoading && !requests.data ? <StatusMessage kind="loading" message="선물 요청을 확인하고 있어요." /> : null}
+      <section className={styles.section} aria-labelledby="family-requests-title">
+        <div className={styles.heading}><h2 id="family-requests-title">확인할 요청 {pendingCount !== undefined ? <span>{pendingCount}</span> : null}</h2><Link to="/family-settings">전체 요청 보기 →</Link></div>
+        {requests.isLoading && !requests.data ? <StatusMessage kind="loading" message="선물·가격 설정 요청을 불러오고 있어요." /> : null}
         {requests.error ? <><StatusMessage kind="error" message={requests.error} /><Button variant="ghost" onClick={() => void refreshRequests()}>선물 요청 다시 불러오기</Button></> : null}
-        <CardCarousel label="확인할 선물 요청" itemLabel="요청">{requests.data?.gifts.map((gift) => <Link key={gift.notificationId} to="/family-settings" className={styles.requestRow}>
-          <span><strong>{gift.productTitle}</strong><small>{gift.requesterChildNickname}의 요청</small></span><span className={styles.requestStatus}>승인 대기 →</span>
+        <CardCarousel label="선물 승인 요청" itemLabel="요청">{requests.data?.gifts.map((gift) => <Link key={gift.notificationId} to="/family-settings" className={styles.requestRow}>
+          <span><strong>{gift.productTitle}</strong><small>{gift.requesterChildNickname} · 선물 요청</small></span><span className={styles.requestStatus}>승인 대기 →</span>
         </Link>)}</CardCarousel>
-        {requests.data && requests.data.pricing.length > 0 ? <Link to="/family-settings" className={styles.pendingLink}>가격을 정해 줄 선물 {requests.data.pricing.length}개 →</Link> : null}
-        {requests.data && pendingCount === 0 ? <p className={styles.helper}>대기 중인 요청이 없어요.</p> : null}
+        {requests.data?.pricing.map(product => <Link key={product.productId} to="/family-settings" className={styles.requestRow}>
+          <span><strong>{product.title}</strong><small>선물 가격 설정 요청</small></span><span className={styles.requestStatus}>가격 정하기 →</span>
+        </Link>)}
+        <FamilyEnglishReviews embedded onPendingCountChange={setEnglishPendingCount}
+          onChanged={async () => { await refreshRequests(); setSummaryRevision(value => value + 1); }} />
+        {pendingCount === 0 ? <p className={styles.helper}>대기 중인 요청이 없어요.</p> : null}
       </section>
 
       <Link to="/family-shop" className={styles.shopLink}>
