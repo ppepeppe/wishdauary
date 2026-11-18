@@ -1,10 +1,11 @@
+import ChildSummaryCard from '../components/family/ChildSummaryCard';
 import CardCarousel from '../components/common/CardCarousel';
 import Tabs from '../components/common/Tabs';
 import FamilyEnglishReviews from '../components/rewards/FamilyEnglishReviews';
 import { fetchEnglishReviews } from '../services/api/rewardApi';
 import { useSelectedChild } from '../hooks/useSelectedChild';
 import { getChildDiaries } from '../utils/childDiaries';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import NavIcon from '../components/common/NavIcon';
@@ -24,11 +25,13 @@ async function loadRequests() {
 
 function FamilyHomePage() {
   const session = getAuthSession();
+  const [summaryRevision, setSummaryRevision] = useState(0);
   const connections = useAsyncData(fetchFamilyConnectionState);
   const diaries = useAsyncData(fetchFamilyFeed);
   const requests = useAsyncData(loadRequests);
   const children = connections.data?.connections ?? [];
   const { childId, selectChild } = useSelectedChild(children);
+  const selectedChild = children.find(child => child.userId === childId);
   const { refetch: refreshConnections } = connections;
   const { refetch: refreshDiaries } = diaries;
   const { refetch: refreshRequests } = requests;
@@ -42,8 +45,8 @@ function FamilyHomePage() {
   }, [refreshConnections, refreshDiaries, refreshRequests]);
 
   const pendingConnections = connections.data?.requests.filter((item) => item.status === 'pending') ?? [];
-  const recentDiaries = getChildDiaries(diaries.data ?? [], childId).sort((a, b) =>
-    (b.writtenDate ?? b.createdAt).localeCompare(a.writtenDate ?? a.createdAt)).slice(0, 3);
+  const todayDiaryCount = diaries.data && !diaries.error
+    ? getChildDiaries(diaries.data, childId, getTodayDateInKorea()).length : null;
   const pendingCount = (requests.data?.gifts.length ?? 0) + (requests.data?.pricing.length ?? 0);
 
   return (
@@ -69,20 +72,15 @@ function FamilyHomePage() {
         {connections.error ? <><StatusMessage kind="error" message={connections.error} /><Button variant="ghost" onClick={() => void refreshConnections()}>아이 연결 다시 불러오기</Button></> : null}
         {children.length > 0 ? <Tabs label="아이 선택" value={String(childId)} onChange={selectChild}
           options={children.map(child => ({ value: String(child.userId), label: child.nickname }))}>
-          {diaries.isLoading && !diaries.data ? <StatusMessage kind="loading" message="아이의 일기를 불러오고 있어요." /> : null}
-          {diaries.error ? <><StatusMessage kind="error" message={diaries.error} /><Button variant="ghost" onClick={() => void refreshDiaries()}>일기 다시 불러오기</Button></> : null}
-          <CardCarousel key={`diaries-${childId}`} label="최근 아이 일기" itemLabel="일기">{recentDiaries.map(diary => <Link key={diary.id} to={`/diaries/${diary.id}`} className={styles.diaryRow}>
-            <div className={styles.meta}><strong>{diary.actorNickname || '아이'}</strong><time>{formatKoreanDate(diary.writtenDate ?? diary.createdAt, false)}</time></div>
-            <p>{diary.contentPreview}</p><span className={styles.readLink}>일기 읽기 <span aria-hidden="true">→</span></span>
-          </Link>)}</CardCarousel>
-          {diaries.data && recentDiaries.length === 0 ? <p className={styles.helper}>이 아이가 공유한 일기가 없어요.</p> : null}
+          {selectedChild ? <ChildSummaryCard key={`${selectedChild.userId}:${summaryRevision}`} child={selectedChild} todayDiaryCount={todayDiaryCount} /> : null}
+          {diaries.error ? <><StatusMessage kind="error" message="오늘 공유한 일기 수를 확인하지 못했어요." /><Button variant="ghost" onClick={() => void refreshDiaries()}>일기 수 다시 불러오기</Button></> : null}
         </Tabs> : null}
         {connections.data?.connections.length === 0 ? <p className={styles.helper}>{pendingConnections.length ? '아이의 연결 승인을 기다리고 있어요.' : '연결된 아이가 없어요.'}</p> : null}
         {pendingConnections.length > 0 ? <Link to="/family-connections" className={styles.pendingLink}>아이의 승인을 기다리는 요청 {pendingConnections.length}개 →</Link> : null}
         {connections.data && children.length === 0 && pendingConnections.length === 0 ? <Link to="/family-connections" className={styles.primaryLink}>아이 찾아 연결하기 <span aria-hidden="true">→</span></Link> : null}
       </section>
 
-      <FamilyEnglishReviews onChanged={refreshRequests} />
+      <FamilyEnglishReviews onChanged={async () => { await refreshRequests(); setSummaryRevision(value => value + 1); }} />
 
       <section className={styles.section} aria-labelledby="family-gifts-title">
         <div className={styles.heading}><h2 id="family-gifts-title">확인할 선물 요청 {requests.data ? <span>{pendingCount}</span> : null}</h2><Link to="/family-settings">요청 보기 →</Link></div>
