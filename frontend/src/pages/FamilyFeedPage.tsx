@@ -6,6 +6,7 @@ import { fetchFamilyConnections } from '../services/api/familyConnectionApi';
 import { getChildDiaries } from '../utils/childDiaries';
 import PageSection from '../components/common/PageSection';
 import FamilyDiaryNavigation from '../components/diary/FamilyDiaryNavigation';
+import { Link } from 'react-router-dom';
 import StatusMessage from '../components/common/StatusMessage';
 import FamilyFeedList from '../components/diary/FamilyFeedList';
 import { useFamilyFeed } from '../hooks/useFamilyFeed';
@@ -58,7 +59,7 @@ function FamilyFeedPage() {
         <StatusMessage kind="empty" message="공유받은 일기가 없어요." />
       ) : null}
       </Tabs> : null}
-      {connections.data?.length === 0 ? <StatusMessage kind="empty" message="연결된 아이가 없어요. 아이 연결에서 요청을 보내 주세요." /> : null}
+      {connections.data?.length === 0 ? <><StatusMessage kind="empty" message="연결된 아이가 없어요." /><Link to="/family-connections">마이페이지에서 아이 연결하기 →</Link></> : null}
     </PageSection>
   );
 }

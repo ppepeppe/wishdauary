@@ -1,7 +1,6 @@
 import CardCarousel from '../components/common/CardCarousel';
-import Tabs from '../components/common/Tabs';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import PageSection from '../components/common/PageSection';
 import FamilyShopNavigation from '../components/shop/FamilyShopNavigation';
 import StatusMessage from '../components/common/StatusMessage';
@@ -23,7 +22,9 @@ async function loadShop() {
 function FamilyShopPage() {
   const { data, isLoading, error, refetch } = useAsyncData(loadShop);
   const [showForm, setShowForm] = useState(false);
-  const [category, setCategory] = useState('catalog');
+  const [params, setParams] = useSearchParams();
+  const requestedCategory = params.get('category');
+  const category = requestedCategory === 'custom' || requestedCategory === 'family' ? requestedCategory : 'catalog';
   const [childId, setChildId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -66,7 +67,7 @@ function FamilyShopPage() {
       await createFamilyShopProduct({ childUserId: targetId, title: title.trim(), description: description.trim(),
         imageData, productUrl: url || null, cloverPrice, purchasePriceWon });
       setShowForm(false); setTitle(''); setDescription(''); setPrice(''); setPurchasePrice(''); setImageData(null); setProductUrl('');
-      setCategory('family');
+      setParams({ category: 'family' }, { replace: true });
       setMessage('선물을 등록했어요. 선택한 아이의 갖고 싶은 선물에 표시돼요.');
       await refetch();
     } catch (caught) { setActionError(caught instanceof Error ? caught.message : '선물을 등록하지 못했어요.'); }
@@ -74,7 +75,7 @@ function FamilyShopPage() {
   }
 
   return (
-    <PageSection title="상점 관리" actions={data && data.children.length > 0 ? <Button onClick={() => { setShowForm(true); setMessage(null); }}>+ 선물 등록</Button> : null}>
+    <PageSection title="상점 관리" actions={category === 'family' && data && data.children.length > 0 ? <Button onClick={() => { setShowForm(true); setMessage(null); }}>+ 선물 제안</Button> : null}>
       <FamilyShopNavigation />
       <div className={styles.container}>
         {isLoading ? <StatusMessage kind="loading" message="상점을 불러오고 있어요." /> : null}
@@ -85,7 +86,7 @@ function FamilyShopPage() {
           <p>아이의 연결 승인을 받은 뒤 선물을 등록할 수 있어요.</p><Link to="/family-connections">아이 찾고 연결 요청하기 →</Link>
         </div> : null}
         {data && data.children.length > 0 ? <>
-          {showForm ? <form className={styles.form} onSubmit={(event) => void save(event)}>
+          {showForm && category === 'family' ? <form className={styles.form} onSubmit={(event) => void save(event)}>
             <h2>선물 등록하기</h2>
             <fieldset disabled={busy}>
               <label>어떤 아이에게 보여줄까요?<select value={String(targetId)} onChange={(event) => setChildId(event.target.value)}>{data.children.map((child) => <option key={child.userId} value={child.userId}>{child.nickname} · #{child.userId}</option>)}</select></label>
@@ -101,11 +102,6 @@ function FamilyShopPage() {
             </fieldset>
           </form> : null}
         </> : null}
-          <Tabs label="상품 구분" value={category} onChange={setCategory} options={[
-            { value: 'catalog', label: '공통 상점' },
-            { value: 'custom', label: `아이의 선물 신청 ${childProducts.length}` },
-            { value: 'family', label: `가족이 제안한 선물 ${familyProducts.length}` },
-          ]}>
             {category === 'catalog' ? <CatalogPreview /> : <>
             <p className={styles.hint}>{category === 'custom'
               ? '아이가 신청한 선물이에요. 클로버를 정하면 아이의 갖고 싶은 선물에 표시돼요.'
@@ -116,7 +112,6 @@ function FamilyShopPage() {
                   childName={data?.children.find(child => child.userId === product.childUserId)?.nickname ?? '아이'} onUpdated={refreshPrice} />)}
               </CardCarousel>}
             </>}
-          </Tabs>
         <div className={styles.footer}>
           <Button type="button" variant="ghost" disabled={isLoading || busy} onClick={() => void refetch()}>새로고침</Button>
         </div>

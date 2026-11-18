@@ -5,8 +5,6 @@ import FamilyShopNavigation from '../components/shop/FamilyShopNavigation';
 import StatusMessage from '../components/common/StatusMessage';
 import CatalogProductManager from '../components/shop/CatalogProductManager';
 import ShopPhotoPicker from '../components/shop/ShopPhotoPicker';
-import Tabs from '../components/common/Tabs';
-import { CatalogPreviewProducts } from '../components/shop/CatalogPreview';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { createCatalogProduct, fetchCatalogProducts } from '../services/api/adminShopApi';
 import { isSupportedProductUrl, normalizeProductUrl } from '../utils/productUrl';
@@ -15,7 +13,6 @@ import styles from './AdminShopPage.module.css';
 export default function AdminShopPage() {
   const { data: products, isLoading, error, refetch } = useAsyncData(fetchCatalogProducts, true);
   const [showForm, setShowForm] = useState(false);
-  const [view, setView] = useState('manage');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imageData, setImageData] = useState<string | null>(null);
@@ -50,7 +47,7 @@ export default function AdminShopPage() {
     finally { pending.current = false; setBusy(false); }
   }
 
-  return <PageSection title="공통 상점 상품 관리">
+  return <PageSection title="상점 관리">
     <FamilyShopNavigation />
     <div className={styles.container}>
       {isLoading ? <StatusMessage kind="loading" message="공통 상점 상품을 불러오고 있어요." /> : null}
@@ -78,14 +75,9 @@ export default function AdminShopPage() {
         </fieldset>
       </form> : null}
       {products?.length === 0 ? <StatusMessage kind="empty" message="첫 공통 상품을 등록해 보세요." /> : null}
-      <Tabs label="공통 상품 보기" value={view} onChange={setView} options={[
-        { value: 'manage', label: '등록 상품' }, { value: 'preview', label: '상점 미리보기' },
-      ]}>
-        {view === 'preview' ? <CatalogPreviewProducts products={products ?? []} /> :
           <div className={styles.products} aria-label="공통 상품 목록" role="region">
             {products?.map((product) => <CatalogProductManager key={product.productId} product={product} onUpdated={async () => { await refetch(); }} />)}
-          </div>}
-      </Tabs>
+          </div>
     </div>
   </PageSection>;
 }

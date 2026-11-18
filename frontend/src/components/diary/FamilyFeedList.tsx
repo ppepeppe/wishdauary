@@ -1,12 +1,9 @@
 import CardCarousel from '../common/CardCarousel';
-import { Link } from 'react-router-dom';
-import { getVisibilityScopeLabel } from '../../constants/diary';
 import { useState } from 'react';
-import { getEmotionMeta } from '../../constants/emotion';
 import type { DiaryComment, DiaryEntry } from '../../types/diary';
 import { getActorDisplayName } from '../../utils/actorDisplay';
 import FamilyFeedComments from './FamilyFeedComments';
-import EmotionIcon from './EmotionIcon';
+import DiaryFeedCard from './DiaryFeedCard';
 import NavIcon from '../common/NavIcon';
 import styles from './FamilyFeedList.module.css';
 
@@ -20,14 +17,6 @@ interface FamilyFeedListProps {
   getCommentError: (diaryId: number) => string | null;
   isCommentLoading: (diaryId: number) => boolean;
   isCommentSubmitting: (diaryId: number) => boolean;
-}
-
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(value));
 }
 
 function getDiaryDisplayDate(diary: DiaryEntry) {
@@ -66,39 +55,16 @@ function FamilyFeedList({
   return (
     <CardCarousel title="아이의 이야기" itemLabel="일기">
       {diaries.map((diary) => {
-        const emotion = getEmotionMeta(diary.emotion);
         const hearted = diary.hearted ?? false;
         const heartCount = diary.heartCount ?? 0;
         const pending = isHeartPending(diary.id);
         const commentsExpanded = expandedDiaryIds.includes(diary.id);
 
         return (
-          <article key={getDiaryItemKey(diary)} className={styles.card}>
-            <div className={styles.header}>
-              <div className={styles.headerMain}>
-                {diary.actorRelationLabel || diary.actorNickname ? (
-                  <span className={styles.actor}>
-                    {getActorDisplayName(diary.actorRelationLabel, diary.actorNickname)}
-                  </span>
-                ) : null}
-                <div className={styles.meta}><time dateTime={getDiaryDisplayDate(diary)}>{formatDate(getDiaryDisplayDate(diary))}</time>
-                  <span>{getVisibilityScopeLabel(diary.visibilityScope)}</span></div>
-              </div>
-              {emotion ? (
-                <span className={styles.emotionBadge}>
-                  <span aria-hidden="true">
-                    <EmotionIcon emotion={emotion.key} />
-                  </span>
-                  {emotion.label}
-                </span>
-              ) : null}
-            </div>
-
-            <Link to={`/diaries/${diary.id}`} className={styles.previewLink} aria-label={`${diary.actorNickname || '아이'}의 일기 읽기`}>
-              <p className={styles.preview}>{diary.contentPreview}</p>
-              <span className={styles.readLink}>일기 읽기 <NavIcon name="arrowRight" /></span>
-            </Link>
-
+          <DiaryFeedCard key={getDiaryItemKey(diary)} diaryId={diary.id}
+            author={getActorDisplayName(diary.actorRelationLabel, diary.actorNickname) || '아이'}
+            writtenDate={getDiaryDisplayDate(diary)} visibilityScope={diary.visibilityScope}
+            emotion={diary.emotion} contentPreview={diary.contentPreview}>
             <div className={styles.actions}>
               <button type="button" className={`${styles.reactionButton} ${hearted ? styles.heartButtonActive : ''}`}
                 disabled={pending} aria-pressed={hearted} aria-label={`하트 ${heartCount}개, ${hearted ? '하트 취소' : '하트 보내기'}`}
@@ -123,7 +89,7 @@ function FamilyFeedList({
               />
             ) : null}
             </div>
-          </article>
+          </DiaryFeedCard>
         );
       })}
     </CardCarousel>
